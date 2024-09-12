@@ -10,7 +10,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.3"
+LattinMellon.version = "0.4"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -60,6 +60,8 @@ end
 
 function LattinMellon:new(options)
   options = options or {}
+  gridH = options.gridHorizontal or 2
+  gridV = options.gridVertical or 2
   margin = options.margin or 30
   m = margin / 2
 
@@ -203,26 +205,70 @@ function LattinMellon:afterMovingResizing()
 
   -- window is not allowed to extend boundaries of screen
   local win = hs.window.focusedWindow()
-  local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
+  local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height without menu bar
   local xNew = point.x
   local wNew = frame.w
-  local maxWithMB = win:screen():fullFrame()
+  local maxWithMB = win:screen():fullFrame() -- max (vertical) size incl. menu bar
   heightMB = maxWithMB.h - max.h -- height menu bar
   local yNew = point.y
   local hNew = frame.h
 
-  if movedNotResized then -- if window has been moved (and not resized) beyond screen boundaries, move window back within boundaries of screen
+  if movedNotResized then
     if point.x < 0 then -- window moved past left screen border
-      xNew = 0
+      if math.abs(point.x) < wNew / 2 then -- move window back within boundaries of screen if overstepping screen boundary with less than half of the window
+        xNew = 0
+      else -- resize window to occupy left half of screen
+        if point.y + frame.h / 2 < max.h / gridV then -- top half
+          xNew = 0
+          yNew = 0
+          wNew = max.w / gridH
+          hNew = max.h / gridV
+        else
+          xNew = 0
+          yNew = max.h - max.h / gridV
+          wNew = max.w / gridH
+          hNew = max.h / gridV
+        end
+      end
     elseif point.x + frame.w > max.w then -- window moved past right screen border
-      wNew = frame.w
-      xNew = max.w - wNew
+      if math.abs(point.x - max.w) > wNew / 2 then -- move window back within boundaries of screen (keep size)
+        wNew = frame.w
+        xNew = max.w - wNew
+      else -- resize window to occupy right half of screen
+        if point.y + frame.h / 2 < max.h / gridV then
+          xNew = max.w - max.w / gridH
+          yNew = 0
+          wNew = max.w / gridH
+          hNew = max.h / gridV
+        else
+          xNew = max.w - max.w / gridH
+          yNew = max.h - max.h / gridV
+          wNew = max.w / gridH
+          hNew = max.h / gridV
+        end
+      end
     end
     -- if window has been moved past bottom of screen
     if point.y + hNew > maxWithMB.h then
-      yNew = maxWithMB.h - hNew
+      if math.abs(point.y - max.h) > hNew / 2 then
+        yNew = maxWithMB.h - hNew
+      else
+        if point.x + frame.w / 2 > max.w / 2 then -- right half of screen
+          xNew = max.w - max.w / gridH
+          yNew = 0
+          wNew = max.w / gridH
+          hNew = max.h
+        else -- left half of screen
+          xNew = 0
+          yNew = 0
+          wNew = max.w / gridH
+          hNew = max.h
+        end
+      end
+
     end
-  else                  -- if window has been resized (and not moved)
+
+  else -- if window has been resized (and not moved)
     if point.x < 0 then -- window resized past left screen border
       wNew = frame.w + point.x
       xNew = 0
@@ -236,7 +282,6 @@ function LattinMellon:afterMovingResizing()
       yNew = heightMB
     end
   end
-
   self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
 end
 
