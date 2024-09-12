@@ -1,6 +1,6 @@
 # upcoming release
 
-    - grid size can be determined by user, i.e., 3x3, 3x4, 4x3, 4,4 (and higher) grids should be possible
+* grid size can be determined by user, i.e., 3x3, 3x4, 4x3, 4,4 (and higher) grids should be possible
 
 
 # v0.4
