@@ -10,7 +10,7 @@ The second issue, having to accept some limitations of using a canvas, is resolv
 
 Additionally, a window manager has been added. Moving half of more of the width of a window past the left and right borders of hte screen, automatically resizes the window to the upper top or bottem left or right quarter of a pre-determined 2x2 grid. If moving half or more of a window below the bottom left or right side border of the screen, the window is automatically resized to occupy the left or right half of the screen. In a future release, the user will be able to determine the size of the grid; this way 3x3 and also 3x4 or 4x3 grids should be possible.
 
-The two animated GIFs below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool.
+The two animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool.
 
 
 <img alt="LattinMellon move and resize demo" src="https://github.com/franzbu/LattinMellon.spoon/blob/main/gif/LattinMellon.gif" />
