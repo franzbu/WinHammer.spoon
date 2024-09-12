@@ -1,7 +1,7 @@
 
 # v0.3
 
-* Beta release: fixed that window can be moved or resized beyond boundaries of screen.
+* Beta release. Fixed issue: windows now stay within the boundaries of the screen.
 
 # v0.2
 
