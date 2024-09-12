@@ -12,6 +12,11 @@ Additionally, a window manager has been added. Moving half of more of the width 
 
 The two animated GIFs below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool.
 
+
+<img alt="LattinMellon move and resize demo" src="https://github.com/franzbu/LattinMellon.spoon/blob/main/gif/LattinMellon.gif" />
+
+This animated GIF demonstrates the window manager:
+
 <img alt="LattinMellon move and resize demo" src="https://github.com/franzbu/LattinMellon.spoon/blob/main/gif/LattinMellon_wm.gif" />
 
 
