@@ -6,7 +6,7 @@ The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addre
 
 The fork of SkyRocket.spoon in this repository resolves the first issue; windows can be resized all directions now. 
 
-The second issue, having to accept some limitations of using a canvas, is resolved by the tool LattinMellon.spoon. This tool is still in its early development state; however, so far it has been working fine, even though the occational hiccup should not be unexpected.
+The second issue, having to accept some limitations of using a canvas, is resolved by the tool LattinMellon.spoon. This tool is still in its early development state; however, so far it has been working fine, even though the occational hiccup should not be unexpected. Once it leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
 
 
 The animated GIF below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool.
