@@ -17,7 +17,7 @@ The two animated GIFs below don't capture the mouse cursor correctly; in real li
 
 This animated GIF demonstrates the window manager:
 
-<img alt="LattinMellon move and resize demo" src="https://github.com/franzbu/LattinMellon.spoon/blob/main/gif/LattinMellon_wm.gif" />
+<img alt="LattinMellon window management demo" src="https://github.com/franzbu/LattinMellon.spoon/blob/main/gif/LattinMellon_wm.gif" />
 
 
 ## Installation
