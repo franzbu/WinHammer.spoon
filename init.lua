@@ -10,7 +10,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.2"
+LattinMellon.version = "0.3"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -21,21 +21,17 @@ local dragTypes = {
 
 local function tableToMap(table)
   local map = {}
-
   for _, value in pairs(table) do
     map[value] = true
   end
-
   return map
 end
 
 
 local function getWindowUnderMouse()
   local _ = hs.application
-
   local my_pos = hs.geometry.new(hs.mouse.absolutePosition())
   local my_screen = hs.mouse.getCurrentScreen()
-
   return hs.fnutils.find(hs.window.orderedWindows(), function(w)
     return my_screen == w:screen() and my_pos:inside(w:frame())
   end)
@@ -50,7 +46,7 @@ end
 --     resizeModifiers = {'alt'},
 --     resizeMouseButton = 'right',
 --   })
---
+
 local function buttonNameToEventType(name, optionName)
   if name == 'left' then
     return hs.eventtap.event.types.leftMouseDown
@@ -132,21 +128,21 @@ function LattinMellon:handleDrag()
 
     local dx = event:getProperty(hs.eventtap.event.properties.mouseEventDeltaX)
     local dy = event:getProperty(hs.eventtap.event.properties.mouseEventDeltaY)
-
-
     if self:isMoving() then
       local point = win:topLeft()
       local frame = win:size() -- win:frame
       --win:move(hs.geometry.new(point.x + dx, point.y + dy, frame.w, frame.h), nil, false, 0)
-      win:move({dx, dy}, nil, false, 0)
+      win:move({ dx, dy }, nil, false, 0)
+      movedNotResized = true
       return true
     elseif self:isResizing() then
-      local currentSize = win:size() -- win:frame
+      movedNotResized = false
+      local currentSize = win:size()           -- win:frame
       local current = win:topLeft()
       if mH <= -m and mV <= m and mV > -m then -- 9 o'clock
         win:move(hs.geometry.new(current.x + dx, current.y, currentSize.w - dx, currentSize.h), nil, false, 0)
-      elseif mH <= -m and mV <= -m then -- 10:30
-        if dy < 0 then                  -- avoid window being extended downwards when cursor crosses border of menubar
+      elseif mH <= -m and mV <= -m then        -- 10:30
+        if dy < 0 then -- avoid window being extended downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x + dx, current.y + dy, currentSize.w - dx, currentSize.h - dy), nil, false,
               0)
@@ -155,7 +151,7 @@ function LattinMellon:handleDrag()
           win:move(hs.geometry.new(current.x + dx, current.y + dy, currentSize.w - dx, currentSize.h - dy), nil, false, 0)
         end
       elseif mH > -m and mH <= m and mV <= -m then -- 12 o'clock
-        if dy < 0 then
+        if dy < 0 then -- avoid window being extended downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w, currentSize.h - dy), nil, false, 0)
           end
@@ -163,7 +159,7 @@ function LattinMellon:handleDrag()
           win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w, currentSize.h - dy), nil, false, 0)
         end
       elseif mH > m and mV <= -m then -- 1:30
-        if dy < 0 then
+        if dy < 0 then -- avoid window being extended downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w + dx, currentSize.h - dy), nil, false, 0)
           end
@@ -181,7 +177,9 @@ function LattinMellon:handleDrag()
       else                                       -- middle
         local point = win:topLeft()
         local frame = win:frame()
-        win:move({dx, dy}, nil, false, 0)      end
+        win:move({ dx, dy }, nil, false, 0)
+        movedNotResized = true
+      end
       return true
     else
       return nil
@@ -192,45 +190,51 @@ end
 function LattinMellon:handleCancel()
   return function()
     if not self.dragging then return end
-
-    if self:isResizing() then
-      -- hs.alert.show("self:isResizing")
-      self:afterResize()
-    end
-
+    self:afterMovingResizing()
     self:stop()
   end
 end
 
-function LattinMellon:afterResize()
+function LattinMellon:afterMovingResizing()
   if not self.targetWindow then return end
 
   local frame = win:frame()
   local point = win:topLeft()
 
-  -- window is not allowed to extend past left and right margins of screen
+  -- window is not allowed to extend boundaries of screen
   local win = hs.window.focusedWindow()
   local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
-
   local xNew = point.x
   local wNew = frame.w
-  if point.x < 0 then
-    wNew = frame.w + point.x
-    xNew = 0
-  elseif point.x + frame.w > max.w then
-    wNew = max.w - point.x
-    xNew = max.w - wNew
-  end
-
-  -- if window is resized past start of menu bar, height of window is corrected accordingly
   local maxWithMB = win:screen():fullFrame()
   heightMB = maxWithMB.h - max.h -- height menu bar
   local yNew = point.y
   local hNew = frame.h
 
-  if point.y < heightMB then
-    hNew = frame.h + point.y - heightMB
-    yNew = heightMB
+  if movedNotResized then -- if window has been moved (and not resized) beyond screen boundaries, move window back within boundaries of screen
+    if point.x < 0 then -- window moved past left screen border
+      xNew = 0
+    elseif point.x + frame.w > max.w then -- window moved past right screen border
+      wNew = frame.w
+      xNew = max.w - wNew
+    end
+    -- if window has been moved past bottom of screen
+    if point.y + hNew > maxWithMB.h then
+      yNew = maxWithMB.h - hNew
+    end
+  else                  -- if window has been resized (and not moved)
+    if point.x < 0 then -- window resized past left screen border
+      wNew = frame.w + point.x
+      xNew = 0
+    elseif point.x + frame.w > max.w then -- window resized past right screen border
+      wNew = max.w - point.x
+      xNew = max.w - wNew
+    end
+    -- if window has been resized past beginning of menu bar, height of window is corrected accordingly
+    if point.y < heightMB then
+      hNew = frame.h + point.y - heightMB
+      yNew = heightMB
+    end
   end
 
   self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
@@ -267,13 +271,9 @@ function LattinMellon:handleClick()
       local point = win:topLeft()
       local frame = win:frame()
 
-
-      --fb:
       local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
       local maxWithMB = win:screen():fullFrame()
       heightMB = maxWithMB.h - max.h   -- height menu bar
-
-
 
       local xOrg = point.x
       local yOrg = point.y
@@ -288,7 +288,6 @@ function LattinMellon:handleClick()
       local my = hOrg + yOrg - mousePos.y
       local dmav = hOrg / 2 - my
       mV = dmav * 100 / hOrg -- delta from mid window in %: from -50(=top border of window) to 50 (bottom border)
-
 
       self.cancelHandler:start()
       self.dragHandler:start()
