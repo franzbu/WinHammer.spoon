@@ -3,7 +3,6 @@ local function scriptPath()
   return str:match("(.*/)")
 end
 
-
 local LattinMellon = {}
 
 LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
@@ -18,7 +17,6 @@ local dragTypes = {
   resize = 2,
 }
 
-
 local function tableToMap(table)
   local map = {}
   for _, value in pairs(table) do
@@ -26,7 +24,6 @@ local function tableToMap(table)
   end
   return map
 end
-
 
 local function getWindowUnderMouse()
   local _ = hs.application
@@ -36,7 +33,6 @@ local function getWindowUnderMouse()
     return my_screen == w:screen() and my_pos:inside(w:frame())
   end)
 end
-
 
 -- Usage:
 --     resizer = LattinMellon:new({
@@ -58,7 +54,6 @@ local function buttonNameToEventType(name, optionName)
   end
   error(optionName .. ': only "left" and "right" mouse button supported, got ' .. name)
 end
-
 
 function LattinMellon:new(options)
   options = options or {}
@@ -126,8 +121,8 @@ function LattinMellon:isMoving()
   return self.dragType == dragTypes.move
 end
 
-sumX = 0
-sumY = 0
+local sumdx = 0
+local sumdy = 0
 function LattinMellon:handleDrag()
   return function(event)
     if not self.dragging then return nil end
@@ -139,8 +134,8 @@ function LattinMellon:handleDrag()
       local frame = win:size() -- win:frame
       --win:move(hs.geometry.new(point.x + dx, point.y + dy, frame.w, frame.h), nil, false, 0)
       win:move({ dx, dy }, nil, false, 0)
-      sumY = sumY + dy
-      sumX = sumX + dx
+      sumdy = sumdy + dy
+      sumdx = sumdx + dx
       movedNotResized = true
       return true
     elseif self:isResizing() then
@@ -225,7 +220,7 @@ function LattinMellon:afterMovingResizing()
         xNew = 0
       else -- automatically resize window
         for i = 1, gridH, 1 do
-          if hs.mouse.getRelativePosition().y + sumY < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns mouse coordinates where moving starts, not ends, therefore sumX/sumY make necessary adjustment
+          if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns mouse coordinates where moving starts, not ends, therefore sumdx/sumdy make necessary adjustment
             xNew = 0
             yNew = (i - 1) * max.h / gridH
             wNew = max.w / gridW
@@ -240,7 +235,7 @@ function LattinMellon:afterMovingResizing()
         xNew = max.w - wNew
       else -- automatically resize window
         for i = 1, gridH, 1 do
-          if hs.mouse.getRelativePosition().y + sumY < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumY' adds 'way of moving'
+          if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
             xNew = max.w - max.w / gridW
             yNew = (i - 1) * max.h / gridH
             wNew = max.w / gridW
@@ -255,7 +250,7 @@ function LattinMellon:afterMovingResizing()
         yNew = maxWithMB.h - hNew
       else
         for i = 1, gridW, 1 do
-          if hs.mouse.getRelativePosition().x + sumX < max.w - (gridW - i) * max.w / gridW then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumY' adds 'way of moving'
+          if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridW - i) * max.w / gridW then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
             xNew = (i - 1) * max.w / gridW
             yNew = 0
             wNew = max.w / gridW
@@ -280,8 +275,8 @@ function LattinMellon:afterMovingResizing()
     end
   end
   self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
-  sumX = 0
-  sumY = 0
+  sumdx = 0
+  sumdy = 0
 end
 
 function LattinMellon:handleClick()
@@ -311,14 +306,11 @@ function LattinMellon:handleClick()
       end
 
       win = getWindowUnderMouse():focus()
-
       local point = win:topLeft()
       local frame = win:frame()
-
       local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
       local maxWithMB = win:screen():fullFrame()
       heightMB = maxWithMB.h - max.h   -- height menu bar
-
       local xOrg = point.x
       local yOrg = point.y
       local wOrg = frame.w
