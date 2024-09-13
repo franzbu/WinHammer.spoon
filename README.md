@@ -15,7 +15,10 @@ The animated GIFs below doesn't capture the mouse cursor correctly; in real life
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon.gif" />
 
-<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon_wm.gif" />
+
+Window manager:
+
+<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMallon_wm.gif" />
 
               
 
