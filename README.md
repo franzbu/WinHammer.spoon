@@ -10,10 +10,12 @@ The second issue, having to accept the limitations of using an overlaying canvas
 
 LattinMellon also serves as a window manager. You can choose the grid size of the screen (see 'Usage') and move windows (one third of its size or more) beyond the left, right, and bottom window borders to have them automatically resized and placed. You best try it out; its intuitive approach should be mostly self-explanatory.
 
-The animated GIF below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool (apart from the window manager).
+The animated GIFs below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still shows what you can do with this tool.
 
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon.gif" />
+
+<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon_wm.gif" />
 
               
 
