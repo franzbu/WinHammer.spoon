@@ -1,14 +1,14 @@
 # LattinMellon.spoon
 
-On macOS, there is a variety of tools to resize and move windows using the mouse and a modifier key, saving the time of having to painstakingly get a hold of edges and corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
+On macOS, there is a variety of tools to resize and move windows using mouse and keyboard, saving the time of having to painstakingly get a hold of edges and corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
-The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, comes close to the ideal tool. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of a lack of fluency of other tools, but at the same time the canvas can block the view for precise window positioniong while moving or resizing a window.
+The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, has a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of a lack of fluency of other tools, but at the same time the canvas can block the view for precise window positioniong while moving or resizing a window.
 
-The fork of SkyRocket.spoon in this repository, also named SkyRocket.spoon, resolves the first issue; windows can be resized all directions now. 
+The fork of SkyRocket.spoon in this repository, also named SkyRocket.spoon, resolves the first issue; windows can be resized all directions with it. 
 
-The second issue, having to accept some limitations of using a canvas, is resolved by this tool, LattinMellon.spoon. It is still in its early development state; therefore, an occational hiccup should be forgiven. Once LattinMellon leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
+The second issue, having to accept the limitations of using an overlaying canvas, is resolved by LattinMellon.spoon. It is still in its early development state; therefore, an occational hiccup should be forgiven. Once LattinMellon leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
 
-Additionally, a window manager has been added. You can choose the grid size (see 'Usage' below) and move the windows (half of its size or more) beyond the left, right, and bottom window borders to have them automatically resized and placed. More information to follow.
+LattinMellon also serves as a window manager. You can choose the grid size of the screen (see 'Usage') and move windows (one third of its size or more) beyond the left, right, and bottom window borders to have them automatically resized and placed. You best try it out; its intuitive approach should be mostly self-explanatory.
 
 The animated GIF below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool (apart from the window manager).
 
@@ -60,37 +60,6 @@ LattinMellon:new({
   resizeMouseButton = 'right',
 })
 ```
-I can recommend using CapsLock as hyper key (with Karabiner Elements, CapsLock can be reconfigured that if pressed alone it acts as CapsLock and if used in combination with another key or a mouse button it acts as modifier key). I have set up Hammerspoon to move a window pressing CapsLock in combination with the left mouse button and to resize a window pressing CapsLock in combination with the right mouse button.
-
-In case of using CapsLock as hyper key, add the following lines to your `~/.hammerspoon/init.lua` file:
-
-```lua
-local LattinMellon = hs.loadSpoon("LattinMellon")
-
-LattinMellon:new({
-  -- How much space (in percent) in the middle of each of the four window-margins do you want to reserve for limiting 
-  -- resizing windows to horizontally and vertically? 0 disables this function, 100 disables diagonal resizing.
-  margin = 30,
-
-  -- window manager - choose the size of the grid:
-  gridX = 3,
-  gridY = 3,
-
-  -- Which modifiers to hold to move a window?
-  -- moveModifiers = {'ctrl', 'shift'},
-  moveModifiers = {'shift', 'ctrl', 'alt', 'cmd'},
-
-  -- Which mouse button to hold to move a window?
-  moveMouseButton = 'left',
-
-  -- Which modifiers to hold to resize a window?
-  resizeModifiers = {'shift', 'ctrl', 'alt', 'cmd'},
-
-  -- Which mouse button to hold to resize a window?
-  resizeMouseButton = 'right',
-})
-```
-
 
 ### Moving
 
