@@ -228,7 +228,6 @@ function LattinMellon:afterMovingResizing()
             yNew = (i - 1) * max.h / gridH
             wNew = max.w / gridW
             hNew = max.h / gridH
-            hs.alert.show("i: " .. i)
             break
           end
         end
@@ -244,7 +243,6 @@ function LattinMellon:afterMovingResizing()
             yNew = (i - 1) * max.h / gridH
             wNew = max.w / gridW
             hNew = max.h / gridH
-            hs.alert.show("i: " .. i)
             break
           end
         end
@@ -254,14 +252,12 @@ function LattinMellon:afterMovingResizing()
       if math.abs(point.y - max.h) > hNew / 2 then -- move window as is back within boundaries
         yNew = maxWithMB.h - hNew
       else
-        hs.alert.show("x: " .. hs.mouse.getRelativePosition().x .. ", sumX: " .. sumX)
         for i = 1, gridW, 1 do
           if hs.mouse.getRelativePosition().x + sumX < max.w - (gridW - i) * max.w / gridW then   -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumY' adds 'way of moving'
             xNew = (i - 1) * max.w / gridW
             yNew = 0
             wNew = max.w / gridW
             hNew = max.h
-            hs.alert.show("i: " .. i)
             break
           end
         end
