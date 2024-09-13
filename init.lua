@@ -60,8 +60,8 @@ end
 
 function LattinMellon:new(options)
   options = options or {}
-  gridH = options.gridHorizontal or 2
-  gridV = options.gridVertical or 2
+  gridW = options.gridWorizontal or 2
+  gridH = options.gridHertical or 2
   margin = options.margin or 30
   m = margin / 2
 
@@ -124,6 +124,8 @@ function LattinMellon:isMoving()
   return self.dragType == dragTypes.move
 end
 
+sumY = 0
+sumX = 0
 function LattinMellon:handleDrag()
   return function(event)
     if not self.dragging then return nil end
@@ -135,6 +137,8 @@ function LattinMellon:handleDrag()
       local frame = win:size() -- win:frame
       --win:move(hs.geometry.new(point.x + dx, point.y + dy, frame.w, frame.h), nil, false, 0)
       win:move({ dx, dy }, nil, false, 0)
+      sumY = sumY + dy
+      sumX = sumX + dx
       movedNotResized = true
       return true
     elseif self:isResizing() then
@@ -179,7 +183,7 @@ function LattinMellon:handleDrag()
       else                                       -- middle
         local point = win:topLeft()
         local frame = win:frame()
-        win:move({ dx, dy }, nil, false, 0)
+        win:move({dx, dy}, nil, false, 0)
         movedNotResized = true
       end
       return true
@@ -215,59 +219,58 @@ function LattinMellon:afterMovingResizing()
 
   if movedNotResized then
     if point.x < 0 then -- window moved past left screen border
-      if math.abs(point.x) < wNew / 2 then -- move window back within boundaries of screen if overstepping screen boundary with less than half of the window
-        xNew = 0
-      else -- resize window to occupy left half of screen
-        if point.y + frame.h / 2 < max.h / gridV then -- top half
+      if math.abs(point.x) < hNew / 2 then -- move window back within boundaries of screen if overstepping screen boundary with less than half of the window
+        xNew =0
+      else -- automatically resize window 
+        if hs.mouse.getRelativePosition().y + sumY < max.h / gridH then -- top half; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumY' adds 'way of moving'
           xNew = 0
           yNew = 0
-          wNew = max.w / gridH
-          hNew = max.h / gridV
-        else
+          wNew = max.w / gridW
+          hNew = max.h / gridH
+        else -- bottom half
           xNew = 0
-          yNew = max.h - max.h / gridV
-          wNew = max.w / gridH
-          hNew = max.h / gridV
+          yNew = max.h - max.h / gridH
+          wNew = max.w / gridW
+          hNew = max.h / gridH
         end
       end
     elseif point.x + frame.w > max.w then -- window moved past right screen border
-      if math.abs(point.x - max.w) > wNew / 2 then -- move window back within boundaries of screen (keep size)
+      if math.abs(point.x - max.w) > hNew / 2 then -- move window back within boundaries of screen (keep size)
         wNew = frame.w
         xNew = max.w - wNew
-      else -- resize window to occupy right half of screen
-        if point.y + frame.h / 2 < max.h / gridV then
-          xNew = max.w - max.w / gridH
+      else -- automatically resize window 
+        if hs.mouse.getRelativePosition().y + sumY < max.h / gridH then -- top half
+          xNew = max.w - max.w / gridW
           yNew = 0
-          wNew = max.w / gridH
-          hNew = max.h / gridV
-        else
-          xNew = max.w - max.w / gridH
-          yNew = max.h - max.h / gridV
-          wNew = max.w / gridH
-          hNew = max.h / gridV
+          wNew = max.w / gridW
+          hNew = max.h / gridH
+        else -- bottom half
+          xNew = max.w - max.w / gridW
+          yNew = max.h - max.h / gridH
+          wNew = max.w / gridW
+          hNew = max.h / gridH
         end
       end
     end
-    -- if window has been moved past bottom of screen
-    if point.y + hNew > maxWithMB.h then
-      if math.abs(point.y - max.h) > hNew / 2 then
+    if point.y + hNew > maxWithMB.h then -- if window has been moved past bottom of screen
+      if math.abs(point.y - max.h) > hNew / 2 then -- move window as is back within boundaries
         yNew = maxWithMB.h - hNew
       else
-        if point.x + frame.w / 2 > max.w / 2 then -- right half of screen
-          xNew = max.w - max.w / gridH
+        hs.alert.show("x: " .. hs.mouse.getRelativePosition().x .. ", sumX: " .. sumX)
+        if hs.mouse.getRelativePosition().x + sumX > max.w / 2 then -- right half of screen
+          xNew = max.w - max.w / gridW
           yNew = 0
-          wNew = max.w / gridH
+          wNew = max.w / gridW
           hNew = max.h
         else -- left half of screen
           xNew = 0
           yNew = 0
-          wNew = max.w / gridH
+          wNew = max.w / gridW
           hNew = max.h
         end
       end
 
     end
-
   else -- if window has been resized (and not moved)
     if point.x < 0 then -- window resized past left screen border
       wNew = frame.w + point.x
@@ -283,6 +286,8 @@ function LattinMellon:afterMovingResizing()
     end
   end
   self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
+  sumX = 0
+  sumY = 0
 end
 
 function LattinMellon:handleClick()
