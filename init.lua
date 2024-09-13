@@ -60,8 +60,8 @@ end
 
 function LattinMellon:new(options)
   options = options or {}
-  gridW = options.gridWorizontal or 2
-  gridH = options.gridHertical or 2
+  gridW = options.gridWidth or 2
+  gridH = options.gridHeight or 2
   margin = options.margin or 30
   m = margin / 2
 
