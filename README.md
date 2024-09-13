@@ -8,7 +8,7 @@ The fork of SkyRocket.spoon in this repository resolves the first issue; windows
 
 The second issue, having to accept some limitations of using a canvas, is resolved by the tool LattinMellon.spoon. This tool is still in its early development state; however, so far it has been working fine, even though the occational hiccup should not be unexpected. Once it leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
 
-Additionally, a window manager has been added. Moving half of more of the width of a window past the left and right borders of hte screen, automatically resizes the window to the upper top or bottem left or right quarter of a pre-determined 2x2 grid. If moving half or more of a window below the bottom left or right side border of the screen, the window is automatically resized to occupy the left or right half of the screen. In a future release, the user will be able to determine the size of the grid; this way 3x3 and also 3x4 or 4x3 grids should be possible.
+Additionally, a window manager has been added. You can choose the grid size (see 'Usage' below) and move the windows (half of its size or more) beyond the left, right, and bottom window borders to have them automatically resized and placed. More information to follow.
 
 The animated GIF below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animation still shows what you can do with this tool (apart from the window manager).
 
