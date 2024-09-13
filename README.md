@@ -4,9 +4,9 @@ On macOS, there is a variety of tools to resize and move windows using the mouse
 
 The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, comes close to the ideal tool. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of a lack of fluency of other tools, but at the same time the canvas can block the view for precise window positioniong while moving or resizing a window.
 
-The fork of SkyRocket.spoon in this repository resolves the first issue; windows can be resized all directions now. 
+The fork of SkyRocket.spoon in this repository, also named SkyRocket.spoon, resolves the first issue; windows can be resized all directions now. 
 
-The second issue, having to accept some limitations of using a canvas, is resolved by the tool LattinMellon.spoon. This tool is still in its early development state; however, so far it has been working fine, even though the occational hiccup should not be unexpected. Once it leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
+The second issue, having to accept some limitations of using a canvas, is resolved by this tool, LattinMellon.spoon. It is still in its early development state; therefore, an occational hiccup should be forgiven. Once LattinMellon leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
 
 Additionally, a window manager has been added. You can choose the grid size (see 'Usage' below) and move the windows (half of its size or more) beyond the left, right, and bottom window borders to have them automatically resized and placed. More information to follow.
 
