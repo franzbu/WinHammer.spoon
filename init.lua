@@ -61,6 +61,8 @@ function LattinMellon:new(options)
   gridH = options.gridY or 2
   margin = options.margin or 30
   m = margin / 2
+  secondMod = options.modifierLayerTwo or 'ctrl'
+
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -140,12 +142,12 @@ function LattinMellon:handleDrag()
       return true
     elseif self:isResizing() then
       movedNotResized = false
-      local currentSize = win:size() -- win:frame
+      local currentSize = win:size()           -- win:frame
       local current = win:topLeft()
       if mH <= -m and mV <= m and mV > -m then -- 9 o'clock
         win:move(hs.geometry.new(current.x + dx, current.y, currentSize.w - dx, currentSize.h), nil, false, 0)
-      elseif mH <= -m and mV <= -m then -- 10:30
-        if dy < 0 then -- prevent extension of downwards when cursor enters menubar
+      elseif mH <= -m and mV <= -m then        -- 10:30
+        if dy < 0 then                         -- prevent extension of downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x + dx, current.y + dy, currentSize.w - dx, currentSize.h - dy), nil, false,
               0)
@@ -154,7 +156,7 @@ function LattinMellon:handleDrag()
           win:move(hs.geometry.new(current.x + dx, current.y + dy, currentSize.w - dx, currentSize.h - dy), nil, false, 0)
         end
       elseif mH > -m and mH <= m and mV <= -m then -- 12 o'clock
-        if dy < 0 then -- prevent extension of downwards when cursor enters menubar
+        if dy < 0 then                             -- prevent extension of downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w, currentSize.h - dy), nil, false, 0)
           end
@@ -210,56 +212,105 @@ function LattinMellon:finalMagic() -- automatic positioning and adjustments, for
   local yNew = point.y
   local wNew = frame.w
   local hNew = frame.h
-  local maxWithMB = win:screen():fullFrame() -- max (vertical) size incl. menu bar
-  heightMB = maxWithMB.h - max.h             -- height menu bar
-  
+  --local maxWithMB = win:screen():fullFrame() -- max (vertical) size incl. menu bar
+  --local heightMB = maxWithMB.h - max.h             -- height menu bar
+
   if movedNotResized then
-    if point.x < 0 then -- window moved past left screen border
-      if math.abs(point.x) < wNew / 3 then -- move window back within boundaries of screen if overstepping screen boundary with less than one third of the window
+    if point.x < 0 then                                                                            -- window moved past left screen border
+      if math.abs(point.x) < wNew / 4 then                                                         -- move window back within boundaries of screen if overstepping screen boundary with less than one third of the window
         xNew = 0
-      else -- automatically resize window
-        for i = 1, gridH, 1 do
-          if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns mouse coordinates where moving starts, not ends, therefore sumdx/sumdy make necessary adjustment
-            xNew = 0
-            yNew = (i - 1) * max.h / gridH
-            wNew = max.w / gridW
-            hNew = max.h / gridH
-            break
+      else                                                                                         -- automatically resize window
+        if flags:containExactly(self.moveModifiers) then                                           -- grid: x = 1
+          for i = 1, gridH, 1 do
+            if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns mouse coordinates where moving starts, not ends, therefore sumdx/sumdy make necessary adjustment
+              xNew = 0
+              yNew = heightMB + (i - 1) * max.h / gridH
+              wNew = max.w / gridW
+              hNew = max.h / gridH
+              break
+            end
+          end
+        else                                                                                       -- grid: x = 2 (additional modifier key pressed)
+          for i = 1, gridH, 1 do
+            if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns mouse coordinates where moving starts, not ends, therefore sumdx/sumdy make necessary adjustment
+              xNew = max.w / gridW
+              yNew = heightMB + (i - 1) * max.h / gridH
+              wNew = max.w / gridW
+              hNew = max.h / gridH
+              break
+            end
           end
         end
       end
-    elseif point.x + frame.w > max.w then -- window moved past right screen border
-      if math.abs(point.x - max.w) > wNew / 3 then -- move window back within boundaries of screen (keep size)
+    elseif point.x + frame.w > max.w then                            -- window moved past right screen border
+      if max.w - point.x > math.abs(max.w - point.x - wNew) * 3 then -- 3 times as much inside screen than outside = 1 quarter outside; move window back within boundaries of screen (keep size)
         wNew = frame.w
         xNew = max.w - wNew
-      else -- automatically resize window
-        for i = 1, gridH, 1 do
-          if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
-            xNew = max.w - max.w / gridW
-            yNew = (i - 1) * max.h / gridH
-            wNew = max.w / gridW
-            hNew = max.h / gridH
-            break
+      else                                                                                         -- automatically resize window
+        if flags:containExactly(self.moveModifiers) then                                           -- grid: x = last
+          for i = 1, gridH, 1 do
+            if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
+              xNew = max.w - max.w / gridW
+              yNew = heightMB + (i - 1) * max.h / gridH
+              wNew = max.w / gridW
+              hNew = max.h / gridH
+              break
+            end
+          end
+        else                                                                                       -- grid: x = last - 1 (additional modifier key pressed)
+          for i = 1, gridH, 1 do
+            if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridH - i) * max.h / gridH then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
+              xNew = max.w - 2 * max.w / gridW
+              yNew = heightMB + (i - 1) * max.h / gridH
+              wNew = max.w / gridW
+              hNew = max.h / gridH
+              break
+            end
           end
         end
       end
     end
-    if point.y + hNew > maxWithMB.h then -- if window has been moved past bottom of screen
-      if math.abs(point.y - max.h) > hNew / 3 then -- move window as is back within boundaries
+
+    if point.y + hNew > maxWithMB.h then -- moved window below bottom of screen 
+      if max.h - point.y > math.abs(max.h - point.y - hNew) * 3 and flags:containExactly(self.moveModifiers) then -- move window as is back within boundaries
         yNew = maxWithMB.h - hNew
-      else
-        for i = 1, gridW, 1 do
-          if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridW - i) * max.w / gridW then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
-            xNew = (i - 1) * max.w / gridW
-            yNew = 0
-            wNew = max.w / gridW
-            hNew = max.h
-            break
+      else -- get window to full height in corresponding x-grid
+        if flags:containExactly(self.moveModifiers) then
+          for i = 1, gridW, 1 do
+            if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridW - i) * max.w / gridW then -- correlate mouse position with grid position; getRelativePosition() weirdly returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
+              xNew = (i - 1) * max.w / gridW
+              yNew = heightMB
+              wNew = max.w / gridW
+              hNew = max.h
+              break
+            end
+          end
+        else -- moveModifiersSecondMod: less than half of window down -> lower half of screen, otherwise upper half
+          if max.h - point.y > math.abs(max.h - point.y - hNew) then -- more than half of window within screen -> lower half
+            for i = 1, gridW, 1 do
+              if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridW - i) * max.w / gridW then -- getRelativePosition() returns point where moving starts, not ends, therefore 'sumdy' adds 'way of moving'
+                xNew = (i - 1) * max.w / gridW
+                yNew = heightMB + max.h / 2
+                wNew = max.w / gridW
+                hNew = max.h / 2
+                break
+              end
+            end
+          else -- less than half of window within screen
+            for i = 1, gridW, 1 do
+              if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridW - i) * max.w / gridW then
+                xNew = (i - 1) * max.w / gridW
+                yNew = heightMB
+                wNew = max.w / gridW
+                hNew = max.h / 2
+                break
+              end
+            end
           end
         end
       end
     end
-  else -- if window has been resized (and not moved)
+  else                  -- if window has been resized (and not moved)
     if point.x < 0 then -- window resized past left screen border
       wNew = frame.w + point.x
       xNew = 0
@@ -282,10 +333,13 @@ function LattinMellon:handleClick()
   return function(event)
     if self.dragging then return true end
 
-    local flags = event:getFlags()
+    flags = event:getFlags()
     local eventType = event:getType()
 
-    local isMoving = eventType == self.moveStartMouseEvent and flags:containExactly(self.moveModifiers)
+    moveModifiersSecondMod = table.copy(self.moveModifiers) -- self.moveModifiers not to be changed
+    table.insert(moveModifiersSecondMod, secondMod)
+
+    local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(self.moveModifiers) or flags:containExactly(moveModifiersSecondMod))
     local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizeModifiers)
 
     if isMoving or isResizing then
@@ -308,7 +362,7 @@ function LattinMellon:handleClick()
       local point = win:topLeft()
       local frame = win:frame()
       local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
-      local maxWithMB = win:screen():fullFrame()
+      maxWithMB = win:screen():fullFrame()
       heightMB = maxWithMB.h - max.h   -- height menu bar
       local xOrg = point.x
       local yOrg = point.y
@@ -317,8 +371,8 @@ function LattinMellon:handleClick()
 
       local mousePos = hs.mouse.absolutePosition()
       local mx = wOrg + xOrg - mousePos.x -- distance between right border of window and cursor
-      local dmah = wOrg / 2 - mx -- absolute delta: mid window - cursor
-      mH = dmah * 100 / wOrg -- delta from mid window: -50(left border of window) to 50 (left border)
+      local dmah = wOrg / 2 - mx          -- absolute delta: mid window - cursor
+      mH = dmah * 100 / wOrg              -- delta from mid window: -50(left border of window) to 50 (left border)
 
       local my = hOrg + yOrg - mousePos.y
       local dmav = hOrg / 2 - my
@@ -334,6 +388,15 @@ function LattinMellon:handleClick()
       return nil
     end
   end
+end
+
+-- helper function(s)
+function table.copy(t)
+  local t2 = {}
+  for k, v in pairs(t) do
+    t2[k] = v
+  end
+  return t2
 end
 
 return LattinMellon
