@@ -96,7 +96,7 @@ At the very center of the window there is an erea (M), the size of which depends
 
 For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set grid size, the window snaps into the desired spot.
 
-Version 0.6 intruduces an additional modifier key ('cmd' if not set in 'init.lua'). By pressing it at the same time with the moveModifier(s), windows can be placed in the center grids by moving them beyond the borders of the screen. Simply try it out. More to follow.
+Version 0.6 intruduces an additional modifier key ('cmd' if not stated otherwise in Hammerspoon's 'init.lua'). By pressing it at the same time with the moveModifier(s), windows can be placed in the center grids by moving them beyond the borders of the screen. Simply try it out. More to follow.
 
 ### Disabling move/resize for applications
 
