@@ -37,12 +37,13 @@ end
 -- Usage:
 --     resizer = LattinMellon:new({
 --     margin = 30,
---     gridX = 2,
---     gridY = 2 ,
+--     gridX = 3,
+--     gridY = 3 ,
 --     moveModifiers = {'alt'},
 --     moveMouseButton = 'left',
 --     resizeModifiers = {'alt'},
 --     resizeMouseButton = 'right',
+--     modifierLayerTwo = 'cmd'
 --   })
 
 local function buttonNameToEventType(name, optionName)
