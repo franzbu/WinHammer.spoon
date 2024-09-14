@@ -19,7 +19,7 @@ Manual resizing and positioning:
 
 Automatic resizing and positioning:
 
-<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMallon_wm.gif" />
+<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMallon_wm2.gif" />
 
               
 
