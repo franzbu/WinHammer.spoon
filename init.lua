@@ -145,7 +145,7 @@ function LattinMellon:handleDrag()
       if mH <= -m and mV <= m and mV > -m then -- 9 o'clock
         win:move(hs.geometry.new(current.x + dx, current.y, currentSize.w - dx, currentSize.h), nil, false, 0)
       elseif mH <= -m and mV <= -m then -- 10:30
-        if dy < 0 then -- avoid window being extended downwards when cursor enters menubar
+        if dy < 0 then -- prevent extension of downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x + dx, current.y + dy, currentSize.w - dx, currentSize.h - dy), nil, false,
               0)
@@ -154,7 +154,7 @@ function LattinMellon:handleDrag()
           win:move(hs.geometry.new(current.x + dx, current.y + dy, currentSize.w - dx, currentSize.h - dy), nil, false, 0)
         end
       elseif mH > -m and mH <= m and mV <= -m then -- 12 o'clock
-        if dy < 0 then -- avoid window being extended downwards when cursor enters menubar
+        if dy < 0 then -- prevent extension of downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w, currentSize.h - dy), nil, false, 0)
           end
@@ -162,7 +162,7 @@ function LattinMellon:handleDrag()
           win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w, currentSize.h - dy), nil, false, 0)
         end
       elseif mH > m and mV <= -m then -- 1:30
-        if dy < 0 then                -- avoid window being extended downwards when cursor enters menubar
+        if dy < 0 then                -- prevent extension of downwards when cursor enters menubar
           if current.y > heightMB then
             win:move(hs.geometry.new(current.x, current.y + dy, currentSize.w + dx, currentSize.h - dy), nil, false, 0)
           end
@@ -193,18 +193,17 @@ end
 function LattinMellon:handleCancel()
   return function()
     if not self.dragging then return end
-    self:afterMovingResizing()
+    self:finalMagic()
     self:stop()
   end
 end
 
-function LattinMellon:afterMovingResizing()
+function LattinMellon:finalMagic() -- automatic positioning and adjustments, for example, prevent window from moving/resizing beyond screen boundaries
   if not self.targetWindow then return end
 
   local frame = win:frame()
   local point = win:topLeft()
 
-  -- window cannot move/resize beyond screen boundaries
   local win = hs.window.focusedWindow()
   local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height without menu bar
   local xNew = point.x
