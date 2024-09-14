@@ -74,9 +74,7 @@ To move a window, hold your `moveModifiers` down, then click `moveMouseButton` a
 
 To resize a window, hold your `resizeModifiers` down, then click `resizeMouseButton` and drag the window.
 
-To resize windows only horizontally and vertically, enable this functionality by adjusting the option 'margin' to your liking: '30' signifies that 30 percent of the window (15 precent left and right around the middle of each border) is reserved for horizontal-only and vertical-only resizing.
-
-This horizontal-only and vertical-only resizing has been enabled because there are use scenarios where such a fine tuned resizing is desirable. Placing the cursor in the remainig parts of the window enables you to resize your windows all directions.
+To have the additional possibility to resize windows only horizontally and vertically, enable this functionality by adjusting the option 'margin' to your liking: '30' signifies that 30 percent of the window (15 precent left and right around the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
 
 ```lua
@@ -90,7 +88,7 @@ This horizontal-only and vertical-only resizing has been enabled because there a
 ```
 
 
-As an additional feature, at the very center of the window there is an erea, the size of which depends on the size of the margin for horizontal-only and vertical-only resizing, where you can move the window by pressing the same modifier key and the same mouse button as for resizing. If the margin is set to 0, also this area becomes non-existent.
+At the very center of the window there is an erea (M), the size of which depends on the size of the margin for horizontal-only and vertical-only resizing, where you can move the window by pressing the same modifier key and the same mouse button as for resizing. If the margin is set to 0, this area is disabled.
 
 ### Disabling move/resize for applications
 
