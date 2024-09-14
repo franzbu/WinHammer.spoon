@@ -12,12 +12,12 @@ LattinMellon can also be used for automatic resizing. You can choose the grid si
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still show what you can do with this tool.
 
-Manual moving and resizing:
+Manual resizing and positioning:
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon.gif" />
 
 
-Automatic moving and resizing:
+Automatic resizing and positioning:
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMallon_wm.gif" />
 
@@ -88,8 +88,9 @@ To have the additional possibility to resize windows only horizontally and verti
  +---+---+---+
 ```
 
-
 At the very center of the window there is an erea (M), the size of which depends on the size of the margin for horizontal-only and vertical-only resizing, where you can move the window by pressing the same modifier key and the same mouse button as for resizing. If the margin is set to 0, this area is disabled.
+
+For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set gross size, the window snaps into the desired spot.
 
 ### Disabling move/resize for applications
 
