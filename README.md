@@ -1,22 +1,23 @@
 # LattinMellon.spoon
 
-On macOS, there is a variety of tools to resize and move windows using mouse and keyboard, saving the time of having to painstakingly get a hold of edges and corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
+On macOS, there is a variety of tools for resizing and moving windows using mouse and keyboard and thus saving time to having to grab onto edges or corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
-The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, has a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of a lack of fluency of other tools, but at the same time the canvas can block the view for precise window positioniong while moving or resizing a window.
+The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, has a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency of other tools, but when moving or reducing the size of a window, the canvas prevents precise window positioniong.
 
-The fork of SkyRocket.spoon in this repository, also named SkyRocket.spoon, resolves the first issue; windows can be resized all directions with it. 
+The fork of SkyRocket.spoon in this repository, also named SkyRocket.spoon, resolves the first issue; windows can be resized all directions with that tool.
 
-The second issue, having to accept the limitations of using an overlaying canvas, is resolved by LattinMellon.spoon. It is still in its early development state; therefore, an occational hiccup should be forgiven. Once LattinMellon leaves its beta state, it is going to replace the tool Skyrocket.spoon, which until then is the recommended choice because of its stable release state.
+LattinMellon.spoon also does away with the second issue, namely to having to accept the limitations of using an overlaying canvas. This tool is still in early development state; therefore, the occational hiccup is possible.
 
-LattinMellon also serves as a window manager. You can choose the grid size of the screen (see 'Usage') and move windows (one third of its size or more) beyond the left, right, and bottom window borders to have them automatically resized and placed. You best try it out; its intuitive approach should be mostly self-explanatory.
+LattinMellon can also be used for automatic resizing. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach should be mostly self-explanatory.
 
-The animated GIFs below doesn't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still shows what you can do with this tool.
+The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still show what you can do with this tool.
 
+Manual moving and resizing:
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon.gif" />
 
 
-Window manager:
+Automatic moving and resizing:
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMallon_wm.gif" />
 
