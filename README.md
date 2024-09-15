@@ -1,4 +1,4 @@
-# LattinMellon
+# 💫 LattinMellon
 
 On macOS, there is a variety of tools for resizing and moving windows using mouse and keyboard and thus saving the time of having to grab onto edges or corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
