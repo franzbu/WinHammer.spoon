@@ -6,7 +6,7 @@ The tool SkyRocket by dbalatero, which uses a transparent canvas for addressing 
 
 The fork of SkyRocket in this repository, also named SkyRocket, resolves the first limitation; windows can be resized all directions with that tool.
 
-LattinMellon also does away with the second limitation, namely using a canvas. LattinMellon is still in early development state; therefore, the occational unexpected hiccup should be forgiven.
+However, LattinMellon also does away with the second limitation, namely using a canvas. LattinMellon is still in early development state; therefore, the occational unexpected hiccup should be forgiven.
 
 LattinMellon can also be used for automatic resizing. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach is mostly self-explanatory.
 
