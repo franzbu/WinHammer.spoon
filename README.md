@@ -8,7 +8,7 @@ The tool SkyRocket by dbalatero I have come accross on my search, which uses a t
 
 I started with a fork of dblatero's SkyRocket, which resolved the first limitation; windows can be resized all directions; this tool can be found in this very repository.
 
-Eventually, the limitations of using a canvas led to the development of a new tool, LattinMellon.
+Eventually, the limitations of having to cope a canvas led to the development of a new tool, LattinMellon.
 
 Besides moving and resizing windows focussing on any part of them, LattinMellon can also be used for automatic positioning and resizing of windows with a simple flick of the mouse. You best try it out; its intuitive approach is mostly self-explanatory.
 
