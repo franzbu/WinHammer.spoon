@@ -39,13 +39,13 @@ end
 --     margin = 30,
 --     gridX = 3,
 --     gridY = 3 ,
---     moveModifier(s) = {'alt'},
+--     moveModifier(s) = { 'alt' },
 --     moveMouseButton = 'left',
---     resizeModifier(s) = {'alt'},
+--     resizeModifier(s) = { 'alt' },
 --     resizeMouseButton = 'right',
---     modifierLayerTwo = 'cmd',
---     modifierLayerThree = 'ctrl',
---     modifierLayerFour = 'hyper',
+--     modifierLayerTwo = { 'alt', 'ctrl' },
+--     modifierLayerThree = { 'alt', 'ctrl', 'cmd' },
+--     modifierLayerFour = { 'alt', 'ctrl', 'cmd', 'shift' } ,
 --   })
 
 local function buttonNameToEventType(name, optionName)
