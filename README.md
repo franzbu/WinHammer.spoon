@@ -4,13 +4,13 @@ It should be stressed that this tool is not for everybody and certainly not for 
 
 On macOS, there is a variety of tools for resizing and moving windows using mouse and keyboard and thus saving the time of having to grab onto edges or corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
-The tool SkyRocket by dbalatero I have come accross on my search, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, provides a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioning.
+The tool SkyRocket by dbalatero I have come accross on my search, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, provides a solid foundation. Two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioning.
 
-The fork of SkyRocket in this repository, also named SkyRocket, resolves the first limitation; windows can be resized all directions with that tool.
+I started with a fork of SkyRocket, also named SkyRocket, which resloved the first limitation; windows can be resized all directions; it can also be found in this repository.
 
-However, LattinMellon also does away with the second limitation, namely having to use a canvas.
+Eventually, the mentioned limitations of using a canvas led to the development of a new tool, LattinMellon.
 
-LattinMellon can also be used for automatic positioning and resizing of windows with a simple flick of your mouse. You best try it out; its intuitive approach is mostly self-explanatory.
+Besides moving and resizing windows focussing on any part of them, LattinMellon can also be used for automatic positioning and resizing of windows with a simple flick of the mouse. You best try it out; its intuitive approach is mostly self-explanatory.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still show what you can do with this tool.
 
