@@ -1,5 +1,7 @@
 # 💫 LattinMellon
 
+It should be stressed that this tool is not for everybody and certainly not for the average user. Only try it out if you are accustomed or interested in using your mouse less and your keyboard more in oder to get things done faster. That being said, if it has not thrown you off, then by all means keep reading.
+
 On macOS, there is a variety of tools for resizing and moving windows using mouse and keyboard and thus saving the time of having to grab onto edges or corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
 The tool SkyRocket by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, provides a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioning.
