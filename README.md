@@ -75,13 +75,14 @@ LattinMellon:new({
 })
 ```
 
-### Moving
+### Manual Moving of a Window
 
-To move a window, hold your `moveModifiers` down, then click `moveMouseButton` and drag the window.
+To move a window, hold your `moveModifiers` down, then click `moveMouseButton` and drag the window. If a window is dragged up to ten percent of its width (left and right borders of screen) or its height (bottom border), it will automatically snap back within the limits of the screen.
 
-### Resizing
 
-To resize a window, hold your `resizeModifiers` down, then click `resizeMouseButton` and drag the window.
+### Manual Resizing
+
+To resize a window, hold your `resizeModifiers` down, then click `resizeMouseButton` and drag the window. If a window is resized beyond the borders of the screen (where possible), it will automatically snap back within the limits of the screen.
 
 To have the additional possibility to resize windows only horizontally and vertically, enable this functionality by adjusting the option 'margin' to your liking: '30' signifies that 30 percent of the window (15 precent left and right around the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
@@ -98,30 +99,29 @@ To have the additional possibility to resize windows only horizontally and verti
 
 At the very center of the window there is an erea (M), the size of which depends on the size of the margin for horizontal-only and vertical-only resizing, where you can move the window by pressing the same modifier key and the same mouse button as for resizing. If the margin is set to 0, this area is disabled.
 
-For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set grid size, the window snaps into the desired spot.
 
-Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoon's 'init.lua' (otherwise LattinMellon defaults back to the modifiers stated in the exemplary 'init.lua' section above). Using the different layers of modifier keys leads to the following results:
+### Automatic Positioning and Resizing
 
-* All layers, starting with the moveModifiers and resizeModifiers, up to modifierLayerFour, can be used for resizing and moving the window within the screen; the different layers lead to a different result - depending on the modifier key(s) pressed - once windows are moved beyond one of the sreen boundaries. 
+For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set grid size, the window snaps into the desired position and size. The window can be moved with the `resizeModifiers`, `moveModifiers` (cursor in the middle of the windows), or any of the higher level modifiers. While using the `resizeModifiers` and `moveModifiers` (cursor in the middle of the window) makes no difference, using the higher level modifiers leads to different positioning and resizing of the windows as described below.
 
 * Layer one (moveModifier, resizeModifier):
-  * window moved past left/right boundaries of screen: depending on the size of the grid established in 'init.lua', windows snap into the first/last column of the screen. The vertical positioning depends on the position of the cursur when moving the window beyond the screen boundary.
-  * window moved past bottom boundary of screen: windows snap into full height; width depends on grid size.
+  * If windows are moved past the left/right boundaries of screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursur when moving the window beyond the screen boundary.
+  * If windows are moved past the bottom boundary of screen: windows snap into full height; width depends on grid size.
 
 * Layer two:
   * left/right: windows snap into second/penultimate column of the screen.
-  * bottom: windows snap into full height; width is double of layer one.
+  * bottom: windows snap into full height; width is two grids.
  
 * Layer three:
   * left/right: window snaps into 2x2 grid, starting from the position where the cursor is moved beyond the screen boundary.
-  * bottom: window snaps into with of grid and half of the size of the screen (bottom)
+  * bottom: window snaps into width of grid and the bottom half of the size of the screen.
  
 * Layer four:
   * left/right: window snaps into left/right half of the screen
-  * bottom: same as with layer three, but top half
+  * bottom: window snaps into width of grid and the top half of the size of the screen.
 
 
-### Disabling moving/resizing for applications
+### Disabling moving/resizing for certain applications
 
 You can disable move/resize for any application by adding it to the `disabledApps` option:
 
