@@ -6,7 +6,7 @@ On macOS, there is a variety of tools for resizing and moving windows using mous
 
 The tool SkyRocket by dbalatero I have come accross on my search, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, provides a solid foundation. Two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioning.
 
-I started with a fork of dblatero's SkyRocket, which resloved the first limitation; windows can be resized all directions; it can also be found in this repository.
+I started with a fork of dblatero's SkyRocket, which resolved the first limitation; windows can be resized all directions; it can also be found in this repository.
 
 Eventually, the mentioned limitations of using a canvas led to the development of a new tool, LattinMellon.
 
