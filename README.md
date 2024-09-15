@@ -4,11 +4,11 @@ On macOS, there is a variety of tools for resizing and moving windows using mous
 
 The tool SkyRocket by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, has a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioniong.
 
-The fork of SkyRocket in this repository, also named SkyRocket, resolves the first issue; windows can be resized all directions with that tool.
+The fork of SkyRocket in this repository, also named SkyRocket, resolves the first limitation; windows can be resized all directions with that tool.
 
-LattinMellon also does away with the second issue, namely to having to accept the limitations of using an overlaying canvas. This tool is still in early development state; therefore, the occational hiccup is possible.
+LattinMellon also does away with the second limitation, namely using a canvas. LattinMellon is still in early development state; therefore, the occational unexpected hiccup should be forgiven.
 
-LattinMellon can also be used for automatic resizing. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach should be mostly self-explanatory.
+LattinMellon can also be used for automatic resizing. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach is mostly self-explanatory.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still show what you can do with this tool.
 
@@ -27,7 +27,7 @@ Automatic resizing and positioning:
 
 This tool requires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
 
-To install LattinMellon.spoon, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'LattinMellon.spoon'. 
+To install LattinMellon, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'LattinMellon.spoon'. 
 
 Alternatively, you can simply paste the following line into a terminal window and press enter:
 
@@ -75,16 +75,16 @@ LattinMellon:new({
 })
 ```
 
-### Manual Moving of a Window
+### Manual Moving
 
-To move a window, hold your `moveModifiers` or any higher level modifier key(s) down, then click `moveMouseButton` and drag the window. If a window is dragged up to ten percent of its width (left and right borders of screen) or its height (bottom border), it will automatically snap back within the limits of the screen.
+To move a window, hold your `moveModifiers` or any higher level modifier key(s) down, then click `moveMouseButton` and drag the window. If a window is dragged up to ten percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the limits of the screen. If it is dragged beyond that limit, it starts getting interesting because then automatic resizing and positioning come into play - more about that below.
 
 
 ### Manual Resizing
 
-To resize a window, hold your `resizeModifiers` or any higher level modifier key(s) down, then click `resizeMouseButton` and drag the window. If a window is resized beyond the borders of the screen (where possible), it will automatically snap back within the limits of the screen.
+To resize a window, hold your `resizeModifiers` or any higher level modifier key(s) down, then click `resizeMouseButton` and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
 
-To have the additional possibility to precisely resize windows horizontally-only and vertically-only, enable this functionality by adjusting the option 'margin' to your liking: '30' signifies that 30 percent of the window (15 precent left and right around the middle of each border) is reserved for horizontal-only and vertical-only resizing.
+To have the additional possibility to precisely resize windows horizontally-only and vertically-only, the option 'margin' has to be set to a value higher than '0': '30', for example, signifies that 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
 
 ```lua
@@ -97,29 +97,29 @@ To have the additional possibility to precisely resize windows horizontally-only
  +---+---+---+
 ```
 
-At the very center of the window there is an erea (M), the size of which depends on the size of the margin for horizontal-only and vertical-only resizing (margin in 'init.lua'), where you can move the window by pressing the same modifier key and the same mouse button as for resizing. If the margin is set to 0, the 'M' area is disabled alongside with the horizontal-only and vertical-only resizing.
+At the very center of the window there is an erea (M), the size of which depends on the size of the just described margin for horizontal-only and vertical-only resizing. In the M-part of a window, you can also move the latter by pressing the resizeMouseButton. If the margin is set to 0, the 'M' area is disabled alongside with the horizontal-only and vertical-only resizing.
 
 
 ### Automatic Positioning and Resizing
 
-For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set grid size, the window snaps into the desired position and size. As has been mentioned, windows can be moved with the `resizeModifiers`, `moveModifiers` (cursor in the middle of the windows), or any of the higher level modifiers. 
+For automatic resizing and positioning of a window, you simply have to move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveModifiers`, `resizeModifiers` (cursor in the middle of the windows), or any of the higher level modifiers. 
 
-As long as windows are resized, or moved within the borders of the screen (and not more than ten percent of its size outside), it makes no difference which one of the modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen boundaries (ten or more percent of the window size is beyond), different positioning and resizing scenarios take place; they are as follows:
+As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen borders (ten or more percent of the window size is beyond), different positioning and resizing scenarios take place; they are as follows:
 
 * Layer one (moveModifier, resizeModifier):
-  * If windows are moved past the left/right boundaries of screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursur when moving the window beyond the screen boundary.
-  * If windows are moved past the bottom boundary of screen: windows snap into full height; width depends on grid size.
+  * If windows are moved past the left/right borders of screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursur when moving the window beyond the screen border.
+  * If windows are moved past the bottom border of screen: windows snap into full height; width depends on grid size.
 
 * Layer two:
   * left/right: windows snap into second/penultimate column of the screen.
   * bottom: windows snap into full height; width is two grids.
  
 * Layer three:
-  * left/right: window snaps into 2x2 grid, starting from the position where the cursor is moved beyond the screen boundary.
+  * left/right: window snaps into 2x2 grid, starting from the position where the cursor is moved beyond the screen border.
   * bottom: window snaps into width of grid and the bottom half of the size of the screen.
  
 * Layer four:
-  * left/right: imagine the window border divided into three equally long parts: if you cross the screen boundary in the middle third, the window snaps into left (or right) half of the screen. Crossing the screen boundary in the upper and lower thirds, the window snaps into occupying the respective quarter of the screen.
+  * left/right: imagine the window border divided into three equally long parts: if you cross the screen border in the middle third, the window snaps into left (or right) half of the screen. Crossing the screen border in the upper and lower thirds, the window snaps into occupying the respective quarter of the screen.
   * bottom: window snaps into width of grid and the top half of the size of the screen.
 
 
