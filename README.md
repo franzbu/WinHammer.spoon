@@ -121,7 +121,7 @@ Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoo
   * bottom: same as with layer three, but top half
 
 
-### Disabling move/resize for applications
+### Disabling moving/resizing for applications
 
 You can disable move/resize for any application by adding it to the `disabledApps` option:
 
