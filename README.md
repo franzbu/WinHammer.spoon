@@ -12,7 +12,7 @@ Eventually, the limitations of having to cope a canvas led to the development of
 
 Besides moving and resizing windows by placing the cursor in virtually any part of them, LattinMellon can also be used for automatic positioning and resizing of windows with a simple flick of the mouse. You best try it out; its intuitive approach is mostly self-explanatory.
 
-The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still show what you can do with this tool.
+The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still gives you an idea how this tool works.
 
 Manual resizing and positioning:
 
