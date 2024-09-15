@@ -69,8 +69,8 @@ LattinMellon:new({
 
   -- modifier to be pressed in addition to moveModifiers
   -- to access additional layers of window positioning and resizing:
-  modifierLayerTwo = { 'alt', 'ctrl' }, -- 'shift',
-  modifierLayerThree = { 'alt', 'ctrl', 'cmd' }, -- 'ctrl',
+  modifierLayerTwo = { 'alt', 'ctrl' },
+  modifierLayerThree = { 'alt', 'ctrl', 'cmd' },
   modifierLayerFour = { 'alt', 'ctrl', 'cmd', 'shift' }, -- hyper key
 })
 ```
