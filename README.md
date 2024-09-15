@@ -67,7 +67,7 @@ LattinMellon:new({
   -- mouse button to hold to resize a window:
   resizeMouseButton = 'right',
 
-  -- modifier to be pressed in addition to moveModifiers
+  -- modifiers to be pressed in addition to moveModifiers
   -- to access additional layers of window positioning and resizing:
   modifierLayerTwo = { 'alt', 'ctrl' },
   modifierLayerThree = { 'alt', 'ctrl', 'cmd' },
