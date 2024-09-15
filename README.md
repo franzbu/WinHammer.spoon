@@ -31,7 +31,7 @@ This tool requires [Hammerspoon](https://www.hammerspoon.org/) to be installed a
 
 To install LattinMellon, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'LattinMellon.spoon'. 
 
-Alternatively, you can simply paste the following line into a terminal window and press enter:
+Alternatively, you can simply paste the following line into a terminal window and execute it:
 
 ```lua
 
