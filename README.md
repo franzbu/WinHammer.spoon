@@ -1,12 +1,12 @@
-# LattinMellon.spoon
+# LattinMellon
 
 On macOS, there is a variety of tools for resizing and moving windows using mouse and keyboard and thus saving the time of having to grab onto edges or corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
-The tool SkyRocket.spoon by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, has a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioniong.
+The tool SkyRocket by dbalatero, which uses a transparent canvas for addressing the already mentioned lack of fluency other tools are hampered with, has a solid foundation. Eventually, two things left me wanting, though. The first was the limitation of balatero's tool to resize windows only down/right. Second, the solution with using an additional canvas solved the problem of the lack of fluency, but when moving or reducing the size of a window, the canvas prevents precise window positioniong.
 
-The fork of SkyRocket.spoon in this repository, also named SkyRocket.spoon, resolves the first issue; windows can be resized all directions with that tool.
+The fork of SkyRocket in this repository, also named SkyRocket, resolves the first issue; windows can be resized all directions with that tool.
 
-LattinMellon.spoon also does away with the second issue, namely to having to accept the limitations of using an overlaying canvas. This tool is still in early development state; therefore, the occational hiccup is possible.
+LattinMellon also does away with the second issue, namely to having to accept the limitations of using an overlaying canvas. This tool is still in early development state; therefore, the occational hiccup is possible.
 
 LattinMellon can also be used for automatic resizing. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach should be mostly self-explanatory.
 
@@ -100,7 +100,7 @@ At the very center of the window there is an erea (M), the size of which depends
 
 For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set grid size, the window snaps into the desired spot.
 
-Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoon's 'init.lua'. Using the different layers of modifier keys leads to the following results:
+Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoon's 'init.lua' (otherwise LattinMellon defaults back to the modifiers stated in the exemplary 'init.lua' section above). Using the different layers of modifier keys leads to the following results:
 
 * All layers, starting with the moveModifiers and resizeModifiers, up to modifierLayerFour - more layers with theoretically all combinations of modifiers keys are conceivable - can be used for resizing and moving the window within the screen; the different layers only lead to a different result once windows are moved beyond one of the sreen boundaries.
 
