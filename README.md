@@ -8,7 +8,7 @@ The fork of SkyRocket in this repository, also named SkyRocket, resolves the fir
 
 However, LattinMellon also does away with the second limitation, namely having to use a canvas.
 
-LattinMellon can also be used for automatic resizing. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach is mostly self-explanatory.
+LattinMellon can also be used for automatic positioning and resizing of windows with a simple flick of your mouse. You can choose the grid size of the screen, see also 'Usage' below. You best try it out; its intuitive approach is mostly self-explanatory.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Nevertheless, the animations still show what you can do with this tool.
 
