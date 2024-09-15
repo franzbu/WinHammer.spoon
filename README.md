@@ -47,7 +47,7 @@ local LattinMellon = hs.loadSpoon("LattinMellon")
 LattinMellon:new({
   -- How much space (in percent) in the middle of each of the four window-margins do you want to reserve for limiting
   -- resizing windows to horizontally and vertically? 0 disables this function, 100 disables diagonal resizing.
-  margin = 20,
+  margin = 30,
 
   -- window manager - choose the size of the grid:
   gridX = 3,
