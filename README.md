@@ -1,6 +1,6 @@
 # 💫 LattinMellon
 
-It should be stressed that this tool is not for everybody and certainly not for the average user. Only try it out if you are accustomed or interested in using your mouse less and your keyboard more in oder to get things done faster.
+It should be stressed that this tool is not for everybody and certainly not for the average user. Only try it out if you are accustomed or at very least interested in using your mouse less and your keyboard more in oder to get things done faster.
 
 On macOS, there is a variety of tools for resizing and moving windows using mouse and keyboard and thus saving the time of having to grab onto edges or corners of windows. However, none of these tools have satisfied me, be it for the lack of fluency or for functional limitations. 
 
