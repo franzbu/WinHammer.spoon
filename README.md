@@ -109,20 +109,20 @@ For automatic resizing and positioning of a window, you simply have to move 10 p
 As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen borders (10 or more percent of the window size is beyond), different positioning and resizing scenarios are called into action; they are as follows:
 
 * Layer one (moveModifier, resizeModifier):
-  * If windows are moved past the left/right borders of screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursur when moving the window beyond the screen border.
-  * If windows are moved past the bottom border of screen: windows snap into full height; width depends on grid size.
+  * If windows are moved past the left/right borders of the screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursor when moving the window beyond the screen border.
+  * If windows are moved past the bottom border of the screen: windows snap into full height; width corresponds to the size of the grid (one grid column).
 
 * Layer two:
   * left/right: windows snap into second/penultimate column of the screen.
-  * bottom: windows snap into full height; width is two grids.
+  * bottom: windows snap into full height; width is two grid columns.
  
 * Layer three:
-  * left/right: window snaps into 2x2 grid, starting from the position where the cursor is moved beyond the screen border.
-  * bottom: window snaps into width of grid and the bottom half of the size of the screen.
+  * left/right: windows snap into 2x2 grid, aligned to the grid cell where the cursor is moved beyond the screen border.
+  * bottom: window snaps into width of a grid column and in terms of height the bottom half of the size of the screen.
  
 * Layer four:
-  * left/right: imagine the window border divided into three equally long parts: if you cross the screen border in the middle third, the window snaps into left (or right) half of the screen. Crossing the screen border in the upper and lower thirds, the window snaps into occupying the respective quarter of the screen.
-  * bottom: window snaps into width of grid and the top half of the size of the screen.
+  * left/right: imagine the screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third, the window snaps into the left/right half of the screen. Crossing the screen border in the upper and lower thirds the window snaps into the respective quarters of the screen.
+  * bottom: windows snap into the width of one grid element and the top half of the height of the screen.
 
 
 ### Disabling moving/resizing for certain applications
