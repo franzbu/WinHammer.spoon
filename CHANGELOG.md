@@ -1,7 +1,7 @@
 # v0.6
 
 * Beta release:
-  With the use of an additional modifier key, pressed at the same time, a second layer of window resizing and positioning is available.
+  With the use of an additional modifier key, pressed at the same time, additional layers of window resizing and positioning are possible.
 
 # v0.5
 
