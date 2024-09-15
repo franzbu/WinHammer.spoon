@@ -45,29 +45,33 @@ Once you've installed LattinMellon, add this to your `~/.hammerspoon/init.lua` f
 local LattinMellon = hs.loadSpoon("LattinMellon")
 
 LattinMellon:new({
-  -- How much space (in percent) in the middle of each of the four borders of the windows do you want to reserve for limiting 
-  -- resizing windows only horizontally and vertically? 0 disables this function, 100 disables diagonal resizing.
-  margin = 30,
+  -- How much space (in percent) in the middle of each of the four window-margins do you want to reserve for limiting
+  -- resizing windows to horizontally and vertically? 0 disables this function, 100 disables diagonal resizing.
+  margin = 20,
 
   -- window manager - choose the size of the grid:
   gridX = 3,
   gridY = 3,
 
-  -- Which modifiers to hold to move a window?
-  moveModifiers = {'alt'},
+  -- modifier(s) to hold to move a window:
+  -- moveModifiers = {'ctrl', 'shift'},
+  moveModifiers = { 'alt' },
 
-  -- Which mouse button to hold to move a window?
+  -- mouse button to hold to move a window:
   moveMouseButton = 'left',
 
-  -- Which modifiers to hold to resize a window?
-  resizeModifiers = {'alt'},
+  -- modifier(s) to hold to resize a window:
+  -- resizeModifiers = {'ctrl', 'shift'},
+  resizeModifiers = { 'alt' },
 
-  -- Which mouse button to hold to resize a window?
+  -- mouse button to hold to resize a window:
   resizeMouseButton = 'right',
 
-  -- modifier to be pressed in addition to moveModifiers 
-  -- to access Layer 2 of window positioning and resizing:
-  modifierLayerTwo = 'cmd' 
+  -- modifier to be pressed in addition to moveModifiers
+  -- to access additional layers of window positioning and resizing:
+  modifierLayerTwo = { 'alt', 'ctrl' }, -- 'shift',
+  modifierLayerThree = { 'alt', 'ctrl', 'cmd' }, -- 'ctrl',
+  modifierLayerFour = { 'alt', 'ctrl', 'cmd', 'shift' }, -- hyper key
 })
 ```
 
