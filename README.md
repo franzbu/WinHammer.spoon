@@ -104,7 +104,7 @@ At the very center of the window there is an erea (M), the size of which depends
 
 ### Automatic Positioning and Resizing
 
-For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveModifiers`, `resizeModifiers` (cursor in the middle of the windows), or any of the higher level modifiers. 
+For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveModifiers`, `resizeModifiers` (with your cursor in the middle of the windows), or any of the higher level modifiers. 
 
 As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen borders (10 or more percent of the window size is beyond), different positioning and resizing scenarios take place; they are as follows:
 
