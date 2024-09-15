@@ -96,7 +96,26 @@ At the very center of the window there is an erea (M), the size of which depends
 
 For automatic resizing and positioning of a window, simply move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the set grid size, the window snaps into the desired spot.
 
-Version 0.6 intruduces an additional modifier key ('cmd' if not stated otherwise in Hammerspoon's 'init.lua'). By pressing it at the same time with the moveModifier(s), windows can be placed in the center grids by moving them beyond the borders of the screen. Simply try it out. More to follow.
+Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoon's 'init.lua'. Using the different layers of modifier keys leads to the following results:
+
+* All layers, starting with the moveModifiers and resizeModifiers, up to modifierLayerFour - more layers with theoretically all combinations of modifiers keys are conceivable - can be used for resizing and moving the window within the screen; the different layers only lead to a different result once windows are moved beyond one of the sreen boundaries.
+
+* Layer one (moveModifier, resizeModifier):
+  * left/right boundaries of screen: depending on the size of the grid established in 'init.lua', windows snap into the first/last column of the screen. The vertical positioning depends on the position of the cursur when moving the window beyond the screen boundary.
+  * bottom boundary of screen: windows snap into full height; width depends on grid size.
+
+* Layer two:
+  * left/right: windows snap into second/penultimate column of the screen.
+  * bottom: windows snap into full height; width is double of layer one.
+ 
+* Layer three:
+  * left/right: window snaps into 2x2 grid, starting from the position where the cursor is moved beyond the screen boundary.
+  * bottom: window snaps into with of grid and half of the size of the screen (bottom)
+ 
+* Layer four:
+  * left/right: not implemented yet
+  * bottom: same as with layer three, but top half
+
 
 ### Disabling move/resize for applications
 
