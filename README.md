@@ -79,7 +79,7 @@ LattinMellon:new({
 
 ### Manual Moving
 
-To move a window, hold your `moveModifiers` or any higher level modifier key(s) down, then click `moveMouseButton` and drag the window. If a window is dragged up to ten percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the limits of the screen. If the window is dragged beyond that 10-percent-limit, things start to get interesting because then automatic resizing and positioning come into play - more about that in a minute.
+To move a window, hold your `moveModifiers` or any higher level modifier key(s) down, then click `moveMouseButton` and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the limits of the screen. If the window is dragged beyond that 10-percent-limit, things start to get interesting because then automatic resizing and positioning come into play - more about that in a minute.
 
 
 ### Manual Resizing
@@ -104,9 +104,9 @@ At the very center of the window there is an erea (M), the size of which depends
 
 ### Automatic Positioning and Resizing
 
-For automatic resizing and positioning of a window, you simply have to move one third or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveModifiers`, `resizeModifiers` (cursor in the middle of the windows), or any of the higher level modifiers. 
+For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveModifiers`, `resizeModifiers` (cursor in the middle of the windows), or any of the higher level modifiers. 
 
-As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen borders (ten or more percent of the window size is beyond), different positioning and resizing scenarios take place; they are as follows:
+As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen borders (10 or more percent of the window size is beyond), different positioning and resizing scenarios take place; they are as follows:
 
 * Layer one (moveModifier, resizeModifier):
   * If windows are moved past the left/right borders of screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursur when moving the window beyond the screen border.
