@@ -102,11 +102,11 @@ For automatic resizing and positioning of a window, simply move one third or mor
 
 Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoon's 'init.lua' (otherwise LattinMellon defaults back to the modifiers stated in the exemplary 'init.lua' section above). Using the different layers of modifier keys leads to the following results:
 
-* All layers, starting with the moveModifiers and resizeModifiers, up to modifierLayerFour - more layers with theoretically all combinations of modifiers keys are conceivable - can be used for resizing and moving the window within the screen; the different layers only lead to a different result once windows are moved beyond one of the sreen boundaries.
+* All layers, starting with the moveModifiers and resizeModifiers, up to modifierLayerFour, can be used for resizing and moving the window within the screen; the different layers lead to a different result - depending on the modifier key(s) pressed - once windows are moved beyond one of the sreen boundaries. 
 
 * Layer one (moveModifier, resizeModifier):
-  * left/right boundaries of screen: depending on the size of the grid established in 'init.lua', windows snap into the first/last column of the screen. The vertical positioning depends on the position of the cursur when moving the window beyond the screen boundary.
-  * bottom boundary of screen: windows snap into full height; width depends on grid size.
+  * window moved past left/right boundaries of screen: depending on the size of the grid established in 'init.lua', windows snap into the first/last column of the screen. The vertical positioning depends on the position of the cursur when moving the window beyond the screen boundary.
+  * window moved past bottom boundary of screen: windows snap into full height; width depends on grid size.
 
 * Layer two:
   * left/right: windows snap into second/penultimate column of the screen.
@@ -117,7 +117,7 @@ Version 0.6 intruduces additional modifier keys, which are defined in Hammerspoo
   * bottom: window snaps into with of grid and half of the size of the screen (bottom)
  
 * Layer four:
-  * left/right: not implemented yet
+  * left/right: window snaps into left/right half of the screen
   * bottom: same as with layer three, but top half
 
 
