@@ -1,4 +1,4 @@
-# 💫 LattinMellon
+# LattinMellon
 
 It should be stressed that this tool is not for everybody and certainly not for the average user. Only go for it if you are accustomed to, or at the very least interested in using your mouse less and your keyboard more in order to get the management of the windows on your screen(s) done more efficiently.
 
