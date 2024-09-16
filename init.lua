@@ -35,12 +35,12 @@ local function getWindowUnderMouse()
 end
 
 -- Usage:
---     resizer = LattinMellon:new({
+--   resizer = LattinMellon:new({
 --     margin = 30,
 --     moveAndResizeModifier = { 'alt' },
 --     OMmodifier = { 'alt', 'ctrl' },
 --     TATmodifier = { 'alt', 'ctrl', 'cmd' },
---     SATmodifier = { 'alt', 'ctrl', 'cmd', 'shift' } ,
+--     SATmodifier = { 'alt', 'ctrl', 'cmd', 'shift' },
 --   })
 
 local function buttonNameToEventType(name, optionName)
@@ -231,7 +231,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
-          -- window moved past left screen border
+        -- window moved past left screen border
         else -- automatically resize and position window within grid
           for i = 1, gridY, 1 do
             -- middle third of left border
@@ -253,7 +253,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             end
           end
         end
-        -- moved window past right screen border
+      -- moved window past right screen border
       elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
         if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then                                      -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
           wNew = frame.w
@@ -279,7 +279,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             end
           end
         end
-        -- moved window below bottom of screen
+      -- moved window below bottom of screen
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
         if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then                                                                -- and flags:containExactly(self.moveModifiers) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
