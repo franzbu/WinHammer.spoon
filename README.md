@@ -48,32 +48,16 @@ local LattinMellon = hs.loadSpoon("LattinMellon")
 
 LattinMellon:new({
   -- How much space (in percent) in the middle of each of the four window-margins do you want to reserve for limiting
-  -- resizing windows to horizontally and vertically? 0 disables this function, 100 disables diagonal resizing.
+  -- resizing windows to horizontally and vertically? 0 disables this function, 100 disables diagonal resizing:
   margin = 30,
 
-  -- window manager - choose the size of the grid:
-  gridX = 3,
-  gridY = 3,
+  -- modifier(s) to hold to move (left mouse button) or resize (right mouse button) a window:
+  moveAndResizeModifier = { 'alt' },
 
-  -- modifier(s) to hold to move a window:
-  -- moveModifiers = {'ctrl', 'shift'},
-  moveModifiers = { 'alt' },
-
-  -- mouse button to hold to move a window:
-  moveMouseButton = 'left',
-
-  -- modifier(s) to hold to resize a window:
-  -- resizeModifiers = {'ctrl', 'shift'},
-  resizeModifiers = { 'alt' },
-
-  -- mouse button to hold to resize a window:
-  resizeMouseButton = 'right',
-
-  -- modifiers to be pressed in addition to moveModifiers
-  -- to access additional layers of window positioning and resizing:
-  modifierLayerTwo = { 'alt', 'ctrl' },
-  modifierLayerThree = { 'alt', 'ctrl', 'cmd' },
-  modifierLayerFour = { 'alt', 'ctrl', 'cmd', 'shift' }, -- hyper key
+  -- modifiers for additional features:
+  OMmodifier = { 'alt', 'ctrl' }, -- 'shift',
+  TATmodifier = { 'alt', 'ctrl', 'cmd' }, -- 'ctrl',
+  SATmodifier = { 'alt', 'ctrl', 'cmd', 'shift' }, -- hyper key
 })
 ```
 
