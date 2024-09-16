@@ -356,9 +356,6 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-
-
-
     end
   else -- if window has been resized (and not moved)
     if point.x < 0 then -- window resized past left screen border
