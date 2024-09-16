@@ -63,12 +63,12 @@ LattinMellon:new({
 
 ### Manual Moving
 
-To move a window, hold your `moveModifiers` or any higher level modifier key(s) down, then click `moveMouseButton` and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the limits of the screen. If the window is dragged beyond that 10-percent-limit, things start to get interesting because then automatic resizing and positioning come into play - more about that in a minute.
+To move a window, hold your `moveAndResizeModifier` or OM-, TAT-, or SATmodifier key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the limits of the screen. If the window is dragged beyond that 10-percent-limit, things start to get interesting because then automatic resizing and positioning come into play - more about that in a minute.
 
 
 ### Manual Resizing
 
-To manually resize a window, hold your `resizeModifiers` or any higher level modifier key(s) down, then click `resizeMouseButton` in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
+To manually resize a window, hold your `moveAndResizeModifier` or any higher level modifier key(s) down, then click the right mouse button in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
 
 To have the additional possibility to precisely resize windows horizontally-only and vertically-only, the option 'margin' has to be set to a value higher than '0'. '30', for example, signifies that 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
@@ -88,25 +88,23 @@ At the very center of the window there is an erea (M), the size of which depends
 
 ### Automatic Positioning and Resizing
 
-For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveModifiers`, `resizeModifiers` (with your cursor in the middle of the window), or any of the higher level modifiers. 
+For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of the screen. Depending on the grid size set in 'init.lua', the window snaps into the according position and size. As has been mentioned, windows can be moved with the `moveAndResizeModifier` key or your OM-, TAT-, or SATmodifier key(s). 
 
-As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys (resizeModifiers, moveModifiers, modifierLayerTwo, modifierLayerThree, modifierLayerFour) is used. However, once a window is moved beyond the screen borders (10 or more percent of the window), different positioning and resizing scenarios are called into action; they are as follows:
+As long as windows are resized, or moved within the borders of the screen, it makes no difference which one of the various modifier keys is used. However, once a window is moved beyond the screen borders (10 or more percent of the window), different positioning and resizing scenarios are called into action; they are as follows:
 
-* Layer one (moveModifier, resizeModifier):
-  * If windows are moved past the left/right borders of the screen: depending on the size of the grid (gridX, gridY) established in 'init.lua', windows snap into the corresponding grid position in the first/last column of the screen. The vertical grid position correlates with the position of the cursor when moving the window beyond the screen border.
-  * If windows are moved past the bottom border of the screen: windows snap into full height; width corresponds to the size of the grid (one grid column).
+* moveAndResizeModifier: 
+  * If windows are moved beyond the left (right) borders of the screen: imagine your screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the border, the window snaps into the left (right) half of the screen. Crossing the screen border in the upper and lower thirds, the window snaps into the respective quarters of the screen.
+  * If windows are moved beyond the bottom border of the screen: imagine your bottom screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the bottom border, the window snaps into full screen. Crossing the screen border in the left and right thirds, the window snaps into the respective halfs of the screen.
 
-* Layer two:
-  * left/right: windows snap into second/penultimate column of the screen.
-  * bottom: windows snap into full height; width is two grid columns.
+* OMmodifier:
+  * Similar to moveAndResizeModifier; however, imagine your screen as a 3 x 3 grid.
  
-* Layer three:
-  * left/right: windows snap into 2x2 grid, aligned to the grid cell where the cursor is moved beyond the screen border.
-  * bottom: window snaps into width of a grid column and in terms of height the bottom half of the size of the screen.
+* TATmodifier:
+  * To be added.
  
-* Layer four:
-  * left/right: imagine the screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third, the window snaps into the left/right half of the screen. Crossing the screen border in the upper and lower thirds the window snaps into the respective quarters of the screen.
-  * bottom: windows snap into the width of one grid element and the top half of the height of the screen.
+* SATmodifier:
+  * To be added.
+ 
 
 
 ### Disabling moving/resizing for certain applications
