@@ -1,3 +1,8 @@
+# v0.7
+
+* Beta release:
+  Code cleanup.
+
 # v0.6
 
 * Beta release:
