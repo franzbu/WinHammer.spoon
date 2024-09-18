@@ -9,7 +9,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.7.1"
+LattinMellon.version = "0.7"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -402,7 +402,8 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             wNew = max.w / gridX * 2
             hNew = max.h
           else -- second (right) double width
-            xNew = max.w - max.w / gridX
+            print("right")
+            xNew = max.w - max.w / gridX * 2
             yNew = heightMB
             wNew = max.w / gridX * 2
             hNew = max.h
