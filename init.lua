@@ -306,6 +306,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
+
     elseif tablesEqual(flags, OMmodifier) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
@@ -401,6 +402,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       end
     end
+
   else -- if window has been resized (and not moved)
     if point.x < 0 then -- window resized past left screen border
       wNew = frame.w + point.x
@@ -428,21 +430,17 @@ function LattinMellon:handleClick()
 
     flags = {}
     
-  ---[[ -- flagsOrg looks like this: {'alt' true}; the following loop turns it into a table comparable to the one initiated in Hammerspoon's init.lua
+  -- flagsOrg looks like this: {'alt' true}; the loop below turns it into a table comparable to the one initiated in Hammerspoon's init.lua
     k = 1
     for i,v in pairs(flagsOrg) do
       flags[k] = i
       k = k + 1
     end
-  --]]
-
-  ---[[
     
     -- local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizeModifiers)
     -- local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(self.moveModifiers) or flags:containExactly(OMmodifier) or flags:containExactly(TATmodifier) or flags:containExactly(SATmodifier))
     local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, self.moveModifiers) or tablesEqual(flags, OMmodifier) or tablesEqual(flags, TATmodifier) or tablesEqual(flags, SATmodifier))
     local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, self.moveModifiers) or tablesEqual(flags, OMmodifier) or tablesEqual(flags, TATmodifier) or tablesEqual(flags, SATmodifier))
-  --]]
 
    --[[
     if tablesEqual(flags, OMmodifier) then
@@ -524,12 +522,12 @@ function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
 
 --[[
   print("--a--")
-  for i = 1, 2 do
+  for i = 1, #a do
     print(a[i])
   end
 
   print("--b--")
-  for i = 1, 2 do
+  for i = 1, #b do
     print(b[i])
   end
 --]]
