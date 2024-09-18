@@ -9,7 +9,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.7"
+LattinMellon.version = "0.7.1"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -60,15 +60,6 @@ function LattinMellon:new(options)
   OMmodifier = options.OMmodifier -- or { 'alt', 'ctrl' }
   TATmodifier = options.TATmodifier or { 'alt', 'ctrl', 'cmd' }
   SATmodifier = options.SATmodifier or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
-
-
-  --fb
-  --OMmodifier = {}
-  --for i,v in pairs(OMmodifier2) do
-  --  OMmodifier[v] = true
-  --end
-
-
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -221,21 +212,21 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
   if movedNotResized then
     -- window moved past left screen border
-    if tableComp(flags,self.moveModifiers) then
+    if tablesEqual(flags,self.moveModifiers) then
       gridX = 2
       gridY = 2
-    elseif tableComp(flags, OMmodifier) then
+    elseif tablesEqual(flags, OMmodifier) then
       gridX = 3
       gridY = 3
-    elseif tableComp(flags, TATmodifier) then
+    elseif tablesEqual(flags, TATmodifier) then
       gridX = 4
       gridY = 4
-    elseif tableComp(flags, SATmodifier) then
+    elseif tablesEqual(flags, SATmodifier) then
       gridX = 5
       gridY = 5
     end
 
-    if tableComp(flags, self.moveModifiers) then
+    if tablesEqual(flags, self.moveModifiers) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -315,7 +306,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-    elseif tableComp(flags, OMmodifier) then
+    elseif tablesEqual(flags, OMmodifier) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -432,34 +423,34 @@ end
 function LattinMellon:handleClick()
   return function(event)
     if self.dragging then return true end
-    flags = {} --event:getFlags()
+    flagsOrg = event:getFlags()
     local eventType = event:getType()
 
-    flagsOrg = event:getFlags()
----[[
+    flags = {}
+    
+  ---[[ -- flagsOrg looks like this: {'alt' true}; the following loop turns it into a table comparable to the one initiated in Hammerspoon's init.lua
     k = 1
     for i,v in pairs(flagsOrg) do
       flags[k] = i
       k = k + 1
     end
---]]
+  --]]
 
----[[
+  ---[[
     
     -- local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizeModifiers)
     -- local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(self.moveModifiers) or flags:containExactly(OMmodifier) or flags:containExactly(TATmodifier) or flags:containExactly(SATmodifier))
-    local isMoving = eventType == self.moveStartMouseEvent and (tableComp(flags, self.moveModifiers) or tableComp(flags, OMmodifier) or tableComp(flags, TATmodifier) or tableComp(flags, SATmodifier))
-    local isResizing = eventType == self.resizeStartMouseEvent and (tableComp(flags, self.moveModifiers) or tableComp(flags, OMmodifier) or tableComp(flags, TATmodifier) or tableComp(flags, SATmodifier))
---]]
+    local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, self.moveModifiers) or tablesEqual(flags, OMmodifier) or tablesEqual(flags, TATmodifier) or tablesEqual(flags, SATmodifier))
+    local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, self.moveModifiers) or tablesEqual(flags, OMmodifier) or tablesEqual(flags, TATmodifier) or tablesEqual(flags, SATmodifier))
+  --]]
 
    --[[
-    if tableComp(flags, OMmodifier) then
+    if tablesEqual(flags, OMmodifier) then
       print "true---------"
     else
       print "false----------"
     end
 
- 
     print("OMmodifier: ------")
     for i,v in pairs(OMmodifier) do
       print(i,v)
@@ -469,12 +460,12 @@ function LattinMellon:handleClick()
       print(i,v)
     end
 
-    if tableComp(OMmodifier, flags) then
+    if tablesEqual(OMmodifier, flags) then
       print("same")
     else
       print("not same")
     end
---]]
+  --]]
 
     if isMoving or isResizing then
   
@@ -486,7 +477,6 @@ function LattinMellon:handleClick()
       self.dragging = true
       self.targetWindow = currentWindow
       
-
       if isMoving then
         self.dragType = dragTypes.move
       else
@@ -527,33 +517,35 @@ end
 
 -- helper function(s)
 
-function tableComp_bo(table1, table2)
-  if #table1 ~= #table2 then return false end
-  -- Lazy implementation: Sort copies of both tables instead of using a binary search. Takes twice as much memory.
-  local t1_sorted = {table.unpack(table1)} -- simple way to copy the table, limited by stack size
-  table.sort(t1_sorted)
-  local t2_sorted = {table.unpack(table2)}
-  table.sort(t2_sorted)
-  for i, v1 in ipairs(t1_sorted) do
-      if t2_sorted[i] ~= v1 then return false end
+function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
+  if #a ~= #b then
+    return false
+  end -- unequal length of tables
+
+--[[
+  print("--a--")
+  for i = 1, 2 do
+    print(a[i])
   end
+
+  print("--b--")
+  for i = 1, 2 do
+    print(b[i])
+  end
+--]]
+
+  table.sort(a)
+  table.sort(b)
+
+  for i = 1, #a do
+    if a[i] ~= b[i] then
+      return false
+    end
+  end
+
   return true
 end
 
---fb: not sure if below function is working consistently...
-function tableComp(a,b) --algorithm is O(n log n), due to table growth.
-  if #a ~= #b then return false end -- early out
-  local t1,t2 = {}, {} -- temp tables
-  for k,v in pairs(a) do -- copy all values into keys for constant time lookups
-      t1[k] = (t1[k] or 0) + 1 -- make sure we track how many times we see each value.
-  end
-  for k,v in pairs(b) do
-      t2[k] = (t2[k] or 0) + 1
-  end
-  for k,v in pairs(t1) do -- go over every element
-      if v ~= t2[k] then return false end -- if the number of times that element was seen don't match...
-  end
-  return true
-end
+
 
 return LattinMellon
