@@ -1,3 +1,8 @@
+# v0.7.1
+
+* Beta release:
+  Corrected some issues.
+
 # v0.7
 
 * Beta release:
