@@ -57,7 +57,7 @@ function LattinMellon:new(options)
   options = options or {}
   margin = options.margin or 30
   m = margin / 2
-  OMmodifier = options.OMmodifier -- or { 'alt', 'ctrl' }
+  OMmodifier = options.OMmodifier or { 'alt', 'ctrl' }
   TATmodifier = options.TATmodifier or { 'alt', 'ctrl', 'cmd' }
   SATmodifier = options.SATmodifier or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
 
