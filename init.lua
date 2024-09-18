@@ -402,7 +402,6 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             wNew = max.w / gridX * 2
             hNew = max.h
           else -- second (right) double width
-            print("right")
             xNew = max.w - max.w / gridX * 2
             yNew = heightMB
             wNew = max.w / gridX * 2
