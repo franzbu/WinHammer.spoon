@@ -1,6 +1,6 @@
 # LattinMellon
 
-Even though macOS Sequoia has introduced additional window management tools, this tool goes beyond these standard possibilities. With LattinMellon windows can be snapped into dynamically changing grid positions with a flick of your mouse. Additionally windows can be resized and moved without having to position your mouse pointer; any area within the window will do.
+Even though macOS Sequoia has introduced additional window management tools, this tool goes beyond these standard possibilities. With LattinMellon windows can be snapped into dynamically changing grid positions with a flick of your mouse. Additionally, windows can be resized and moved without having to position your mouse pointer; any area within the window will do.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Be also aware that the animations show an earlier stage of development; with the most recent version, indicators at the borders of the screen guide the positioning and resizing of windows.
 
