@@ -37,10 +37,10 @@ end
 -- Usage:
 --   resizer = LattinMellon:new({
 --     margin = 30,
---     standardModifier = { 'alt' },
---     OMmodifier = { 'alt', 'ctrl' },
---     TATmodifier = { 'alt', 'ctrl', 'cmd' },
---     SATmodifier = { 'alt', 'ctrl', 'cmd', 'shift' },
+--     modStandard = { 'alt' },
+--     modOM = { 'alt', 'ctrl' },
+--     modTAT = { 'alt', 'ctrl', 'cmd' },
+--     modSAT = { 'alt', 'ctrl', 'cmd', 'shift' },
 --   })
 
 local function buttonNameToEventType(name, optionName)
@@ -57,18 +57,17 @@ function LattinMellon:new(options)
   options = options or {}
   margin = options.margin or 30
   m = margin / 2
-  OMmodifier = options.OMmodifier or { 'alt', 'ctrl' }
-  TATmodifier = options.TATmodifier or { 'alt', 'ctrl', 'cmd' }
-  SATmodifier = options.SATmodifier or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
+  modOM = options.modOM or { 'alt', 'ctrl' }
+  modTAT = options.modTAT or { 'alt', 'ctrl', 'cmd' }
+  modSAT = options.modSAT or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
     dragging = false,
     dragType = nil,
     moveStartMouseEvent = buttonNameToEventType('left', 'moveMouseButton'),
-    moveModifiers = options.standardModifier or { 'alt' },
+    mod = options.modStandard or { 'alt' },
     resizeStartMouseEvent = buttonNameToEventType('right', 'resizeMouseButton'),
-    resizeModifiers = options.standardModifier or { 'alt' },
     targetWindow = nil,
   }
 
@@ -212,21 +211,21 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
   if movedNotResized then
     -- window moved past left screen border
-    if tablesEqual(flags,self.moveModifiers) then
+    if tablesEqual(flags,self.mod) then
       gridX = 2
       gridY = 2
-    elseif tablesEqual(flags, OMmodifier) then
+    elseif tablesEqual(flags, modOM) then
       gridX = 3
       gridY = 3
-    elseif tablesEqual(flags, TATmodifier) then
+    elseif tablesEqual(flags, modTAT) then
       gridX = 4
       gridY = 4
-    elseif tablesEqual(flags, SATmodifier) then
+    elseif tablesEqual(flags, modSAT) then
       gridX = 5
       gridY = 5
     end
 
-    if tablesEqual(flags, self.moveModifiers) then
+    if tablesEqual(flags, self.mod) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -280,7 +279,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       -- moved window below bottom of screen
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(self.moveModifiers) then -- move window as is back within boundaries
+        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(self.mod) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
         else -- get window to full height in corresponding x-grid
           for i = 1, gridX, 1 do
@@ -307,7 +306,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       end
 
-    elseif tablesEqual(flags, OMmodifier) then
+    elseif tablesEqual(flags, modOM) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -373,7 +372,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
       -- moved window below bottom of screen
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(self.moveModifiers) then -- move window as is back within boundaries
+        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(self.mod) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
         else -- get window to full height in corresponding x-grid
           if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
@@ -425,32 +424,53 @@ end
 function LattinMellon:handleClick()
   return function(event)
     if self.dragging then return true end
-    flagsOrg = event:getFlags()
+    --flagsOrg = event:getFlags()
+    flags = eventToArray(event:getFlags())
     local eventType = event:getType()
 
-    flags = {}
+
     
-  -- flagsOrg looks like this: {'alt' true}; the loop below turns it into a table comparable to the one initiated in Hammerspoon's init.lua
-    k = 1
-    for i,v in pairs(flagsOrg) do
-      flags[k] = i
-      k = k + 1
+
+    -- older still: local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizeModifiers)
+    -- older: local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(self.mod) or flags:containExactly(modOM) or flags:containExactly(modTAT) or flags:containExactly(modSAT))
+    
+    --old: local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, self.mod) or tablesEqual(flags, modOM) or tablesEqual(flags, modTAT) or tablesEqual(flags, modSAT))
+    --old: local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, self.mod) or tablesEqual(flags, modOM) or tablesEqual(flags, modTAT) or tablesEqual(flags, modSAT))
+
+    -- enable active modifiers (self.mod, modOM, modTAT, modSAT)
+    isMoving = false
+    isResizing = false
+    if eventType == self.moveStartMouseEvent then
+      if tablesEqual(flags, self.mod) then
+        isMoving = true
+      elseif modOM ~= nil and tablesEqual(flags, modOM) then
+        isMoving = true
+      elseif modTAT ~= nil and tablesEqual(flags, modTAT) then
+        isMoving = true
+      elseif modSAT ~= nil and tablesEqual(flags, modSAT) then
+        isMoving = true
+      end
+    elseif eventType == self.resizeStartMouseEvent then
+      if tablesEqual(flags, self.mod) then
+        isResizing = true
+      elseif modOM ~= nil and tablesEqual(flags, modOM) then
+        isResizing = true
+      elseif modTAT ~= nil and tablesEqual(flags, modTAT) then
+        isResizing = true
+      elseif modSAT ~= nil and tablesEqual(flags, modSAT) then
+        isResizing = true
+      end
     end
-    
-    -- local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizeModifiers)
-    -- local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(self.moveModifiers) or flags:containExactly(OMmodifier) or flags:containExactly(TATmodifier) or flags:containExactly(SATmodifier))
-    local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, self.moveModifiers) or tablesEqual(flags, OMmodifier) or tablesEqual(flags, TATmodifier) or tablesEqual(flags, SATmodifier))
-    local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, self.moveModifiers) or tablesEqual(flags, OMmodifier) or tablesEqual(flags, TATmodifier) or tablesEqual(flags, SATmodifier))
 
    --[[
-    if tablesEqual(flags, OMmodifier) then
+    if tablesEqual(flags, modOM) then
       print "true---------"
     else
       print "false----------"
     end
 
-    print("OMmodifier: ------")
-    for i,v in pairs(OMmodifier) do
+    print("modOM: ------")
+    for i,v in pairs(modOM) do
       print(i,v)
     end
     print("flags: ------")
@@ -458,12 +478,19 @@ function LattinMellon:handleClick()
       print(i,v)
     end
 
-    if tablesEqual(OMmodifier, flags) then
+    if tablesEqual(modOM, flags) then
       print("same")
     else
       print("not same")
     end
-  --]]
+
+
+    if isMoving then
+      print ("isMoving")
+    else
+      print("no...")
+    end  
+    --]]
 
     if isMoving or isResizing then
   
@@ -513,7 +540,19 @@ function LattinMellon:handleClick()
   end
 end
 
--- helper function(s)
+-- __________ helper functions __________
+
+ -- event looks like this: {'alt' true}; function turns table into an 'array' so
+ -- it can be compared to the other arrays (self.mod, modOM,...)
+function eventToArray(a)
+  k = 1
+  b= {}
+  for i,v in pairs(a) do
+    b[k] = i
+    k = k + 1
+  end
+  return b
+end
 
 function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
   if #a ~= #b then
