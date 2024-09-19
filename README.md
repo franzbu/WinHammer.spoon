@@ -67,23 +67,23 @@ To have the additional possibility to precisely resize windows horizontally-only
  +---+---+---+
 ```
 
-At the very center of the window there is an erea (M), the size of which depends on the size of the just described margin for horizontal-only and vertical-only resizing. In the M-area of a window, you can also move the window by pressing the right mouse button. 
+At the very center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
 
 
 ### Automatic Positioning and Resizing
 
-For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of your screen. 
+For automatic resizing and positioning of a window, you simply have to move 10 percent or more of the window beyond the left, right, or bottom borders of your screen using your left mouse button. 
 
-As long as windows are resized, or moved within the borders of the screen, it makes no difference which of the two modifier keys you use. However, once a window is moved beyond the screen borders (10 or more percent of the window), different positioning and resizing scenarios are called into action; they are as follows:
+As long as windows are resized - or moved within the borders of the screen -, it makes no difference whether you use  `modifier1` or `modifier2`. However, once a window is moved beyond the screen borders (10 or more percent of the window), different positioning and resizing scenarios are called into action; they are as follows:
 
 * `modifier1`: 
   * If windows are moved beyond the left (right) borders of the screen: imagine your screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the border, the window snaps into the left (right) half of the screen. Crossing the screen border in the upper and lower thirds, the window snaps into the respective quarters of the screen.
   * If windows are moved beyond the bottom border of the screen: imagine your bottom screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the bottom border, the window snaps into full screen. Crossing the screen border in the left or right thirds, the window snaps into the respective halfs of the screen.
 
 * `modifier2`: 
-  * The difference to `modifier1` is that your screen has an underlying 3x3 grid rather than the 2x2 grid.
+  * The difference to `modifier1` is that your screen has an underlying 3x3 grid rather than a 2x2 grid.
  
-*  `modifier1` and `modifier2`: pressing both modifier keys at the same time while moving windows 10 or more percent of their width beyond the left or right screen borders makes the window snap back into the middle column.
+*  `modifier1` and `modifier2`: pressing both modifier keys at the same time while moving a window 10 or more percent of its width beyond the left or right screen borders makes the window snap into the middle column (same size as if using solely your `modifier2` key.
  
 
 ### Disabling moving/resizing for certain applications
