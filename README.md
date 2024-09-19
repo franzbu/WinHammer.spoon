@@ -39,7 +39,7 @@ local LattinMellon = hs.loadSpoon("LattinMellon")
 LattinMellon:new({
 
   -- modifier(s) to hold to move (left mouse button) or resize (right mouse button) a window:
-  modifier1 = { 'alt' }, -- also a group of modifiers susch as { 'alt', 'cmd' } is possible
+  modifier1 = { 'alt' }, -- also a group of modifiers such as { 'alt', 'cmd' } is possible
   modifier2 = { 'ctrl' },
 
 })
