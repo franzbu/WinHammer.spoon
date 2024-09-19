@@ -428,15 +428,6 @@ function LattinMellon:handleClick()
     flags = eventToArray(event:getFlags())
     local eventType = event:getType()
 
-
-    
-
-    -- older still: local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizeModifiers)
-    -- older: local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(self.mod) or flags:containExactly(modOM) or flags:containExactly(modTAT) or flags:containExactly(modSAT))
-    
-    --old: local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, self.mod) or tablesEqual(flags, modOM) or tablesEqual(flags, modTAT) or tablesEqual(flags, modSAT))
-    --old: local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, self.mod) or tablesEqual(flags, modOM) or tablesEqual(flags, modTAT) or tablesEqual(flags, modSAT))
-
     -- enable active modifiers (self.mod, modOM, modTAT, modSAT)
     isMoving = false
     isResizing = false
@@ -461,36 +452,6 @@ function LattinMellon:handleClick()
         isResizing = true
       end
     end
-
-   --[[
-    if tablesEqual(flags, modOM) then
-      print "true---------"
-    else
-      print "false----------"
-    end
-
-    print("modOM: ------")
-    for i,v in pairs(modOM) do
-      print(i,v)
-    end
-    print("flags: ------")
-    for i,v in pairs(flags) do
-      print(i,v)
-    end
-
-    if tablesEqual(modOM, flags) then
-      print("same")
-    else
-      print("not same")
-    end
-
-
-    if isMoving then
-      print ("isMoving")
-    else
-      print("no...")
-    end  
-    --]]
 
     if isMoving or isResizing then
   
@@ -557,23 +518,9 @@ end
 function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
   if #a ~= #b then
     return false
-  end -- unequal length of tables
-
---[[
-  print("--a--")
-  for i = 1, #a do
-    print(a[i])
-  end
-
-  print("--b--")
-  for i = 1, #b do
-    print(b[i])
-  end
---]]
-
+  end 
   table.sort(a)
   table.sort(b)
-
   for i = 1, #a do
     if a[i] ~= b[i] then
       return false
