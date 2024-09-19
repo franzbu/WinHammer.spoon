@@ -9,7 +9,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.7.1"
+LattinMellon.version = "0.8"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -37,10 +37,10 @@ end
 -- Usage:
 --   resizer = LattinMellon:new({
 --     margin = 30,
---     modStandard = { 'alt' },
---     modOM = { 'alt', 'ctrl' },
---     modTAT = { 'alt', 'ctrl', 'cmd' },
---     modSAT = { 'alt', 'ctrl', 'cmd', 'shift' },
+--     modifier1 = { 'alt' },
+--     modifier2 = { 'ctrl' },
+--     modifier3 = { 'alt', 'ctrl', 'shift' },
+--     modifier4 = { 'alt', 'ctrl', 'cmd' },
 --   })
 
 local function buttonNameToEventType(name, optionName)
@@ -57,16 +57,29 @@ function LattinMellon:new(options)
   options = options or {}
   margin = options.margin or 30
   m = margin / 2
-  modOM = options.modOM or { 'alt', 'ctrl' }
-  modTAT = options.modTAT or { 'alt', 'ctrl', 'cmd' }
-  modSAT = options.modSAT or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
+  modifier1 = options.modifier1 or { 'alt' }
+  modifier2 = options.modifier2 or { 'ctrl' }
+  modifier3 = options.modifier3 or { 'alt', 'ctrl', 'shift' }
+  modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd' } -- hyper key
+
+  -- merge modifier1 and modifier2
+  modifier1_2 = {}
+  k = 1
+  for i = 1, #modifier1 do
+    modifier1_2[k] = modifier1[i]
+    k = k + 1
+  end
+  for i = 1, #modifier2 do
+    modifier1_2[k] = modifier2[i]
+    k = k + 1
+  end
+
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
     dragging = false,
     dragType = nil,
     moveStartMouseEvent = buttonNameToEventType('left', 'moveMouseButton'),
-    mod = options.modStandard or { 'alt' },
     resizeStartMouseEvent = buttonNameToEventType('right', 'resizeMouseButton'),
     targetWindow = nil,
   }
@@ -106,6 +119,14 @@ end
 function LattinMellon:stop()
   self.dragging = false
   self.dragType = nil
+  
+  --fb: -- delete canvas
+    for i = 1, #cv do
+      cv[i]:delete()
+    end
+
+
+
   self.cancelHandler:stop()
   self.dragHandler:stop()
   self.clickHandler:start()
@@ -129,6 +150,9 @@ function LattinMellon:handleDrag()
     local dy = event:getProperty(hs.eventtap.event.properties.mouseEventDeltaY)
 
     if self:isMoving() then
+
+
+
   
       local point = win:topLeft()
       local frame = win:size() -- win:frame
@@ -211,21 +235,21 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
   if movedNotResized then
     -- window moved past left screen border
-    if tablesEqual(flags,self.mod) then
+    if tablesEqual(flags,modifier1) then
       gridX = 2
       gridY = 2
-    elseif tablesEqual(flags, modOM) then
+    elseif tablesEqual(flags, modifier2) or tablesEqual(flags, modifier1_2)  then
       gridX = 3
       gridY = 3
-    elseif tablesEqual(flags, modTAT) then
+    elseif tablesEqual(flags, modifier3) then
       gridX = 4
       gridY = 4
-    elseif tablesEqual(flags, modSAT) then
+    elseif tablesEqual(flags, modifier4) then
       gridX = 5
       gridY = 5
     end
 
-    if tablesEqual(flags, self.mod) then
+    if tablesEqual(flags, modifier1) and eventType == self.moveStartMouseEvent then -- if dragging with right mouse button, windows don't snap back into screen
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -279,7 +303,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       -- moved window below bottom of screen
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(self.mod) then -- move window as is back within boundaries
+        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
         else -- get window to full height in corresponding x-grid
           for i = 1, gridX, 1 do
@@ -305,8 +329,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-
-    elseif tablesEqual(flags, modOM) then
+    elseif tablesEqual(flags, modifier2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -337,7 +360,6 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             hNew = max.h / gridY * 2
           end
         end
-
       -- moved window past right screen border
       elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
         if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
@@ -369,10 +391,102 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             hNew = max.h / gridY * 2
           end
         end
-
       -- moved window below bottom of screen
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(self.mod) then -- move window as is back within boundaries
+        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
+          yNew = maxWithMB.h - hNew
+        else -- get window to full height in corresponding x-grid
+          if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
+            -- 3 standard areas
+            for i = 1, gridX, 1 do
+              if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridX - i) * max.w / gridX then 
+                xNew = (i - 1) * max.w / gridX 
+                yNew = heightMB + (i - 1) * gridX
+                wNew = max.w / gridX
+                hNew = max.h
+                break
+              end
+            end
+          -- first (left) double width
+          elseif (hs.mouse.getRelativePosition().x + sumdx > max.w / 5) and (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 2) then
+            xNew = 0
+            yNew = heightMB
+            wNew = max.w / gridX * 2
+            hNew = max.h
+          else -- second (right) double width
+            xNew = max.w - max.w / gridX * 2
+            yNew = heightMB
+            wNew = max.w / gridX * 2
+            hNew = max.h
+          end
+        end
+      end
+    -- if dragged beyond left/right screen border, windows snap to middle column
+    elseif tablesEqual(flags, modifier1_2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+      if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
+        if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
+          xNew = 0
+        -- window moved past left screen border
+        else -- automatically resize and position window within grid
+          -- 3 standard areas
+          if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+            for i = 1, gridY, 1 do
+              -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment             
+              if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
+                xNew = max.w / gridX
+                yNew = heightMB + (i - 1) * max.h / gridY
+                wNew = max.w / gridX
+                hNew = max.h / gridY
+                break
+              end
+            end
+          -- first (upper) double area
+          elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
+            xNew = max.w / gridX
+            yNew = heightMB
+            wNew = max.w / gridX
+            hNew = max.h / gridY * 2
+          else -- second (lower) double area
+            xNew = max.w / gridX
+            yNew = heightMB + max.h / 5 * 2
+            wNew = max.w / gridX
+            hNew = max.h / gridY * 2
+          end
+        end
+      -- moved window past right screen border
+      elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
+        if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
+          wNew = frame.w
+          xNew = max.w - wNew
+        else -- automatical positioning and resizing of window
+           -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
+          if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+            -- 3 standard areas
+            for i = 1, gridY, 1 do
+              if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
+                xNew = max.w / gridX
+                yNew = heightMB + (i - 1) * max.h / gridY
+                wNew = max.w / gridX
+                hNew = max.h / gridY
+                break
+              end
+            end
+          -- first (upper) double area
+          elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
+            xNew = max.w / gridX
+            yNew = heightMB
+            wNew = max.w / gridX
+            hNew = max.h / gridY * 2
+          else -- second (lower) double area
+            xNew = max.w / gridX
+            yNew = heightMB + max.h / 5 * 2
+            wNew = max.w / gridX
+            hNew = max.h / gridY * 2
+          end
+        end
+      -- moved window below bottom of screen
+      elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
+        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
         else -- get window to full height in corresponding x-grid
           if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
@@ -401,7 +515,6 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       end
     end
-
   else -- if window has been resized (and not moved)
     if point.x < 0 then -- window resized past left screen border
       wNew = frame.w + point.x
@@ -426,32 +539,73 @@ function LattinMellon:handleClick()
     if self.dragging then return true end
     --flagsOrg = event:getFlags()
     flags = eventToArray(event:getFlags())
-    local eventType = event:getType()
+    eventType = event:getType()
 
-    -- enable active modifiers (self.mod, modOM, modTAT, modSAT)
+
+    
+
+    -- older still: local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizemodifiers)
+    -- older: local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(modifier1) or flags:containExactly(modifier2) or flags:containExactly(modifier3) or flags:containExactly(modifier4))
+    
+    --old: local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, modifier1) or tablesEqual(flags, modifier2) or tablesEqual(flags, modifier3) or tablesEqual(flags, modifier4))
+    --old: local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, modifier1) or tablesEqual(flags, modifier2) or tablesEqual(flags, modifier3) or tablesEqual(flags, modifier4))
+
+    -- enable active modifiers (modifier1, modifier2, modifier3, modifier4)
     isMoving = false
     isResizing = false
     if eventType == self.moveStartMouseEvent then
-      if tablesEqual(flags, self.mod) then
+      if tablesEqual(flags, modifier1) then
         isMoving = true
-      elseif modOM ~= nil and tablesEqual(flags, modOM) then
+      elseif modifier2 ~= nil and tablesEqual(flags, modifier2) then
         isMoving = true
-      elseif modTAT ~= nil and tablesEqual(flags, modTAT) then
+      elseif modifier3 ~= nil and tablesEqual(flags, modifier3) then
         isMoving = true
-      elseif modSAT ~= nil and tablesEqual(flags, modSAT) then
+      elseif modifier4 ~= nil and tablesEqual(flags, modifier4) then
+        isMoving = true
+      elseif modifier1_2 ~= nil and tablesEqual(flags, modifier1_2) then -- fb:
         isMoving = true
       end
     elseif eventType == self.resizeStartMouseEvent then
-      if tablesEqual(flags, self.mod) then
+      if tablesEqual(flags, modifier1) then
         isResizing = true
-      elseif modOM ~= nil and tablesEqual(flags, modOM) then
+      elseif modifier2 ~= nil and tablesEqual(flags, modifier2) then
         isResizing = true
-      elseif modTAT ~= nil and tablesEqual(flags, modTAT) then
+      elseif modifier3 ~= nil and tablesEqual(flags, modifier3) then
         isResizing = true
-      elseif modSAT ~= nil and tablesEqual(flags, modSAT) then
+      elseif modifier4 ~= nil and tablesEqual(flags, modifier4) then
         isResizing = true
       end
     end
+
+   --[[
+    if tablesEqual(flags, modifier2) then
+      print "true---------"
+    else
+      print "false----------"
+    end
+
+    print("modifier2: ------")
+    for i,v in pairs(modifier2) do
+      print(i,v)
+    end
+    print("flags: ------")
+    for i,v in pairs(flags) do
+      print(i,v)
+    end
+
+    if tablesEqual(modifier2, flags) then
+      print("same")
+    else
+      print("not same")
+    end
+
+
+    if isMoving then
+      print ("isMoving")
+    else
+      print("no...")
+    end  
+    --]]
 
     if isMoving or isResizing then
   
@@ -472,7 +626,7 @@ function LattinMellon:handleClick()
       win = getWindowUnderMouse():focus()
       local point = win:topLeft()
       local frame = win:frame()
-      local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
+      max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
       maxWithMB = win:screen():fullFrame()
       heightMB = maxWithMB.h - max.h   -- height menu bar
       local xOrg = point.x
@@ -489,6 +643,21 @@ function LattinMellon:handleClick()
       local dmav = hOrg / 2 - my
       mV = dmav * 100 / hOrg -- delta from mid window in %: from -50(=top border of window) to 50 (bottom border)
 
+      -- show canvases for visually supporting automatic window positioning and resizing
+      local thickness = 20 -- thickness of bar
+      if eventType == self.moveStartMouseEvent and tablesEqual(flags, modifier1) then
+        createCanvas(1, 0, max.h / 3, thickness, max.h / 3)
+        createCanvas(2, max.w / 3, heightMB + max.h - thickness, max.w / 3, thickness)
+        createCanvas(3, max.w - thickness, max.h / 3, thickness, max.h / 3)
+      elseif eventType == self.moveStartMouseEvent and (tablesEqual(flags, modifier2) or tablesEqual(flags, modifier1_2)) then
+        createCanvas(1, 0, max.h / 5, thickness, max.h / 5)
+        createCanvas(2, 0, max.h / 5 * 3, thickness, max.h / 5)
+        createCanvas(3, max.w / 5, heightMB + max.h - thickness, max.w / 5, thickness)
+        createCanvas(4, max.w / 5 * 3, heightMB + max.h - thickness, max.w / 5, thickness)
+        createCanvas(5, max.w - thickness, max.h / 5, thickness, max.h / 5)
+        createCanvas(6, max.w - thickness, max.h / 5 * 3, thickness, max.h / 5)
+      end
+
       self.cancelHandler:start()
       self.dragHandler:start()
       self.clickHandler:stop()
@@ -503,11 +672,28 @@ end
 
 -- __________ helper functions __________
 
+-- create canvases at screen border
+cv = {}
+function createCanvas(n, x, y, w, h)
+  cv[n] = hs.canvas.new(hs.geometry.rect(x, y, w, h))
+  cv[n]:insertElement(
+    {
+      action = 'fill',
+      type = 'rectangle',
+      fillColor = { red = 1, green = 0, blue = 0, alpha = 0.5 },
+      roundedRectRadii = { xRadius = 5.0, yRadius = 5.0 },
+    },
+    1
+  )
+  cv[n]:show()
+end
+
+
  -- event looks like this: {'alt' true}; function turns table into an 'array' so
- -- it can be compared to the other arrays (self.mod, modOM,...)
+ -- it can be compared to the other arrays (modifier1, modifier2,...)
 function eventToArray(a)
   k = 1
-  b= {}
+  b = {}
   for i,v in pairs(a) do
     b[k] = i
     k = k + 1
@@ -518,9 +704,23 @@ end
 function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
   if #a ~= #b then
     return false
-  end 
+  end -- unequal length of tables
+
+--[[
+  print("--a--")
+  for i = 1, #a do
+    print(a[i])
+  end
+
+  print("--b--")
+  for i = 1, #b do
+    print(b[i])
+  end
+--]]
+
   table.sort(a)
   table.sort(b)
+
   for i = 1, #a do
     if a[i] ~= b[i] then
       return false
