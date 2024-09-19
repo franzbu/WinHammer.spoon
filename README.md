@@ -47,7 +47,7 @@ LattinMellon:new({
 
 ### Manual Moving
 
-To move a window, hold your `modifier1` or `modifier2` key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things start to get interesting because then window management with automatic resizing and positioning come into play - more about that in a minute.
+To move a window, hold your `modifier1` or `modifier2` key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things start to get interesting because then window management with automatic resizing and positioning comes into play - more about that in a minute.
 
 
 ### Manual Resizing
