@@ -570,37 +570,7 @@ function LattinMellon:handleClick()
         isResizing = true
       end
     end
-
-   --[[
-    if tablesEqual(flags, modifier2) then
-      print "true---------"
-    else
-      print "false----------"
-    end
-
-    print("modifier2: ------")
-    for i,v in pairs(modifier2) do
-      print(i,v)
-    end
-    print("flags: ------")
-    for i,v in pairs(flags) do
-      print(i,v)
-    end
-
-    if tablesEqual(modifier2, flags) then
-      print("same")
-    else
-      print("not same")
-    end
-
-
-    if isMoving then
-      print ("isMoving")
-    else
-      print("no...")
-    end  
-    --]]
-
+    
     if isMoving or isResizing then
   
       local currentWindow = getWindowUnderMouse()
@@ -700,18 +670,6 @@ function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
     return false
   end -- unequal length of tables
 
---[[
-  print("--a--")
-  for i = 1, #a do
-    print(a[i])
-  end
-
-  print("--b--")
-  for i = 1, #b do
-    print(b[i])
-  end
---]]
-
   table.sort(a)
   table.sort(b)
 
@@ -723,7 +681,5 @@ function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
 
   return true
 end
-
-
 
 return LattinMellon
