@@ -1,7 +1,7 @@
 # v0.8
 
 * Beta release:
-  Added canvases for visual supporting window management. In 3x3 grid windows can now automatically be snapped into middle column.
+  Added canvases for visual support of window management. In 3x3 grid windows can now automatically be snapped into middle column.
 
 # v0.7.1
 
