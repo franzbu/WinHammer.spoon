@@ -92,9 +92,6 @@ You can disable move/resize for any application by adding it to the `disabledApp
 
 ```lua
 LattinMellon:new({
-  -- How much space (in percent) in the middle of each of the four window-margins do you want to reserve for limiting 
-  -- resizing windows to horizontally and vertically? 0 disables this function, 100 disables diagonal resizing.
-  margin = 30,
 
   -- ...
 
