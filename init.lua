@@ -9,7 +9,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.8"
+LattinMellon.version = "0.8.1"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -19,14 +19,14 @@ local dragTypes = {
 
 local function tableToMap(table)
   local map = {}
-  for _, value in pairs(table) do
-    map[value] = true
+  for _, v in pairs(table) do
+    map[v] = true
   end
   return map
 end
 
 local function getWindowUnderMouse()
-  local _ = hs.application
+  --local _ = hs.application
   local my_pos = hs.geometry.new(hs.mouse.absolutePosition())
   local my_screen = hs.mouse.getCurrentScreen()
   return hs.fnutils.find(hs.window.orderedWindows(), function(w)
@@ -236,21 +236,15 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
   if movedNotResized then
     -- window moved past left screen border
-    if tablesEqual(flags,modifier1) then
+    if modifiersEqual(flags, modifier1) then
       gridX = 2
       gridY = 2
-    elseif tablesEqual(flags, modifier2) or tablesEqual(flags, modifier1_2)  then
+    elseif modifiersEqual(flags, modifier2) or modifiersEqual(flags, modifier1_2)  then
       gridX = 3
       gridY = 3
-    elseif tablesEqual(flags, modifier3) then
-      gridX = 4
-      gridY = 4
-    elseif tablesEqual(flags, modifier4) then
-      gridX = 5
-      gridY = 5
     end
 
-    if tablesEqual(flags, modifier1) then
+    if modifiersEqual(flags, modifier1) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -330,7 +324,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-    elseif tablesEqual(flags, modifier2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    elseif modifiersEqual(flags, modifier2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -423,7 +417,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       end
     -- if dragged beyond left/right screen border, windows snap to middle column
-    elseif tablesEqual(flags, modifier1_2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    elseif modifiersEqual(flags, modifier1_2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -546,36 +540,38 @@ function LattinMellon:handleClick()
     isMoving = false
     isResizing = false
     if eventType == self.moveStartMouseEvent then
-      if tablesEqual(flags, modifier1) then
+      if modifiersEqual(flags, modifier1) then
         isMoving = true
-      elseif modifier2 ~= nil and tablesEqual(flags, modifier2) then
+      elseif modifier2 ~= nil and modifiersEqual(flags, modifier2) then
         isMoving = true
-      elseif modifier3 ~= nil and tablesEqual(flags, modifier3) then
+      elseif modifier3 ~= nil and modifiersEqual(flags, modifier3) then
         isMoving = true
-      elseif modifier4 ~= nil and tablesEqual(flags, modifier4) then
+      elseif modifier4 ~= nil and modifiersEqual(flags, modifier4) then
         isMoving = true
-      elseif modifier1_2 ~= nil and tablesEqual(flags, modifier1_2) then
+      elseif modifier1_2 ~= nil and modifiersEqual(flags, modifier1_2) then
         isMoving = true
       end
     elseif eventType == self.resizeStartMouseEvent then
-      if tablesEqual(flags, modifier1) then
+      if modifiersEqual(flags, modifier1) then
         isResizing = true
-      elseif modifier2 ~= nil and tablesEqual(flags, modifier2) then
+      elseif modifier2 ~= nil and modifiersEqual(flags, modifier2) then
         isResizing = true
-      elseif modifier3 ~= nil and tablesEqual(flags, modifier3) then
+      elseif modifier3 ~= nil and modifiersEqual(flags, modifier3) then
         isResizing = true
-      elseif modifier4 ~= nil and tablesEqual(flags, modifier4) then
+      elseif modifier4 ~= nil and modifiersEqual(flags, modifier4) then
         isResizing = true
-      elseif modifier1_2 ~= nil and tablesEqual(flags, modifier1_2) then
+      elseif modifier1_2 ~= nil and modifiersEqual(flags, modifier1_2) then
         isResizing = true
       end
     end
-    
+
     if isMoving or isResizing then
   
       local currentWindow = getWindowUnderMouse()
-      if self.disabledApps[currentWindow:application():name()] then
-        return nil
+      if #self.disabledApps >= 1 then
+        if self.disabledApps[currentWindow:application():name()] then
+          return nil
+        end
       end
 
       self.dragging = true
@@ -586,8 +582,18 @@ function LattinMellon:handleClick()
       else
         self.dragType = dragTypes.resize
       end
+    
+      --fb: experimental -> attempt to prevent error when clicking on screen (and not window) with pressed modifier(s)
+      --print("getWindowUnderMouse: " .. type(getWindowUnderMouse())) 
+      if type(getWindowUnderMouse()) == "nil" then
+        self.cancelHandler:start()
+        self.dragHandler:stop()
+        self.clickHandler:stop()
+        -- Prevent selection
+        return true
 
-      win = getWindowUnderMouse():focus()
+      end
+      win = getWindowUnderMouse():focus() --fb: error if clicked on screen (and not window)
       local point = win:topLeft()
       local frame = win:frame()
       max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
@@ -609,11 +615,11 @@ function LattinMellon:handleClick()
 
       -- show canvases for visually supporting automatic window positioning and resizing
       local thickness = 20 -- thickness of bar
-      if eventType == self.moveStartMouseEvent and tablesEqual(flags, modifier1) then
+      if eventType == self.moveStartMouseEvent and modifiersEqual(flags, modifier1) then
         createCanvas(1, 0, max.h / 3, thickness, max.h / 3)
         createCanvas(2, max.w / 3, heightMB + max.h - thickness, max.w / 3, thickness)
         createCanvas(3, max.w - thickness, max.h / 3, thickness, max.h / 3)
-      elseif eventType == self.moveStartMouseEvent and (tablesEqual(flags, modifier2) or tablesEqual(flags, modifier1_2)) then
+      elseif eventType == self.moveStartMouseEvent and (modifiersEqual(flags, modifier2) or modifiersEqual(flags, modifier1_2)) then
         createCanvas(1, 0, max.h / 5, thickness, max.h / 5)
         createCanvas(2, 0, max.h / 5 * 3, thickness, max.h / 5)
         createCanvas(3, max.w / 5, heightMB + max.h - thickness, max.w / 5, thickness)
@@ -633,9 +639,6 @@ function LattinMellon:handleClick()
     end
   end
 end
-
-
--- __________ helper functions __________
 
 -- create canvases at screen border
 cv = {}
@@ -665,7 +668,7 @@ function eventToArray(a)
   return b
 end
 
-function tablesEqual(a, b) --algorithm is O(n log n), due to table growth.
+function modifiersEqual(a, b) --algorithm is O(n log n), due to table growth.
   if #a ~= #b then
     return false
   end -- unequal length of tables
