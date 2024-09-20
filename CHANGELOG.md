@@ -1,3 +1,8 @@
+# v0.8.1
+
+* Beta release:
+  Ironed out some issues.
+
 # v0.8
 
 * Beta release:
