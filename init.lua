@@ -60,20 +60,27 @@ function LattinMellon:new(options)
   modifier1 = options.modifier1 or { 'alt' }
   modifier2 = options.modifier2 or { 'ctrl' }
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'shift' }
-  modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd' } -- hyper key
+  modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
 
-  -- merge modifier1 and modifier2
-  modifier1_2 = {}
+  modifier1_2 = {} -- merge modifier1 and modifier2:
   k = 1
   for i = 1, #modifier1 do
     modifier1_2[k] = modifier1[i]
     k = k + 1
   end
   for i = 1, #modifier2 do
-    modifier1_2[k] = modifier2[i]
-    k = k + 1
+    ap = false -- already present
+    for j = 1, #modifier1_2 do -- avoid double entries
+      if modifier1_2[j] == modifier2[i] then
+        ap = true
+        break
+      end
+    end
+    if not ap then
+      modifier1_2[k] = modifier2[i]
+      k = k + 1
+    end
   end
-
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -119,13 +126,10 @@ end
 function LattinMellon:stop()
   self.dragging = false
   self.dragType = nil
-  
-  --fb: -- delete canvas
-    for i = 1, #cv do
-      cv[i]:delete()
-    end
 
-
+  for i = 1, #cv do -- delete canvases
+    cv[i]:delete()
+  end
 
   self.cancelHandler:stop()
   self.dragHandler:stop()
@@ -151,9 +155,6 @@ function LattinMellon:handleDrag()
 
     if self:isMoving() then
 
-
-
-  
       local point = win:topLeft()
       local frame = win:size() -- win:frame
       --win:move(hs.geometry.new(point.x + dx, point.y + dy, frame.w, frame.h), nil, false, 0)
@@ -249,12 +250,12 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
       gridY = 5
     end
 
-    if tablesEqual(flags, modifier1) and eventType == self.moveStartMouseEvent then -- if dragging with right mouse button, windows don't snap back into screen
+    if tablesEqual(flags, modifier1) then
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
         -- window moved past left screen border
-        else -- automatically resize and position window within grid
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           for i = 1, gridY, 1 do
             -- middle third of left border
             if hs.mouse.getRelativePosition().y + sumdy > max.h / 3 and hs.mouse.getRelativePosition().y + sumdy < max.h * 2 / 3 then -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment
@@ -280,7 +281,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
           wNew = frame.w
           xNew = max.w - wNew
-        else -- automatical positioning and resizing of window
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           for i = 1, gridY, 1 do
             -- middle third of left border
             if hs.mouse.getRelativePosition().y + sumdy > max.h / 3 and hs.mouse.getRelativePosition().y + sumdy < max.h * 2 / 3 then
@@ -305,7 +306,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
         if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
-        else -- get window to full height in corresponding x-grid
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           for i = 1, gridX, 1 do
             if hs.mouse.getRelativePosition().x + sumdx > max.w / 3 and hs.mouse.getRelativePosition().x + sumdx < max.w * 2 / 3 then -- middle
               xNew = 0
@@ -334,7 +335,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
         -- window moved past left screen border
-        else -- automatically resize and position window within grid
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           -- 3 standard areas
           if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
             for i = 1, gridY, 1 do
@@ -365,7 +366,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
           wNew = frame.w
           xNew = max.w - wNew
-        else -- automatical positioning and resizing of window
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
            -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
           if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
             -- 3 standard areas
@@ -395,7 +396,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
         if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
-        else -- get window to full height in corresponding x-grid
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
             -- 3 standard areas
             for i = 1, gridX, 1 do
@@ -427,7 +428,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
         -- window moved past left screen border
-        else -- automatically resize and position window within grid
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           -- 3 standard areas
           if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
             for i = 1, gridY, 1 do
@@ -458,7 +459,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
           wNew = frame.w
           xNew = max.w - wNew
-        else -- automatical positioning and resizing of window
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
            -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
           if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
             -- 3 standard areas
@@ -488,7 +489,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
       elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
         if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
           yNew = maxWithMB.h - hNew
-        else -- get window to full height in corresponding x-grid
+        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
           if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
             -- 3 standard areas
             for i = 1, gridX, 1 do
@@ -529,7 +530,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
     end
   end
   self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
-  --hs.spaces.moveWindowToSpace(hs.window.focusedWindow(), getIDSpaceLeft(), true) -- fb: move to different space 
+  --hs.spaces.moveWindowToSpace(hs.window.focusedWindow(), getIDSpaceLeft(), true) -- fb: managing of spaces (broken in macOS Sequoia); to be implemented with modifier3/4
   sumdx = 0
   sumdy = 0
 end
@@ -540,15 +541,6 @@ function LattinMellon:handleClick()
     --flagsOrg = event:getFlags()
     flags = eventToArray(event:getFlags())
     eventType = event:getType()
-
-
-    
-
-    -- older still: local isResizing = eventType == self.resizeStartMouseEvent and flags:containExactly(self.resizemodifiers)
-    -- older: local isMoving = eventType == self.moveStartMouseEvent and (flags:containExactly(modifier1) or flags:containExactly(modifier2) or flags:containExactly(modifier3) or flags:containExactly(modifier4))
-    
-    --old: local isMoving = eventType == self.moveStartMouseEvent and (tablesEqual(flags, modifier1) or tablesEqual(flags, modifier2) or tablesEqual(flags, modifier3) or tablesEqual(flags, modifier4))
-    --old: local isResizing = eventType == self.resizeStartMouseEvent and (tablesEqual(flags, modifier1) or tablesEqual(flags, modifier2) or tablesEqual(flags, modifier3) or tablesEqual(flags, modifier4))
 
     -- enable active modifiers (modifier1, modifier2, modifier3, modifier4)
     isMoving = false
@@ -562,7 +554,7 @@ function LattinMellon:handleClick()
         isMoving = true
       elseif modifier4 ~= nil and tablesEqual(flags, modifier4) then
         isMoving = true
-      elseif modifier1_2 ~= nil and tablesEqual(flags, modifier1_2) then -- fb:
+      elseif modifier1_2 ~= nil and tablesEqual(flags, modifier1_2) then
         isMoving = true
       end
     elseif eventType == self.resizeStartMouseEvent then
@@ -573,6 +565,8 @@ function LattinMellon:handleClick()
       elseif modifier3 ~= nil and tablesEqual(flags, modifier3) then
         isResizing = true
       elseif modifier4 ~= nil and tablesEqual(flags, modifier4) then
+        isResizing = true
+      elseif modifier1_2 ~= nil and tablesEqual(flags, modifier1_2) then
         isResizing = true
       end
     end
@@ -670,6 +664,7 @@ function LattinMellon:handleClick()
   end
 end
 
+
 -- __________ helper functions __________
 
 -- create canvases at screen border
@@ -688,13 +683,12 @@ function createCanvas(n, x, y, w, h)
   cv[n]:show()
 end
 
-
  -- event looks like this: {'alt' true}; function turns table into an 'array' so
  -- it can be compared to the other arrays (modifier1, modifier2,...)
 function eventToArray(a)
   k = 1
   b = {}
-  for i,v in pairs(a) do
+  for i,_ in pairs(a) do
     b[k] = i
     k = k + 1
   end
