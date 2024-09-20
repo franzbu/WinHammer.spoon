@@ -39,7 +39,7 @@ end
 --     margin = 30,
 --     modifier1 = { 'alt' },
 --     modifier2 = { 'ctrl' },
---     modifier3 = { 'alt', 'ctrl', 'shift' },
+--     modifier3 = { 'alt', 'ctrl', 'win' },
 --     modifier4 = { 'alt', 'ctrl', 'cmd' },
 --   })
 
@@ -59,7 +59,7 @@ function LattinMellon:new(options)
   m = margin / 2
   modifier1 = options.modifier1 or { 'alt' }
   modifier2 = options.modifier2 or { 'ctrl' }
-  modifier3 = options.modifier3 or { 'alt', 'ctrl', 'shift' }
+  modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
 
   modifier1_2 = {} -- merge modifier1 and modifier2:
@@ -70,7 +70,7 @@ function LattinMellon:new(options)
   end
   for i = 1, #modifier2 do
     ap = false -- already present
-    for j = 1, #modifier1_2 do -- avoid double entries
+    for j = 1, #modifier1_2 do -- prevent double entries
       if modifier1_2[j] == modifier2[i] then
         ap = true
         break
@@ -144,8 +144,8 @@ function LattinMellon:isMoving()
   return self.dragType == dragTypes.move
 end
 
-local sumdx = 0
-local sumdy = 0
+sumdx = 0
+sumdy = 0
 function LattinMellon:handleDrag()
   return function(event)
     if not self.dragging then return nil end
@@ -228,7 +228,8 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
   local win = hs.window.focusedWindow()
   local frame = win:frame()
   local point = win:topLeft()
-  local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height without menu bar
+  -- 'max' should not be reintialized here because if there is another adjacent display with different resolution, windows are adjusted according to that resolution (as cursor gets moved there)
+  -- local max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height without menu bar
   local xNew = point.x
   local yNew = point.y
   local wNew = frame.w
@@ -335,7 +336,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
             for i = 1, gridY, 1 do
               -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment             
               if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
-                xNew = 0
+                 xNew = 0
                 yNew = heightMB + (i - 1) * max.h / gridY
                 wNew = max.w / gridX
                 hNew = max.h / gridY
@@ -532,7 +533,6 @@ end
 function LattinMellon:handleClick()
   return function(event)
     if self.dragging then return true end
-    --flagsOrg = event:getFlags()
     flags = eventToArray(event:getFlags())
     eventType = event:getType()
 
@@ -591,27 +591,27 @@ function LattinMellon:handleClick()
         self.clickHandler:stop()
         -- Prevent selection
         return true
-
       end
+
       win = getWindowUnderMouse():focus() --fb: error if clicked on screen (and not window)
       local point = win:topLeft()
       local frame = win:frame()
       max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
       maxWithMB = win:screen():fullFrame()
       heightMB = maxWithMB.h - max.h   -- height menu bar
-      local xOrg = point.x
-      local yOrg = point.y
-      local wOrg = frame.w
-      local hOrg = frame.h
+      local xNew = point.x
+      local yNew = point.y
+      local wNew = frame.w
+      local hNew = frame.h
 
       local mousePos = hs.mouse.absolutePosition()
-      local mx = wOrg + xOrg - mousePos.x -- distance between right border of window and cursor
-      local dmah = wOrg / 2 - mx -- absolute delta: mid window - cursor
-      mH = dmah * 100 / wOrg -- delta from mid window: -50(left border of window) to 50 (left border)
+      local mx = wNew + xNew - mousePos.x -- distance between right border of window and cursor
+      local dmah = wNew / 2 - mx -- absolute delta: mid window - cursor
+      mH = dmah * 100 / wNew -- delta from mid window: -50(left border of window) to 50 (left border)
 
-      local my = hOrg + yOrg - mousePos.y
-      local dmav = hOrg / 2 - my
-      mV = dmav * 100 / hOrg -- delta from mid window in %: from -50(=top border of window) to 50 (bottom border)
+      local my = hNew + yNew - mousePos.y
+      local dmav = hNew / 2 - my
+      mV = dmav * 100 / hNew -- delta from mid window in %: from -50(=top border of window) to 50 (bottom border)
 
       -- show canvases for visually supporting automatic window positioning and resizing
       local thickness = 20 -- thickness of bar
@@ -640,7 +640,7 @@ function LattinMellon:handleClick()
   end
 end
 
--- create canvases at screen border
+-- function for creating canvases at screen border
 cv = {}
 function createCanvas(n, x, y, w, h)
   cv[n] = hs.canvas.new(hs.geometry.rect(x, y, w, h))
@@ -669,20 +669,18 @@ function eventToArray(a)
 end
 
 function modifiersEqual(a, b) --algorithm is O(n log n), due to table growth.
-  if #a ~= #b then
+  if #a ~= #b then 
     return false
-  end -- unequal length of tables
-
+  end 
   table.sort(a)
   table.sort(b)
-
   for i = 1, #a do
     if a[i] ~= b[i] then
       return false
     end
   end
-
   return true
 end
+
 
 return LattinMellon
