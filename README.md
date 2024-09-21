@@ -6,7 +6,7 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 
 Manual resizing and positioning:
 
-<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/LattinMellon.gif" />
+<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo1.gif" />
 
 
 Automatic resizing and positioning:
