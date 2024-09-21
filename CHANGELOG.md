@@ -1,6 +1,7 @@
 # v0.8.2
 
-* Beta release:In 3x3 grid windows are snapped into middle column by releasing modifier key before releasing mouse button.
+* Beta release:
+  In 3x3 grid windows are snapped into middle column by releasing modifier key before releasing mouse button.
 
 # v0.8.1
 
