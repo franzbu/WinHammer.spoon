@@ -1,7 +1,8 @@
 # v0.8.2
 
 * Beta release:
-  In 3x3 grid windows are snapped into middle column by releasing modifier key before releasing mouse button.
+  - In 3x3 grid windows are snapped into middle column by releasing modifier key before releasing mouse button.
+  - Adjusting value of 'margin' allows the resizing of the area of vertical-only and horizontal-only resizing of windows.
 
 # v0.8.1
 
