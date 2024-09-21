@@ -1,3 +1,9 @@
+# v0.8.2
+  In 3x3 grid windows are snapped into middle column by releasing modifier key before releasing mouse button.
+
+* Beta release:
+  Ironed out some issues.
+
 # v0.8.1
 
 * Beta release:
@@ -6,7 +12,7 @@
 # v0.8
 
 * Beta release:
-  Added canvases for visual support of window management. In 3x3 grid windows can now automatically be snapped into middle column.
+  Added canvases for visual support of window management. In 3x3 grid windows can now automatically be snapped into middle column by pressing both modifier keys.
 
 # v0.7.1
 
