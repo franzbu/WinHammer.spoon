@@ -81,10 +81,10 @@ As long as windows are resized - or moved within the borders of the screen -, it
   * If windows are moved beyond the bottom border of the screen: imagine your bottom screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the bottom border, the window snaps into full screen. Crossing the screen border in the left or right thirds, the window snaps into the respective halfs of the screen.
 
 * `modifier2`: 
-  * The difference to `modifier1` is that your screen has an underlying 3x3 grid rather than a 2x2 grid.
+  * The difference to `modifier1` is that your screen has an underlying 3x3 grid rather than a 2x2 grid. This means that windows snap into the left column of the 3x3 grid when dragged beyond the left screen border and into the right column when dragged beyond the right screen border. In both cases, if the `modifier2` key is released before the mouse button, the window will snap into the middle column.
  
-*  `modifier1` and `modifier2`: pressing both modifier keys at the same time while moving a window 10 or more percent of its width beyond the left or right screen borders makes the window snap into the middle column (same size as if using solely your `modifier2` key.
- 
+* The moment dragging of a window starts, the screen borders are highlighted in order to indicate where to drag the window for using two vertical grid positions rather than one. 
+
 
 ### Disabling moving/resizing for certain applications
 
@@ -99,4 +99,20 @@ LattinMellon:new({
   disabledApps = {"Alacritty"},
 })
 ```
+
+
+### Advanced options
+
+You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 30 percent. Changing it to 0 results in deactivating this options, changing it to 100 results in deactivating resizing. Any value in between 0 and 100 has both options enabled in the respective areas.
+
+```lua
+LattinMellon:new({
+
+  -- ...
+
+  -- Adjust the size of the area with vertical-only and horizontal-only resizing:
+  margin = 20,
+})
+```
+
 
