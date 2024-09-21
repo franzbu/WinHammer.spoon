@@ -9,7 +9,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.8.1"
+LattinMellon.version = "0.8.2"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -40,7 +40,7 @@ end
 --     modifier1 = { 'alt' },
 --     modifier2 = { 'ctrl' },
 --     modifier3 = { 'alt', 'ctrl', 'win' },
---     modifier4 = { 'alt', 'ctrl', 'cmd' },
+--     modifier4 = { 'alt', 'ctrl', 'cmd', 'shift' },
 --   })
 
 local function buttonNameToEventType(name, optionName)
@@ -62,6 +62,7 @@ function LattinMellon:new(options)
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
 
+  --[[ -- modifier1_2
   modifier1_2 = {} -- merge modifier1 and modifier2:
   k = 1
   for i = 1, #modifier1 do
@@ -81,6 +82,7 @@ function LattinMellon:new(options)
       k = k + 1
     end
   end
+  --]]
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -225,6 +227,13 @@ end
 
 function LattinMellon:doMagic() -- automatic positioning and adjustments, for example, prevent window from moving/resizing beyond screen boundaries
   if not self.targetWindow then return end
+
+  --fb2:
+  modifierDM = eventToArray(hs.eventtap.checkKeyboardModifiers()) -- modifiers (still) pressed after releasing mouse button
+  for i,v in pairs(modifierDM) do
+    print(i,v)
+  end
+
   local win = hs.window.focusedWindow()
   local frame = win:frame()
   local point = win:topLeft()
@@ -240,7 +249,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
     if modifiersEqual(flags, modifier1) then
       gridX = 2
       gridY = 2
-    elseif modifiersEqual(flags, modifier2) or modifiersEqual(flags, modifier1_2)  then
+    elseif modifiersEqual(flags, modifier2) then --or modifiersEqual(flags, modifier1_2)  then
       gridX = 3
       gridY = 3
     end
@@ -325,7 +334,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-    elseif modifiersEqual(flags, modifier2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    elseif modifiersEqual(flags, modifier2) and modifiersEqual(flags, modifierDM) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -417,8 +426,9 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-    -- if dragged beyond left/right screen border, windows snap to middle column
-    elseif modifiersEqual(flags, modifier1_2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    -- if dragged beyond left/right screen border, window snaps to middle column
+    --elseif modifiersEqual(flags, modifier1_2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    elseif modifiersEqual(flags, modifier2) and #modifierDM == 0 then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -548,8 +558,8 @@ function LattinMellon:handleClick()
         isMoving = true
       elseif modifier4 ~= nil and modifiersEqual(flags, modifier4) then
         isMoving = true
-      elseif modifier1_2 ~= nil and modifiersEqual(flags, modifier1_2) then
-        isMoving = true
+     --elseif modifier1_2 ~= nil and modifiersEqual(flags, modifier1_2) then
+      --  isMoving = true
       end
     elseif eventType == self.resizeStartMouseEvent then
       if modifiersEqual(flags, modifier1) then
@@ -560,8 +570,8 @@ function LattinMellon:handleClick()
         isResizing = true
       elseif modifier4 ~= nil and modifiersEqual(flags, modifier4) then
         isResizing = true
-      elseif modifier1_2 ~= nil and modifiersEqual(flags, modifier1_2) then
-        isResizing = true
+      --elseif modifier1_2 ~= nil and modifiersEqual(flags, modifier1_2) then
+      --  isResizing = true
       end
     end
 
@@ -619,7 +629,7 @@ function LattinMellon:handleClick()
         createCanvas(1, 0, max.h / 3, thickness, max.h / 3)
         createCanvas(2, max.w / 3, heightMB + max.h - thickness, max.w / 3, thickness)
         createCanvas(3, max.w - thickness, max.h / 3, thickness, max.h / 3)
-      elseif eventType == self.moveStartMouseEvent and (modifiersEqual(flags, modifier2) or modifiersEqual(flags, modifier1_2)) then
+      elseif eventType == self.moveStartMouseEvent and (modifiersEqual(flags, modifier2)) then -- or modifiersEqual(flags, modifier1_2)) then
         createCanvas(1, 0, max.h / 5, thickness, max.h / 5)
         createCanvas(2, 0, max.h / 5 * 3, thickness, max.h / 5)
         createCanvas(3, max.w / 5, heightMB + max.h - thickness, max.w / 5, thickness)
@@ -662,8 +672,10 @@ function eventToArray(a)
   k = 1
   b = {}
   for i,_ in pairs(a) do
-    b[k] = i
-    k = k + 1
+    if i == "cmd" or i == "alt" or i == "ctrl" or i == "shift" then -- or i == "fn" then
+      b[k] = i
+      k = k + 1
+    end
   end
   return b
 end
