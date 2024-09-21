@@ -26,7 +26,6 @@ local function tableToMap(table)
 end
 
 local function getWindowUnderMouse()
-  --local _ = hs.application
   local my_pos = hs.geometry.new(hs.mouse.absolutePosition())
   local my_screen = hs.mouse.getCurrentScreen()
   return hs.fnutils.find(hs.window.orderedWindows(), function(w)
@@ -61,28 +60,6 @@ function LattinMellon:new(options)
   modifier2 = options.modifier2 or { 'ctrl' }
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
-
-  --[[ -- modifier1_2
-  modifier1_2 = {} -- merge modifier1 and modifier2:
-  k = 1
-  for i = 1, #modifier1 do
-    modifier1_2[k] = modifier1[i]
-    k = k + 1
-  end
-  for i = 1, #modifier2 do
-    ap = false -- already present
-    for j = 1, #modifier1_2 do -- prevent double entries
-      if modifier1_2[j] == modifier2[i] then
-        ap = true
-        break
-      end
-    end
-    if not ap then
-      modifier1_2[k] = modifier2[i]
-      k = k + 1
-    end
-  end
-  --]]
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -228,9 +205,8 @@ end
 function LattinMellon:doMagic() -- automatic positioning and adjustments, for example, prevent window from moving/resizing beyond screen boundaries
   if not self.targetWindow then return end
 
-  --fb2:
   modifierDM = eventToArray(hs.eventtap.checkKeyboardModifiers()) -- modifiers (still) pressed after releasing mouse button
-    
+
   local frame = win:frame()
   local point = win:topLeft()
   -- 'max' should not be reintialized here because if there is another adjacent display with different resolution, windows are adjusted according to that resolution (as cursor gets moved there)
@@ -572,7 +548,6 @@ function LattinMellon:handleClick()
     end
 
     if isMoving or isResizing then
-  
       local currentWindow = getWindowUnderMouse()
       if #self.disabledApps >= 1 then
         if self.disabledApps[currentWindow:application():name()] then
@@ -589,7 +564,7 @@ function LattinMellon:handleClick()
         self.dragType = dragTypes.resize
       end
     
-      --fb: experimental -> attempt to prevent error when clicking on screen (and not window) with pressed modifier(s)
+      -- experimental: prevent error when clicking on screen (and not window) with pressed modifier(s)
       if type(getWindowUnderMouse()) == "nil" then
         self.cancelHandler:start()
         self.dragHandler:stop()
@@ -675,7 +650,7 @@ function eventToArray(a)
   return b
 end
 
-function modifiersEqual(a, b) --algorithm is O(n log n), due to table growth.
+function modifiersEqual(a, b)
   if #a ~= #b then 
     return false
   end 
