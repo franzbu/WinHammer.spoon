@@ -230,9 +230,6 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
   --fb2:
   modifierDM = eventToArray(hs.eventtap.checkKeyboardModifiers()) -- modifiers (still) pressed after releasing mouse button
-  for i,v in pairs(modifierDM) do
-    print(i,v)
-  end
 
   local win = hs.window.focusedWindow()
   local frame = win:frame()
@@ -594,7 +591,6 @@ function LattinMellon:handleClick()
       end
     
       --fb: experimental -> attempt to prevent error when clicking on screen (and not window) with pressed modifier(s)
-      --print("getWindowUnderMouse: " .. type(getWindowUnderMouse())) 
       if type(getWindowUnderMouse()) == "nil" then
         self.cancelHandler:start()
         self.dragHandler:stop()
