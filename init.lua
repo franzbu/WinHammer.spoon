@@ -230,8 +230,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
 
   --fb2:
   modifierDM = eventToArray(hs.eventtap.checkKeyboardModifiers()) -- modifiers (still) pressed after releasing mouse button
-
-  local win = hs.window.focusedWindow()
+    
   local frame = win:frame()
   local point = win:topLeft()
   -- 'max' should not be reintialized here because if there is another adjacent display with different resolution, windows are adjusted according to that resolution (as cursor gets moved there)
