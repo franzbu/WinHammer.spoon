@@ -9,7 +9,7 @@ LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
 LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
 LattinMellon.license = "MIT"
 LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.8.2"
+LattinMellon.version = "0.9"
 LattinMellon.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -63,28 +63,6 @@ function LattinMellon:new(options)
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
   useAS = options.AeroSpace or false
   ratioMoveAS = options.ratioMoveWorkSpace or 0.8
-
-  --[[ -- modifier1_2
-  modifier1_2 = {} -- merge modifier1 and modifier2:
-  k = 1
-  for i = 1, #modifier1 do
-    modifier1_2[k] = modifier1[i]
-    k = k + 1
-  end
-  for i = 1, #modifier2 do
-    ap = false -- already present
-    for j = 1, #modifier1_2 do -- prevent double entries
-      if modifier1_2[j] == modifier2[i] then
-        ap = true
-        break
-      end
-    end
-    if not ap then
-      modifier1_2[k] = modifier2[i]
-      k = k + 1
-    end
-  end
-  --]]
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
