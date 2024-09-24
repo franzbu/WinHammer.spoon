@@ -100,10 +100,11 @@ LattinMellon:new({
 
   -- Should LattinMellon be used alongside AeroSpace?
   AeroSpace = true
-
+  ratioMoveAS = 0.8
 
 })
 ```
+The option 'ratioMoveAS' determines how much of the window needs to be moved beyond the left or right borders of the screen for the window to be moved to the previous or next (work-) space. A value of 1 disables this function, a value of 0 would disable the automatic positioning feature of LattinMellon.
 
 To use LattinMellon alongside AeroSpace only makes sense if the layout in AeroSpace is set to 'floating' layout. AeroSpace is thus used primarily for its excellent implemantation of spaces, or, as they are called in AeroSpace, workspaces.
 
@@ -114,6 +115,11 @@ To set AeroSpace to 'floating' layout, make sure aerospace.toml contains the fol
 check-further-callbacks = true
 run = 'layout floating'
 ```
+
+To use this feature, simple drag 80 percent (if 'ratioMoveAS' is set to 0.8) or more of the window beyond the left/right screen border to move the window to the previous/next (work-) space. 
+
+There is an additional feature: if you release the modifier button before releasing the left mouse button, LattinMellon switches to the workspace the window has moved to; otherwise LattinMellon stays on the current one.
+
 
 ### Change Margin
 
