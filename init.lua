@@ -61,8 +61,8 @@ function LattinMellon:new(options)
   modifier2 = options.modifier2 or { 'ctrl' }
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
-  useAS = options.AeroSpace or false
-  ratioMoveAS = options.ratioMoveAS or 0.8
+  useSpaces = options.useSpaces or false
+  ratioSpaces = options.ratioSpaces or 0.8
 
   --[[ -- modifier1_2
   modifier1_2 = {} -- merge modifier1 and modifier2:
@@ -173,13 +173,13 @@ function LattinMellon:handleDrag()
       -- aerospace --
       moveLeftAS = false -- two variables also needed if AeroSpace is deactivated
       moveRightAS = false
-      if useAS then
-       if current.x + currentSize.w * ratioMoveAS < 0 then 
+      if useSpaces then
+       if current.x + currentSize.w * ratioSpaces < 0 then 
           for i = 1, #cv do
             cv[ i ]:hide() 
           end
           moveLeftAS = true
-        elseif current.x + currentSize.w > max.w + currentSize.w * ratioMoveAS then
+        elseif current.x + currentSize.w > max.w + currentSize.w * ratioSpaces then
           for i = 1, #cv do
             cv[ i ]:hide()
           end
@@ -192,7 +192,7 @@ function LattinMellon:handleDrag()
           moveRightAS = false
         end
       else
-        ratioMoveAS = 1 -- enable automatic snapping and resizing regardless of how far windows are dragged bayond left/right screen borders
+        ratioSpaces = 1 -- enable automatic snapping and resizing regardless of how far windows are dragged bayond left/right screen borders
       end
 
 
@@ -563,7 +563,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
     self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
   
   -- aerospace
-  elseif useAS and movedNotResized then
+  elseif useSpaces and movedNotResized then
     if moveLeftAS then
       aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
       if not modifiersEqual(modifierDM, flags) then
