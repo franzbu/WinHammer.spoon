@@ -7,7 +7,7 @@ An optional feature is to enable handling spaces with LattinMellon using AeroSpa
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Be also aware that the animations show an earlier stage of development; with the most recent version, indicators at the borders of the screen guide the positioning and resizing of windows.
 
 
-## Automatic window resizing and positioning
+* Automatic window resizing and positioning
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo2.gif" />
 
@@ -16,7 +16,7 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo1.gif" />
          
 
-## Installation
+* Installation
 
 This tool requires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
 
