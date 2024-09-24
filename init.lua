@@ -62,7 +62,7 @@ function LattinMellon:new(options)
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
   useAS = options.AeroSpace or false
-  ratioMoveAS = options.ratioMoveAS or 1
+  ratioMoveAS = options.ratioMoveAS or 0.8
 
   --[[ -- modifier1_2
   modifier1_2 = {} -- merge modifier1 and modifier2:
