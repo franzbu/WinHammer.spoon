@@ -1,11 +1,10 @@
 # LattinMellon
 
-LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma). With LattinMellon, windows can be snapped into dynamically changing grid positions with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
+LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma) that combines keyboard and mouse to position your windows and manage your spaces highly efficiently. Windows are snapped into dynamically changing grid positions with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
 
-As an optional feature, handling spaces with LattinMellon using AeroSpace can be enabled. With it, LattinMellon can also move windows to other spaces (also known as workspaces); more below in the section 'Advanced Features'.
+As an optional feature, LattinMellon handles spaces using AeroSpace. With this feature activated, LattinMellon can move windows to other spaces (also known as workspaces), choosing on-the-fly whether to move there or to stay on the current space - more below in the section 'Advanced Features'.
 
-The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Be also aware that the animations show an earlier stage of development; with the most recent version, indicators at the borders of the screen guide the positioning and resizing of windows.
-
+The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
 * Automatic window resizing and positioning
 
@@ -32,7 +31,7 @@ mkdir -p ~/.hammerspoon/Spoons && git clone https://github.com/franzbu/LattinMel
 
 ## Usage
 
-Once you've installed LattinMellon, add this to your `~/.hammerspoon/init.lua` file:
+Once you've installed LattinMellon, add the following lines to your `~/.hammerspoon/init.lua` file:
 
 ```lua
 local LattinMellon = hs.loadSpoon("LattinMellon")
@@ -48,17 +47,17 @@ LattinMellon:new({
 
 ### Manual Moving
 
-To move a window, hold your `modifier1` or `modifier2` key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things start to get interesting because then window management with automatic resizing and positioning comes into play - more about that in a minute.
+To move a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things start to get interesting because then window management with automatic resizing and positioning comes into play - more about that in a minute.
 
 
 ### Manual Resizing
 
-To manually resize a window, hold your  `modifier1` or `modifier2` key(s) down, then click the right mouse button in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
+To manually resize a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the right mouse button in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
 
 To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
 
-```ruby
+```java
  +---+---+---+
  | ↖ | ↑ | ↗ |
  +---+---+---+
@@ -75,14 +74,14 @@ At the very center of the window there is an erea (M) where you can also move th
 
 For automatic resizing and positioning of a window, you simply have to move between 10 and 80 percent of the window beyond the left, right, or bottom (no upper limit here) borders of your screen using your left mouse button. 
 
-As long as windows are resized - or moved within the borders of the screen -, it makes no difference whether you use  `modifier1` or `modifier2`. However, once a window is moved beyond the screen borders (10 - 80 percent of the window), different positioning and resizing scenarios are called into action; they are as follows:
+As long as windows are resized - or moved within the borders of the screen -, it makes no difference whether you use  'modifier1' or 'modifier2'. However, once a window is moved beyond the screen borders (10 - 80 percent of the window), different positioning and resizing scenarios are called into action; they are as follows:
 
-* `modifier1`: 
+* 'modifier1': 
   * If windows are moved beyond the left (right) borders of the screen: imagine your screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the border, the window snaps into the left (right) half of the screen. Crossing the screen border in the upper and lower thirds, the window snaps into the respective quarters of the screen.
   * If windows are moved beyond the bottom border of the screen: imagine your bottom screen border divided into three equally long parts: if the cursor crosses the screen border in the middle third of the bottom border, the window snaps into full screen. Crossing the screen border in the left or right thirds, the window snaps into the respective halfs of the screen.
 
-* `modifier2`: 
-  * The difference to `modifier1` is that your screen has an underlying 3x3 grid. This means that windows snap into the left column of the 3x3 grid when dragged beyond the left screen border and into the right column when dragged beyond the right screen border. If `modifier2` is released before the left mouse button, the window will snap into the middle column.
+* 'modifier2': 
+  * The difference to 'modifier1' is that your screen has an underlying 3x3 grid. This means that windows snap into the left column of the 3x3 grid when dragged beyond the left screen border and into the right column when dragged beyond the right screen border. If 'modifier2' is released before the left mouse button, the window will snap into the middle column.
  
 * The moment dragging of a window starts, the screen borders are highlighted in order to indicate where to drag the window for using two grid positions rather than one. 
 
@@ -182,7 +181,7 @@ LattinMellon:new({
 
 ### Disabling Moving and Resizing for Certain Applications
 
-You can disable move/resize for any application by adding it to the `disabledApps` option:
+You can disable move/resize for any application by adding it to the 'disabledApps' option:
 
 ```lua
 LattinMellon:new({
