@@ -93,7 +93,7 @@ As long as windows are resized - or moved within the borders of the screen -, it
 
 As has been mentioned, AeroSpace can be installed (https://nikitabobko.github.io/AeroSpace/guide) in order to enable LattinMellon to handle spaces. 
 
-To use AeroSpace in LattinMellon, the layout in AeroSpace needs to be set to 'floating', thus make sure 'aerospace.toml' contains the following section at the top:
+To use AeroSpace in LattinMellon, the layout in AeroSpace needs to be set to 'floating', so the following section needs to be added to the top of AeroSpace's config file 'aerospace.toml':
 
 ```toml
 [[on-window-detected]]
@@ -101,7 +101,7 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-The file 'aerospace.toml' can be left like this for now; however, you can additionally finetune where - for instance, where the cursor is positionod after moving to another space - at a later stage (more here: https://nikitabobko.github.io/AeroSpace/guide).
+The file 'aerospace.toml' can be left like this for now; however, it can be sensible to do additional finetuning, e.g., where the cursor is positionod after moving to another space, at a later stage (more here: https://nikitabobko.github.io/AeroSpace/guide).
 
 After installing AeroSpace, LattinMellon can be authorized to move windows to spaces by adding the following option to your 'init.lua':
 
