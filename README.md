@@ -101,7 +101,7 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-The file 'aerospace.toml' can stay like this; however, you might be interested in some additional finetuning, so can you determine where the cursor is positioned after moving to another space.
+The file 'aerospace.toml' can stay like this; however, you might be interested in some additional finetuning, so can you determine where the cursor is positioned after moving to another space or enable the automatic start of AeroSpace at login (start-at-login = true).
 
 After installing AeroSpace, LattinMellon can be authorized to move windows to spaces by adding the following option to your 'init.lua':
 
