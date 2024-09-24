@@ -1,3 +1,8 @@
+# v0.9
+
+* Beta release:
+  - If used alongside AeroSpace (https://github.com/nikitabobko/AeroSpace), moving 80 or more percent of a window beyond the left or right borders of the screen moves the window in the adjacent workspaces. In order to activate this functionality, 'AeroSpace = true' has to be added to 'init.lua'.
+
 # v0.8.2
 
 * Beta release:
