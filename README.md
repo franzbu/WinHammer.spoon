@@ -2,7 +2,7 @@
 
 LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma); windows can be snapped into dynamically changing grid positions with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
 
-An optional feature is the use of LattinMellon alongside AeroSpace; in this case LattinMellon can move windows to other spaces (called workspaces in AeroSpace).
+An optional feature is the use of LattinMellon alongside AeroSpace; in this case LattinMellon can move windows to other spaces (called workspaces in AeroSpace); more below in the section 'Advanced features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Be also aware that the animations show an earlier stage of development; with the most recent version, indicators at the borders of the screen guide the positioning and resizing of windows.
 
@@ -87,7 +87,7 @@ As long as windows are resized - or moved within the borders of the screen -, it
 * The moment dragging of a window starts, the screen borders are highlighted in order to indicate where to drag the window for using two vertical grid positions rather than one. 
 
 
-## Advanced options
+## Advanced features
 
 ### AeroSpace
 
@@ -101,12 +101,9 @@ LattinMellon:new({
   ...
 
   -- Should LattinMellon be used alongside AeroSpace?
-  AeroSpace = true
-  ratioMoveAS = 0.8
-
+  AeroSpace = true,
 })
 ```
-The option 'ratioMoveAS' determines how much of the window needs to be moved beyond the left or right borders of the screen for the window to be moved to the previous or next (work-) space. A value of 1 disables this function, a value of 0 would disable the automatic positioning feature of LattinMellon.
 
 To use LattinMellon alongside AeroSpace only makes sense if the layout in AeroSpace is set to 'floating' layout. AeroSpace is thus used primarily for its excellent implemantation of spaces, or, as they are called in AeroSpace, workspaces.
 
@@ -118,9 +115,9 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-To use this feature, simple drag 80 percent (if 'ratioMoveAS' is set to 0.8) or more of the window beyond the left/right screen border to move the window to the previous/next (work-) space. 
+To use this feature, simple drag 80 percent or more of the window beyond the left/right screen border to move the window to the previous/next (work-) space. This area of '80 percent or more' can be changed with the option 'ratioMoveAS = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling AeroSpace, while a value of '0' practically leads to eliminating the area for automatic positioning and resizing of windows and thus disabling this feature.
 
-There is an additional feature: if you release the modifier button before releasing the left mouse button, LattinMellon switches to the workspace the window has moved to; otherwise LattinMellon stays on the current one.
+There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier button before releasing the left mouse button, LattinMellon switches to the (work-) space the window has moved to; otherwise LattinMellon stays on the current one.
 
 
 ### Change Margin
