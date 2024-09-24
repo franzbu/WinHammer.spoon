@@ -1,44 +1,44 @@
-# LattinMellon
+# WinHammer
 
-LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma) that combines keyboard and mouse operations to manage your windows and spaces in a highly efficient way. 
+WinHammer is a window manager for macOS (tested in macOS Sequoia and Sonoma) that combines keyboard and mouse operations to manage your windows and spaces in a highly efficient way. 
 
 There is no need to pre-define a 2x2, 2x3, or 3x3 grid, as windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
 
-As an optional feature, LattinMellon handles spaces using AeroSpace (AeroSpace irons out some of macOS' space manager's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for increased functionality). With this feature activated, LattinMellon can move windows to other spaces (also known as workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
+As an optional feature, WinHammer handles spaces using AeroSpace (AeroSpace irons out some of macOS' space manager's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for increased functionality). With this feature activated, WinHammer can move windows to other spaces (also known as workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
 * Automatic window resizing and positioning
 
-<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo2.gif" />
+<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/demo2.gif" />
 
 * Manual window resizing and positioning
 
-<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo1.gif" />
+<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/demo1.gif" />
          
 
 ## Installation
 
 This tool requires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
 
-To install LattinMellon, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'LattinMellon.spoon'. 
+To install WinHammer, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'WinHammer.spoon'. 
 
 Alternatively, you can simply paste the following line into a terminal window and execute it:
 
 ```lua
 
-mkdir -p ~/.hammerspoon/Spoons && git clone https://github.com/franzbu/LattinMellon.spoon.git ~/.hammerspoon/Spoons/LattinMellon.spoon
+mkdir -p ~/.hammerspoon/Spoons && git clone https://github.com/franzbu/WinHammer.spoon.git ~/.hammerspoon/Spoons/WinHammer.spoon
 
 ```
 
 ## Usage
 
-Once you've installed LattinMellon, add the following lines to your `~/.hammerspoon/init.lua` file:
+Once you've installed WinHammer, add the following lines to your `~/.hammerspoon/init.lua` file:
 
 ```lua
-local LattinMellon = hs.loadSpoon("LattinMellon")
+local WinHammer = hs.loadSpoon("WinHammer")
 
-LattinMellon:new({
+WinHammer:new({
 
   -- modifier(s) to hold to move (left mouse button) or resize (right mouse button) a window:
   modifier1 = { 'alt' }, -- also a group of modifiers such as { 'alt', 'cmd' } is possible
@@ -58,7 +58,7 @@ To manually resize a window, hold your 'modifier1' or 'modifier2' key(s) down, t
 
 To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
-<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/resizing.png" width="200">
+<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/resizing.png" width="200">
 
 At the very center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
 
@@ -83,9 +83,9 @@ As long as windows are resized - or moved within the borders of the screen -, it
 
 ### Spaces
 
-As has been mentioned, if you want to also handle spaces with LattinMellon, AeroSpace can optionally be installed (https://nikitabobko.github.io/AeroSpace/guide) . 
+As has been mentioned, if you want to also handle spaces with WinHammer, AeroSpace can optionally be installed (https://nikitabobko.github.io/AeroSpace/guide) . 
 
-To use AeroSpace in LattinMellon, the layout in AeroSpace needs to be set to 'floating', so the following section needs to be added at the top of AeroSpace's config file 'aerospace.toml':
+To use AeroSpace in WinHammer, the layout in AeroSpace needs to be set to 'floating', so the following section needs to be added at the top of AeroSpace's config file 'aerospace.toml':
 
 ```toml
 [[on-window-detected]]
@@ -95,21 +95,21 @@ run = 'layout floating'
 
 The file 'aerospace.toml' can stay like this; however, you might be interested in some additional finetuning, so can you enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
 
-After installing AeroSpace, LattinMellon can be authorized to move windows to spaces by adding the following option to your 'init.lua':
+After installing AeroSpace, WinHammer can be authorized to move windows to spaces by adding the following option to your 'init.lua':
 
 ```lua
-LattinMellon:new({
+WinHammer:new({
 
   ...
 
-  -- Handle spaces from within LattinMellon:
+  -- Handle spaces from within WinHammer:
   useSpaces = true,
 })
 ```
 
-In order to move a window to another (work-) space, besides using the keyboard shortcuts defined in your 'aerospace.toml', you can also use LattinMellon by simply dragging 80 percent (= 0.8) or more of the window beyond the left or right border of the screen. The area of '80 percent or more' can be altered with the option 'ratioSpaces = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling moving windows to spaces using LattinMellon, while a value of '0' moves windows to the other (work-) space if they are even moved only slightly beyond the screen border; this at the same time practically leads to eliminating the area for automatic positioning and resizing of windows and thus disables this feature within LattinMellon. The option 'ratioSpaces = 0.8' corresponds the standard of 80 percent (to keep it at that value, you do not need to do anything, only if you want a different value you can add the corresponding line).
+In order to move a window to another (work-) space, besides using the keyboard shortcuts defined in your 'aerospace.toml', you can also use WinHammer by simply dragging 80 percent (= 0.8) or more of the window beyond the left or right border of the screen. The area of '80 percent or more' can be altered with the option 'ratioSpaces = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling moving windows to spaces using WinHammer, while a value of '0' moves windows to the other (work-) space if they are even moved only slightly beyond the screen border; this at the same time practically leads to eliminating the area for automatic positioning and resizing of windows and thus disables this feature within WinHammer. The option 'ratioSpaces = 0.8' corresponds the standard of 80 percent (to keep it at that value, you do not need to do anything, only if you want a different value you can add the corresponding line).
 
-There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier key before releasing the left mouse button, LattinMellon 
+There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier key before releasing the left mouse button, WinHammer 
 stays on the current space; otherwise it switches to the (work-) space the window has moved to.
 
 In case you would like to additionally use Hammerspoon to handle your (work-) spaces, you can add the following lines to your 'init.lua'; adjust the keys to your liking:
@@ -161,7 +161,7 @@ end
 You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 0.3, which corresponds to 30 percent. Changing it to 0 results in deactivating this options, changing it to 1 results in deactivating resizing. Any value in between 0 and 1 has both options enabled in the respective areas.
 
 ```lua
-LattinMellon:new({
+WinHammer:new({
 
   -- ...
 
@@ -177,7 +177,7 @@ LattinMellon:new({
 You can disable move/resize for any application by adding it to the 'disabledApps' option:
 
 ```lua
-LattinMellon:new({
+WinHammer:new({
 
   -- ...
 
