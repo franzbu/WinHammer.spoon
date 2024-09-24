@@ -3,14 +3,14 @@ local function scriptPath()
   return str:match("(.*/)")
 end
 
-local LattinMellon = {}
+local WinHammer = {}
 
-LattinMellon.author = "Franz B. <csaa6335@gmail.com>"
-LattinMellon.homepage = "https://github.com/franzbu/LattinMellon.spoon"
-LattinMellon.license = "MIT"
-LattinMellon.name = "LattinMellon"
-LattinMellon.version = "0.9"
-LattinMellon.spoonPath = scriptPath()
+WinHammer.author = "Franz B. <csaa6335@gmail.com>"
+WinHammer.homepage = "https://github.com/franzbu/WinHammer.spoon"
+WinHammer.license = "MIT"
+WinHammer.name = "WinHammer"
+WinHammer.version = "0.9"
+WinHammer.spoonPath = scriptPath()
 
 local dragTypes = {
   move = 1,
@@ -35,7 +35,7 @@ local function getWindowUnderMouse()
 end
 
 -- Usage:
---   resizer = LattinMellon:new({
+--   resizer = WinHammer:new({
 --     modifier1 = { 'alt' },
 --     modifier2 = { 'ctrl' },
 --   })
@@ -50,14 +50,14 @@ local function buttonNameToEventType(name, optionName)
   error(optionName .. ': only "left" and "right" mouse button supported, got ' .. name)
 end
 
-function LattinMellon:new(options)
+function WinHammer:new(options)
   options = options or {}
-  margin = options.margin or 0.3
-  m = margin * 100 / 2
   modifier1 = options.modifier1 or { 'alt' }
   modifier2 = options.modifier2 or { 'ctrl' }
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
+  margin = options.margin or 0.3
+  m = margin * 100 / 2
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
 
@@ -102,7 +102,7 @@ function LattinMellon:new(options)
   return resizer
 end
 
-function LattinMellon:stop()
+function WinHammer:stop()
   self.dragging = false
   self.dragType = nil
 
@@ -115,17 +115,17 @@ function LattinMellon:stop()
   self.clickHandler:start()
 end
 
-function LattinMellon:isResizing()
+function WinHammer:isResizing()
   return self.dragType == dragTypes.resize
 end
 
-function LattinMellon:isMoving()
+function WinHammer:isMoving()
   return self.dragType == dragTypes.move
 end
 
 sumdx = 0
 sumdy = 0
-function LattinMellon:handleDrag()
+function WinHammer:handleDrag()
   return function(event)
     if not self.dragging then return nil end
     local currentSize = win:size() -- win:frame
@@ -220,7 +220,7 @@ function LattinMellon:handleDrag()
   end
 end
 
-function LattinMellon:handleCancel()
+function WinHammer:handleCancel()
   return function()
     if not self.dragging then return end
     self:doMagic()
@@ -228,7 +228,7 @@ function LattinMellon:handleCancel()
   end
 end
 
-function LattinMellon:doMagic() -- automatic positioning and adjustments, for example, prevent window from moving/resizing beyond screen boundaries
+function WinHammer:doMagic() -- automatic positioning and adjustments, for example, prevent window from moving/resizing beyond screen boundaries
   if not self.targetWindow then return end
 
   modifierDM = eventToArray(hs.eventtap.checkKeyboardModifiers()) -- modifiers (still) pressed after releasing mouse button
@@ -561,7 +561,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
   sumdy = 0
 end
 
-function LattinMellon:handleClick()
+function WinHammer:handleClick()
   return function(event)
     if self.dragging then return true end
     flags = eventToArray(event:getFlags())
@@ -724,4 +724,4 @@ function modifiersEqual(a, b)
 end
 
 
-return LattinMellon
+return WinHammer
