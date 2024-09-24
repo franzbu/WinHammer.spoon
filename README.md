@@ -91,7 +91,7 @@ As long as windows are resized - or moved within the borders of the screen -, it
 
 ### AeroSpace
 
-As has been mentioned, LattinMellon can be used alongside AeroSpace (https://github.com/nikitabobko/AeroSpace). This feature can be enabled by adding the following option to 'init.lua':
+As has been mentioned, AeroSpace (https://github.com/nikitabobko/AeroSpace) can be installed to enable LattinMellon to handle spaces. After installing AersoSpace (https://nikitabobko.github.io/AeroSpace/guide), it can be enabled by adding the following option to 'init.lua':
 
 ```lua
 local LattinMellon = hs.loadSpoon("LattinMellon")
@@ -100,14 +100,12 @@ LattinMellon:new({
 
   ...
 
-  -- Should LattinMellon be used alongside AeroSpace?
+  -- Handle AeroSpace spaces from within LattinMellon:
   AeroSpace = true,
 })
 ```
 
-To use LattinMellon alongside AeroSpace only makes sense if the layout in AeroSpace is set to 'floating'. AeroSpace, alongside its keyboard shortcuts for switching between spaces, is thus used primarily for its excellent implemantation of spaces, or, as they are called in AeroSpace, workspaces.
-
-To set AeroSpace to 'floating' layout, make sure aerospace.toml contains the following section:
+To use AeroSpace in LattinMellon, the layout in AeroSpace needs to be set to 'floating', thus make sure aerospace.toml contains the following section:
 
 ```lua
 [[on-window-detected]]
@@ -115,10 +113,69 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-To use this feature, simple drag 80 percent or more of the window beyond the left/right screen border to move the window to the previous/next (work-) space. This area of '80 percent or more' can be changed with the option 'ratioMoveAS = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling AeroSpace, while a value of '0' practically leads to eliminating the area for automatic positioning and resizing of windows and thus disabling this feature.
+Also only enable the amount of spaces you need, in my case three of them:
+
+
+```lua
+[mode.main.binding]
+# move to space
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+
+# move active window to space
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+```
+
+To move a window to a different space you can now use eiter the shortcuts defined above or LattinMellon by simple dragging 80 percent or more of the window beyond the left/right screen border in order to move the window to the previous/next (work-) space. This area of '80 percent or more' can be changed with the option 'ratioMoveAS = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling AeroSpace, while a value of '0' practically leads to eliminating the area for automatic positioning and resizing of windows and thus disabling this feature.
 
 There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier button before releasing the left mouse button, LattinMellon switches to the (work-) space the window has moved to; otherwise LattinMellon stays on the current one.
 
+You can also use Hammerspoon to handle your (work-) spaces; simply add the following lines to your 'init.lua'; adjust the keys to your liking:
+
+```lua
+local hyper = { 'shift', 'ctrl', 'alt', 'cmd' }
+
+hs.hotkey.bind(hyper, "a", function() -- switch to prev space
+  aerospace({'workspace', '--wrap-around', 'prev'})
+
+hs.hotkey.bind(hyper, "s", function() -- switch to next space
+  aerospace({'workspace', '--wrap-around', 'next'})
+end)
+
+hs.hotkey.bind(hyper, "q", function() -- move active window to prev space and switch there
+  aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
+  hs.timer.doAfter(0.1, function()
+    aerospace({'workspace', '--wrap-around', 'prev'})
+  end)
+
+end)
+
+hs.hotkey.bind(hyper, "w", function() -- move active window to next space and switch there
+  aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
+  hs.timer.doAfter(0.1, function()
+    aerospace({'workspace', '--wrap-around', 'next'})
+  end)
+end)
+
+hs.hotkey.bind(hyper, "d", function() -- move active window to prev space
+  aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
+end)
+
+hs.hotkey.bind(hyper, "f", function() -- move active window to next space
+  aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
+end)
+
+function aerospace(args)
+  hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
+    hs.inspect(table.pack(...))
+    return true
+  end, args):start()
+end
+
+```
 
 ### Change Margin
 
