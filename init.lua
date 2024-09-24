@@ -36,11 +36,8 @@ end
 
 -- Usage:
 --   resizer = LattinMellon:new({
---     margin = 0.3,
 --     modifier1 = { 'alt' },
 --     modifier2 = { 'ctrl' },
---     modifier3 = { 'alt', 'ctrl', 'win' },
---     modifier4 = { 'alt', 'ctrl', 'cmd', 'shift' },
 --   })
 
 local function buttonNameToEventType(name, optionName)
@@ -63,28 +60,6 @@ function LattinMellon:new(options)
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
-
-  --[[ -- modifier1_2
-  modifier1_2 = {} -- merge modifier1 and modifier2:
-  k = 1
-  for i = 1, #modifier1 do
-    modifier1_2[k] = modifier1[i]
-    k = k + 1
-  end
-  for i = 1, #modifier2 do
-    ap = false -- already present
-    for j = 1, #modifier1_2 do -- prevent double entries
-      if modifier1_2[j] == modifier2[i] then
-        ap = true
-        break
-      end
-    end
-    if not ap then
-      modifier1_2[k] = modifier2[i]
-      k = k + 1
-    end
-  end
-  --]]
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -169,9 +144,8 @@ function LattinMellon:handleDrag()
       sumdx = sumdx + dx
       movedNotResized = true
 
-
       -- aerospace --
-      moveLeftAS = false -- two variables also needed if AeroSpace is deactivated
+      moveLeftAS = false -- these two variables are also needed in case AeroSpace is deactivated
       moveRightAS = false
       if useSpaces then
         if current.x + currentSize.w * ratioSpaces < 0 then -- left
@@ -192,9 +166,8 @@ function LattinMellon:handleDrag()
           moveRightAS = false
         end
       else
-        ratioSpaces = 1 -- enable automatic snapping and resizing regardless of how far windows are dragged bayond left/right screen borders
+        ratioSpaces = 1 -- if 'useSpaces' is disabled, enable automatic snapping and resizing beyond 'ratioSpaces', i.e., for dragging windows as far as possible (= 1)
       end
-
 
       return true
     elseif self:isResizing() then
@@ -269,13 +242,13 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
   local wNew = frame.w
   local hNew = frame.h
 
-  if not moveLeftAS and not moveRightAS then -- if moved to other workspace, no resizing/repositioning necessary
+  if not moveLeftAS and not moveRightAS then -- if moved to other workspace, no resizing/repositioning wanted/necessary
     if movedNotResized then
       -- window moved past left screen border
       if modifiersEqual(flags, modifier1) then
         gridX = 2
         gridY = 2
-      elseif modifiersEqual(flags, modifier2) then --or modifiersEqual(flags, modifier1_2)  then
+      elseif modifiersEqual(flags, modifier2) then --or modifiersEqual(flags, modifier1_2) then
         gridX = 3
         gridY = 3
       end
@@ -566,7 +539,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
   elseif useSpaces and movedNotResized then
     if moveLeftAS then
       aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
-      if modifiersEqual(modifierDM, flags) then
+      if modifiersEqual(modifierDM, flags) then -- if modifier is still pressed, switch to where window has been moved
         hs.timer.doAfter(0.02, function()
           aerospace({'workspace', '--wrap-around', 'prev'})
         end)
@@ -579,13 +552,11 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end)
       end
     end
-    -- position in middle of new workspace
+    -- position window in middle of new workspace
     xNew = max.w / 2 - wNew / 2
     yNew = max.h / 2 - hNew / 2
     self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
   end
-  
-  --hs.spaces.moveWindowToSpace(hs.window.focusedWindow(), getIDSpaceLeft(), true) -- todo: managing of spaces (broken in macOS Sequoia); to be implemented with modifier3/4
   sumdx = 0
   sumdy = 0
 end
@@ -700,7 +671,7 @@ function LattinMellon:handleClick()
   end
 end
 
--- AeroSpace -> needed in case it is activated
+-- function needed in case 'useSpaces' is activated
 function aerospace(args)
   hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
     hs.inspect(table.pack(...))
@@ -724,7 +695,7 @@ function createCanvas(n, x, y, w, h)
   cv[n]:show()
 end
 
- -- event looks like this: {'alt' true}; function turns table into an 'array' so
+ -- event looks like this: {'alt' 'true'}; function turns table into an 'array' so
  -- it can be compared to the other arrays (modifier1, modifier2,...)
 function eventToArray(a)
   k = 1
