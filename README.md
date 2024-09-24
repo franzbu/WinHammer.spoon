@@ -76,7 +76,7 @@ As long as windows are resized - or moved within the borders of the screen -, it
 * modifier2: 
   * The difference to 'modifier1' is that your screen has an underlying 3x3 grid. This means that windows snap into the left column of the 3x3 grid when dragged beyond the left screen border and into the right column when dragged beyond the right screen border. If 'modifier2' is released before the left mouse button, the window will snap into the middle column.
  
-* The moment dragging of a window starts, indicators appear to guide the user as to where to drag the window for different window managing scenarios. 
+* The moment dragging of a window starts, indicators appear to guide the user as to where to drag the window for different window managing scenarios, allowing additional grid sizes. 
 
 
 ## Advanced Features
