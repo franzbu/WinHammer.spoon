@@ -26,6 +26,7 @@ local function tableToMap(table)
 end
 
 local function getWindowUnderMouse()
+  --local _ = hs.application
   local my_pos = hs.geometry.new(hs.mouse.absolutePosition())
   local my_screen = hs.mouse.getCurrentScreen()
   return hs.fnutils.find(hs.window.orderedWindows(), function(w)
@@ -60,6 +61,30 @@ function LattinMellon:new(options)
   modifier2 = options.modifier2 or { 'ctrl' }
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
+  useAS = options.AeroSpace or false
+  ratioMoveAS = options.ratioMoveWorkSpace or 0.8
+
+  --[[ -- modifier1_2
+  modifier1_2 = {} -- merge modifier1 and modifier2:
+  k = 1
+  for i = 1, #modifier1 do
+    modifier1_2[k] = modifier1[i]
+    k = k + 1
+  end
+  for i = 1, #modifier2 do
+    ap = false -- already present
+    for j = 1, #modifier1_2 do -- prevent double entries
+      if modifier1_2[j] == modifier2[i] then
+        ap = true
+        break
+      end
+    end
+    if not ap then
+      modifier1_2[k] = modifier2[i]
+      k = k + 1
+    end
+  end
+  --]]
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -128,7 +153,9 @@ sumdy = 0
 function LattinMellon:handleDrag()
   return function(event)
     if not self.dragging then return nil end
-
+    local currentSize = win:size() -- win:frame
+    local current = win:topLeft()
+      
     local dx = event:getProperty(hs.eventtap.event.properties.mouseEventDeltaX)
     local dy = event:getProperty(hs.eventtap.event.properties.mouseEventDeltaY)
 
@@ -141,11 +168,35 @@ function LattinMellon:handleDrag()
       sumdy = sumdy + dy
       sumdx = sumdx + dx
       movedNotResized = true
+
+
+      -- aerospace --fb
+      if useAS then
+        moveLeftAS = false
+        moveRightAS = false
+        if current.x + currentSize.w * ratioMoveAS < 0 then 
+          for i = 1, #cv do
+            cv[ i ]:hide() 
+          end
+          moveLeftAS = true
+        elseif current.x + currentSize.w > max.w + currentSize.w * ratioMoveAS then
+          for i = 1, #cv do
+            cv[ i ]:hide()
+          end
+          moveRightAS = true
+        else
+          for i = 1, #cv do
+            cv[ i ]:show()
+          end
+          moveLeftAS = false
+          moveRightAS = false
+        end
+      end
+
+
       return true
     elseif self:isResizing() then
       movedNotResized = false
-      local currentSize = win:size() -- win:frame
-      local current = win:topLeft()
       if mH <= -m and mV <= m and mV > -m then -- 9 o'clock
         win:move(hs.geometry.new(current.x + dx, current.y, currentSize.w - dx, currentSize.h), nil, false, 0)
       elseif mH <= -m and mV <= -m then -- 10:30
@@ -181,7 +232,7 @@ function LattinMellon:handleDrag()
         win:move(hs.geometry.new(current.x, current.y, currentSize.w, currentSize.h + dy), nil, false, 0)
       elseif mH <= -m and mV > m then -- 7:30
         win:move(hs.geometry.new(current.x + dx, current.y, currentSize.w - dx, currentSize.h + dy), nil, false, 0)
-      else -- middle
+      else -- middle -> moving (not resizing) window
         local point = win:topLeft()
         local frame = win:frame()
         win:move({ dx, dy }, nil, false, 0)
@@ -306,7 +357,7 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
           end
         end
       end
-    elseif modifiersEqual(flags, modifier2) and modifiersEqual(flags, modifierDM) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    elseif modifiersEqual(flags, modifier2) and modifiersEqual(flags, modifierDM) then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -399,8 +450,8 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         end
       end
     -- if dragged beyond left/right screen border, window snaps to middle column
-    --elseif modifiersEqual(flags, modifier1_2) then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
-    elseif modifiersEqual(flags, modifier2) and #modifierDM == 0 then --fb: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    --elseif modifiersEqual(flags, modifier1_2) then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
+    elseif modifiersEqual(flags, modifier2) and #modifierDM == 0 then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
       if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
         if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
           xNew = 0
@@ -507,7 +558,23 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
     end
   end
   self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
-  --hs.spaces.moveWindowToSpace(hs.window.focusedWindow(), getIDSpaceLeft(), true) -- fb: managing of spaces (broken in macOS Sequoia); to be implemented with modifier3/4
+  
+  -- aerospace --fb:
+  if useAS then
+    if moveLeftAS then
+      aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
+      hs.timer.doAfter(0.02, function()
+        aerospace({'workspace', '--wrap-around', 'prev'})
+      end)
+    elseif moveRightAS then
+      aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
+      hs.timer.doAfter(0.02, function()
+        aerospace({'workspace', '--wrap-around', 'next'})
+      end)
+    end
+  end
+
+  --hs.spaces.moveWindowToSpace(hs.window.focusedWindow(), getIDSpaceLeft(), true) -- todo: managing of spaces (broken in macOS Sequoia); to be implemented with modifier3/4
   sumdx = 0
   sumdy = 0
 end
@@ -564,16 +631,19 @@ function LattinMellon:handleClick()
         self.dragType = dragTypes.resize
       end
     
+      ---[[
       -- experimental: prevent error when clicking on screen (and not window) with pressed modifier(s)
       if type(getWindowUnderMouse()) == "nil" then
+        print("______________ nil window ______________")
         self.cancelHandler:start()
         self.dragHandler:stop()
         self.clickHandler:stop()
         -- Prevent selection
         return true
       end
+      --]]
 
-      win = getWindowUnderMouse():focus() --fb: error if clicked on screen (and not window)
+      win = getWindowUnderMouse():focus() --todo (?done? ->experimental): error if clicked on screen (and not window)
       local point = win:topLeft()
       local frame = win:frame()
       max = win:screen():frame() -- max.x = 0; max.y = 0; max.w = screen width; max.h = screen height
@@ -618,6 +688,14 @@ function LattinMellon:handleClick()
       return nil
     end
   end
+end
+
+-- AeroSpace -> needed in case it is activated
+function aerospace(args)
+  hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
+    hs.inspect(table.pack(...))
+    return true
+  end, args):start()
 end
 
 -- function for creating canvases at screen border
