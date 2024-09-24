@@ -16,7 +16,7 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo1.gif" />
          
 
-* Installation
+## Installation
 
 This tool requires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
 
