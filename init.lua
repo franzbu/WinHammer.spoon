@@ -64,6 +64,28 @@ function LattinMellon:new(options)
   useAS = options.AeroSpace or false
   ratioMoveAS = options.ratioMoveWorkSpace or 0.8
 
+  --[[ -- modifier1_2
+  modifier1_2 = {} -- merge modifier1 and modifier2:
+  k = 1
+  for i = 1, #modifier1 do
+    modifier1_2[k] = modifier1[i]
+    k = k + 1
+  end
+  for i = 1, #modifier2 do
+    ap = false -- already present
+    for j = 1, #modifier1_2 do -- prevent double entries
+      if modifier1_2[j] == modifier2[i] then
+        ap = true
+        break
+      end
+    end
+    if not ap then
+      modifier1_2[k] = modifier2[i]
+      k = k + 1
+    end
+  end
+  --]]
+
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
     dragging = false,
@@ -148,11 +170,11 @@ function LattinMellon:handleDrag()
       movedNotResized = true
 
 
-      -- aerospace --fb
+      -- aerospace --
+      moveLeftAS = false -- two variables also needed if AeroSpace is deactivated
+      moveRightAS = false
       if useAS then
-        moveLeftAS = false
-        moveRightAS = false
-        if current.x + currentSize.w * ratioMoveAS < 0 then 
+       if current.x + currentSize.w * ratioMoveAS < 0 then 
           for i = 1, #cv do
             cv[ i ]:hide() 
           end
@@ -245,300 +267,301 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
   local wNew = frame.w
   local hNew = frame.h
 
-  if movedNotResized then
-    -- window moved past left screen border
-    if modifiersEqual(flags, modifier1) then
-      gridX = 2
-      gridY = 2
-    elseif modifiersEqual(flags, modifier2) then --or modifiersEqual(flags, modifier1_2)  then
-      gridX = 3
-      gridY = 3
-    end
+  if not moveLeftAS and not moveRightAS then -- if moved to other workspace, no resizing/repositioning necessary
+    if movedNotResized then
+      -- window moved past left screen border
+      if modifiersEqual(flags, modifier1) then
+        gridX = 2
+        gridY = 2
+      elseif modifiersEqual(flags, modifier2) then --or modifiersEqual(flags, modifier1_2)  then
+        gridX = 3
+        gridY = 3
+      end
 
-    if modifiersEqual(flags, modifier1) then
-      if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
-        if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
-          xNew = 0
-        -- window moved past left screen border
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          for i = 1, gridY, 1 do
-            -- middle third of left border
-            if hs.mouse.getRelativePosition().y + sumdy > max.h / 3 and hs.mouse.getRelativePosition().y + sumdy < max.h * 2 / 3 then -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment
-              xNew = 0
-              yNew = heightMB
-              wNew = max.w / 2
-              hNew = max.h
-            elseif hs.mouse.getRelativePosition().y + sumdy <= max.h / 3 then -- upper third
-              xNew = 0
-              yNew = heightMB
-              wNew = max.w / 2
-              hNew = max.h / 2
-            else -- bottom third
-              xNew = 0
-              yNew = heightMB + max.h / 2
-              wNew = max.w / 2
-              hNew = max.h / 2
-            end
-          end
-        end
-      -- moved window past right screen border
-      elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
-        if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
-          wNew = frame.w
-          xNew = max.w - wNew
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          for i = 1, gridY, 1 do
-            -- middle third of left border
-            if hs.mouse.getRelativePosition().y + sumdy > max.h / 3 and hs.mouse.getRelativePosition().y + sumdy < max.h * 2 / 3 then
-              xNew = max.w / 2
-              yNew = heightMB
-              wNew = max.w / 2
-              hNew = max.h
-            elseif hs.mouse.getRelativePosition().y + sumdy <= max.h / 3 then -- upper third
-              xNew = max.w / 2
-              yNew = heightMB
-              wNew = max.w / 2
-              hNew = max.h / 2
-            else -- bottom third
-              xNew = max.w / 2
-              yNew = heightMB + max.h / 2
-              wNew = max.w / 2
-              hNew = max.h / 2
-            end
-          end
-        end
-      -- moved window below bottom of screen
-      elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
-          yNew = maxWithMB.h - hNew
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          for i = 1, gridX, 1 do
-            if hs.mouse.getRelativePosition().x + sumdx > max.w / 3 and hs.mouse.getRelativePosition().x + sumdx < max.w * 2 / 3 then -- middle
-              xNew = 0
-              yNew = heightMB
-              wNew = max.w
-              hNew = max.h
-              break
-            elseif hs.mouse.getRelativePosition().x + sumdx <= max.w / 3 then -- left
-              xNew = 0
-              yNew = heightMB
-              wNew = max.w / gridX
-              hNew = max.h
-              break
-            else -- right
-              xNew = max.w - max.w / gridX -- for gridX = 2 the same as max.w / 2
-              yNew = heightMB
-              wNew = max.w / gridX
-              hNew = max.h
-              break
-            end
-          end
-        end
-      end
-    elseif modifiersEqual(flags, modifier2) and modifiersEqual(flags, modifierDM) then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
-      if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
-        if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
-          xNew = 0
-        -- window moved past left screen border
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          -- 3 standard areas
-          if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+      if modifiersEqual(flags, modifier1) then
+        if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
+          if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
+            xNew = 0
+          -- window moved past left screen border
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
             for i = 1, gridY, 1 do
-              -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment             
-              if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
-                 xNew = 0
-                yNew = heightMB + (i - 1) * max.h / gridY
-                wNew = max.w / gridX
-                hNew = max.h / gridY
-                break
+              -- middle third of left border
+              if hs.mouse.getRelativePosition().y + sumdy > max.h / 3 and hs.mouse.getRelativePosition().y + sumdy < max.h * 2 / 3 then -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment
+                xNew = 0
+                yNew = heightMB
+                wNew = max.w / 2
+                hNew = max.h
+              elseif hs.mouse.getRelativePosition().y + sumdy <= max.h / 3 then -- upper third
+                xNew = 0
+                yNew = heightMB
+                wNew = max.w / 2
+                hNew = max.h / 2
+              else -- bottom third
+                xNew = 0
+                yNew = heightMB + max.h / 2
+                wNew = max.w / 2
+                hNew = max.h / 2
               end
             end
-          -- first (upper) double area
-          elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
-            xNew = 0
-            yNew = heightMB
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
-          else -- second (lower) double area
-            xNew = 0
-            yNew = heightMB + max.h / 5 * 2
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
           end
-        end
-      -- moved window past right screen border
-      elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
-        if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
-          wNew = frame.w
-          xNew = max.w - wNew
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-           -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
-          if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
-            -- 3 standard areas
+        -- moved window past right screen border
+        elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
+          if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
+            wNew = frame.w
+            xNew = max.w - wNew
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
             for i = 1, gridY, 1 do
-              if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
-                xNew = max.w - max.w / gridX
-                yNew = heightMB + (i - 1) * max.h / gridY
-                wNew = max.w / gridX
-                hNew = max.h / gridY
-                break
+              -- middle third of left border
+              if hs.mouse.getRelativePosition().y + sumdy > max.h / 3 and hs.mouse.getRelativePosition().y + sumdy < max.h * 2 / 3 then
+                xNew = max.w / 2
+                yNew = heightMB
+                wNew = max.w / 2
+                hNew = max.h
+              elseif hs.mouse.getRelativePosition().y + sumdy <= max.h / 3 then -- upper third
+                xNew = max.w / 2
+                yNew = heightMB
+                wNew = max.w / 2
+                hNew = max.h / 2
+              else -- bottom third
+                xNew = max.w / 2
+                yNew = heightMB + max.h / 2
+                wNew = max.w / 2
+                hNew = max.h / 2
               end
             end
-          -- first (upper) double area
-          elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
-            xNew = max.w - max.w / gridX
-            yNew = heightMB
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
-          else -- second (lower) double area
-            xNew = max.w - max.w / gridX
-            yNew = heightMB + max.h / 5 * 2
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
           end
-        end
-      -- moved window below bottom of screen
-      elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
-          yNew = maxWithMB.h - hNew
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
-            -- 3 standard areas
+        -- moved window below bottom of screen
+        elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
+          if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
+            yNew = maxWithMB.h - hNew
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
             for i = 1, gridX, 1 do
-              if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridX - i) * max.w / gridX then 
-                xNew = (i - 1) * max.w / gridX 
-                yNew = heightMB + (i - 1) * gridX
+              if hs.mouse.getRelativePosition().x + sumdx > max.w / 3 and hs.mouse.getRelativePosition().x + sumdx < max.w * 2 / 3 then -- middle
+                xNew = 0
+                yNew = heightMB
+                wNew = max.w
+                hNew = max.h
+                break
+              elseif hs.mouse.getRelativePosition().x + sumdx <= max.w / 3 then -- left
+                xNew = 0
+                yNew = heightMB
+                wNew = max.w / gridX
+                hNew = max.h
+                break
+              else -- right
+                xNew = max.w - max.w / gridX -- for gridX = 2 the same as max.w / 2
+                yNew = heightMB
                 wNew = max.w / gridX
                 hNew = max.h
                 break
               end
             end
-          -- first (left) double width
-          elseif (hs.mouse.getRelativePosition().x + sumdx > max.w / 5) and (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 2) then
+          end
+        end
+      elseif modifiersEqual(flags, modifier2) and modifiersEqual(flags, modifierDM) then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
+        if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
+          if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
             xNew = 0
-            yNew = heightMB
-            wNew = max.w / gridX * 2
-            hNew = max.h
-          else -- second (right) double width
-            xNew = max.w - max.w / gridX * 2
-            yNew = heightMB
-            wNew = max.w / gridX * 2
-            hNew = max.h
+          -- window moved past left screen border
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
+            -- 3 standard areas
+            if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+              for i = 1, gridY, 1 do
+                -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment             
+                if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
+                  xNew = 0
+                  yNew = heightMB + (i - 1) * max.h / gridY
+                  wNew = max.w / gridX
+                  hNew = max.h / gridY
+                  break
+                end
+              end
+            -- first (upper) double area
+            elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
+              xNew = 0
+              yNew = heightMB
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            else -- second (lower) double area
+              xNew = 0
+              yNew = heightMB + max.h / 5 * 2
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            end
+          end
+        -- moved window past right screen border
+        elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
+          if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
+            wNew = frame.w
+            xNew = max.w - wNew
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
+            -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
+            if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+              -- 3 standard areas
+              for i = 1, gridY, 1 do
+                if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
+                  xNew = max.w - max.w / gridX
+                  yNew = heightMB + (i - 1) * max.h / gridY
+                  wNew = max.w / gridX
+                  hNew = max.h / gridY
+                  break
+                end
+              end
+            -- first (upper) double area
+            elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
+              xNew = max.w - max.w / gridX
+              yNew = heightMB
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            else -- second (lower) double area
+              xNew = max.w - max.w / gridX
+              yNew = heightMB + max.h / 5 * 2
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            end
+          end
+        -- moved window below bottom of screen
+        elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
+          if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
+            yNew = maxWithMB.h - hNew
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
+            if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
+              -- 3 standard areas
+              for i = 1, gridX, 1 do
+                if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridX - i) * max.w / gridX then 
+                  xNew = (i - 1) * max.w / gridX 
+                  yNew = heightMB + (i - 1) * gridX
+                  wNew = max.w / gridX
+                  hNew = max.h
+                  break
+                end
+              end
+            -- first (left) double width
+            elseif (hs.mouse.getRelativePosition().x + sumdx > max.w / 5) and (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 2) then
+              xNew = 0
+              yNew = heightMB
+              wNew = max.w / gridX * 2
+              hNew = max.h
+            else -- second (right) double width
+              xNew = max.w - max.w / gridX * 2
+              yNew = heightMB
+              wNew = max.w / gridX * 2
+              hNew = max.h
+            end
+          end
+        end
+      -- if dragged beyond left/right screen border, window snaps to middle column
+      --elseif modifiersEqual(flags, modifier1_2) then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
+      elseif modifiersEqual(flags, modifier2) and #modifierDM == 0 then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
+        if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
+          if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
+            xNew = 0
+          -- window moved past left screen border
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
+            -- 3 standard areas
+            if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+              for i = 1, gridY, 1 do
+                -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment             
+                if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
+                  xNew = max.w / gridX
+                  yNew = heightMB + (i - 1) * max.h / gridY
+                  wNew = max.w / gridX
+                  hNew = max.h / gridY
+                  break
+                end
+              end
+            -- first (upper) double area
+            elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
+              xNew = max.w / gridX
+              yNew = heightMB
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            else -- second (lower) double area
+              xNew = max.w / gridX
+              yNew = heightMB + max.h / 5 * 2
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            end
+          end
+        -- moved window past right screen border
+        elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
+          if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
+            wNew = frame.w
+            xNew = max.w - wNew
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
+            -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
+            if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
+              -- 3 standard areas
+              for i = 1, gridY, 1 do
+                if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
+                  xNew = max.w / gridX
+                  yNew = heightMB + (i - 1) * max.h / gridY
+                  wNew = max.w / gridX
+                  hNew = max.h / gridY
+                  break
+                end
+              end
+            -- first (upper) double area
+            elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
+              xNew = max.w / gridX
+              yNew = heightMB
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            else -- second (lower) double area
+              xNew = max.w / gridX
+              yNew = heightMB + max.h / 5 * 2
+              wNew = max.w / gridX
+              hNew = max.h / gridY * 2
+            end
+          end
+        -- moved window below bottom of screen
+        elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
+          if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
+            yNew = maxWithMB.h - hNew
+          elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
+            if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
+              -- 3 standard areas
+              for i = 1, gridX, 1 do
+                if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridX - i) * max.w / gridX then 
+                  xNew = (i - 1) * max.w / gridX 
+                  yNew = heightMB + (i - 1) * gridX
+                  wNew = max.w / gridX
+                  hNew = max.h
+                  break
+                end
+              end
+            -- first (left) double width
+            elseif (hs.mouse.getRelativePosition().x + sumdx > max.w / 5) and (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 2) then
+              xNew = 0
+              yNew = heightMB
+              wNew = max.w / gridX * 2
+              hNew = max.h
+            else -- second (right) double width
+              xNew = max.w - max.w / gridX * 2
+              yNew = heightMB
+              wNew = max.w / gridX * 2
+              hNew = max.h
+            end
           end
         end
       end
-    -- if dragged beyond left/right screen border, window snaps to middle column
-    --elseif modifiersEqual(flags, modifier1_2) then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
-    elseif modifiersEqual(flags, modifier2) and #modifierDM == 0 then --todo: ?not necessary? -> and eventType == self.moveStartMouseEvent
-      if point.x < 0 and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- left and not bottom
-        if math.abs(point.x) < wNew / 10 then -- moved past border by 10 or less percent: move window as is back within boundaries of screen
-          xNew = 0
-        -- window moved past left screen border
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          -- 3 standard areas
-          if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
-            for i = 1, gridY, 1 do
-              -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment             
-              if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
-                xNew = max.w / gridX
-                yNew = heightMB + (i - 1) * max.h / gridY
-                wNew = max.w / gridX
-                hNew = max.h / gridY
-                break
-              end
-            end
-          -- first (upper) double area
-          elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
-            xNew = max.w / gridX
-            yNew = heightMB
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
-          else -- second (lower) double area
-            xNew = max.w / gridX
-            yNew = heightMB + max.h / 5 * 2
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
-          end
-        end
-      -- moved window past right screen border
-      elseif point.x + frame.w > max.w and hs.mouse.getRelativePosition().y + sumdy < max.h + heightMB then -- right and not bottom
-        if max.w - point.x > math.abs(max.w - point.x - wNew) * 9 then  -- 9 times as much inside screen than outside = 10 percent outside; move window back within boundaries of screen (keep size)
-          wNew = frame.w
-          xNew = max.w - wNew
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-           -- getRelativePosition() returns mouse coordinates where moving process starts, not ends, thus sumdx/sumdy make necessary adjustment                     
-          if (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 2 and hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 3) or (hs.mouse.getRelativePosition().y + sumdy > max.h / 5 * 4) then
-            -- 3 standard areas
-            for i = 1, gridY, 1 do
-              if hs.mouse.getRelativePosition().y + sumdy < max.h - (gridY - i) * max.h / gridY then 
-                xNew = max.w / gridX
-                yNew = heightMB + (i - 1) * max.h / gridY
-                wNew = max.w / gridX
-                hNew = max.h / gridY
-                break
-              end
-            end
-          -- first (upper) double area
-          elseif (hs.mouse.getRelativePosition().y + sumdy > max.h / 5) and (hs.mouse.getRelativePosition().y + sumdy <= max.h / 5 * 2) then
-            xNew = max.w / gridX
-            yNew = heightMB
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
-          else -- second (lower) double area
-            xNew = max.w / gridX
-            yNew = heightMB + max.h / 5 * 2
-            wNew = max.w / gridX
-            hNew = max.h / gridY * 2
-          end
-        end
-      -- moved window below bottom of screen
-      elseif point.y + hNew > maxWithMB.h and hs.mouse.getRelativePosition().x + sumdx < max.w and hs.mouse.getRelativePosition().x + sumdx > 0 then
-        if max.h - point.y > math.abs(max.h - point.y - hNew) * 9 then -- and flags:containExactly(modifier1) then -- move window as is back within boundaries
-          yNew = maxWithMB.h - hNew
-        elseif eventType == self.moveStartMouseEvent then -- automatically resize and position window within grid, but only with left mouse button
-          if (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 2 and hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 3) or (hs.mouse.getRelativePosition().x + sumdx > max.w / 5 * 4) then
-            -- 3 standard areas
-            for i = 1, gridX, 1 do
-              if hs.mouse.getRelativePosition().x + sumdx < max.w - (gridX - i) * max.w / gridX then 
-                xNew = (i - 1) * max.w / gridX 
-                yNew = heightMB + (i - 1) * gridX
-                wNew = max.w / gridX
-                hNew = max.h
-                break
-              end
-            end
-          -- first (left) double width
-          elseif (hs.mouse.getRelativePosition().x + sumdx > max.w / 5) and (hs.mouse.getRelativePosition().x + sumdx <= max.w / 5 * 2) then
-            xNew = 0
-            yNew = heightMB
-            wNew = max.w / gridX * 2
-            hNew = max.h
-          else -- second (right) double width
-            xNew = max.w - max.w / gridX * 2
-            yNew = heightMB
-            wNew = max.w / gridX * 2
-            hNew = max.h
-          end
-        end
+    else -- if window has been resized (and not moved)
+      if point.x < 0 then -- window resized past left screen border
+        wNew = frame.w + point.x
+        xNew = 0
+      elseif point.x + frame.w > max.w then -- window resized past right screen border
+        wNew = max.w - point.x
+        xNew = max.w - wNew
+      end
+      if point.y < heightMB then -- if window has been resized past beginning of menu bar, height of window is corrected accordingly
+        hNew = frame.h + point.y - heightMB
+        yNew = heightMB
       end
     end
-  else -- if window has been resized (and not moved)
-    if point.x < 0 then -- window resized past left screen border
-      wNew = frame.w + point.x
-      xNew = 0
-    elseif point.x + frame.w > max.w then -- window resized past right screen border
-      wNew = max.w - point.x
-      xNew = max.w - wNew
-    end
-    if point.y < heightMB then -- if window has been resized past beginning of menu bar, height of window is corrected accordingly
-      hNew = frame.h + point.y - heightMB
-      yNew = heightMB
-    end
-  end
-  self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
+    self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
   
-  -- aerospace --fb:
-  if useAS then
+  -- aerospace
+  elseif useAS and movedNotResized then
     if moveLeftAS then
       aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
       hs.timer.doAfter(0.02, function()
@@ -550,8 +573,12 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
         aerospace({'workspace', '--wrap-around', 'next'})
       end)
     end
+    -- position in middle of new workspace
+    xNew = max.w / 2 - wNew / 2
+    yNew = max.h / 2 - hNew / 2
+    self.targetWindow:move(hs.geometry.new(xNew, yNew, wNew, hNew), nil, false, 0)
   end
-
+  
   --hs.spaces.moveWindowToSpace(hs.window.focusedWindow(), getIDSpaceLeft(), true) -- todo: managing of spaces (broken in macOS Sequoia); to be implemented with modifier3/4
   sumdx = 0
   sumdy = 0
