@@ -167,7 +167,7 @@ end
 
 ### Change Margin
 
-You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 30 percent. Changing it to 0 results in deactivating this options, changing it to 100 results in deactivating resizing. Any value in between 0 and 100 has both options enabled in the respective areas.
+You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 0.3, which corresponds to 30 percent. Changing it to 0 results in deactivating this options, changing it to 1 results in deactivating resizing. Any value in between 0 and 1 has both options enabled in the respective areas.
 
 ```lua
 LattinMellon:new({
@@ -175,7 +175,7 @@ LattinMellon:new({
   -- ...
 
   -- Adjust the size of the area with vertical-only and horizontal-only resizing:
-  margin = 20,
+  margin = 0.2,
 })
 ```
 
