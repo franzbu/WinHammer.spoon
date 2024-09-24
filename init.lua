@@ -62,7 +62,7 @@ function LattinMellon:new(options)
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
   useAS = options.AeroSpace or false
-  ratioMoveAS = options.ratioMoveWorkSpace or 0.8
+  ratioMoveAS = options.ratioMoveAS or 1
 
   --[[ -- modifier1_2
   modifier1_2 = {} -- merge modifier1 and modifier2:
@@ -191,6 +191,8 @@ function LattinMellon:handleDrag()
           moveLeftAS = false
           moveRightAS = false
         end
+      else
+        ratioMoveAS = 1 -- enable automatic snapping and resizing regardless of how far windows are dragged bayond left/right screen borders
       end
 
 
