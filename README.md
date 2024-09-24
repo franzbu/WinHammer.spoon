@@ -56,16 +56,7 @@ To manually resize a window, hold your 'modifier1' or 'modifier2' key(s) down, t
 
 To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
-
-```python
- +---+---+---+
- | ↖ | ↑ | ↗ |
- +---+---+---+
- | ← | M | → |
- +---+---+---+
- | ↙ | ↓ | ↘ |
- +---+---+---+
-```
+<img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/resizing.png" width="200">
 
 At the very center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
 
