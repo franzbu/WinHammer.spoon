@@ -58,7 +58,7 @@ To manually resize a window, hold your  `modifier1` or `modifier2` key(s) down, 
 To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
 
 
-```toml
+```ruby
  +---+---+---+
  | ↖ | ↑ | ↗ |
  +---+---+---+
