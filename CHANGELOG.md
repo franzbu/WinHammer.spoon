@@ -17,6 +17,14 @@ LattinMellon:new({
 })
 ```
 
+To use LattinMellon alongside AeroSpace only makes sense if the latter is set to 'floating', so make sure aerospace.toml contains the following section:
+
+```lua
+[[on-window-detected]]
+check-further-callbacks = true
+run = 'layout floating'
+```
+
 # v0.8.2
 
 * Beta release:
