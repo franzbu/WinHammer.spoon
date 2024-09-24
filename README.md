@@ -60,7 +60,7 @@ To have the additional possibility of precisely resizing windows horizontally-on
 
 <img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/resizing.png" width="200">
 
-At the very center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
+At the center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
 
 
 ### Automatic Positioning and Resizing
