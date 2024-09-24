@@ -1,29 +1,7 @@
 # v0.9
 
 * Beta release:
-  - If LattinMellon is used alongside AeroSpace (https://github.com/nikitabobko/AeroSpace), moving 80 or more percent of a window beyond the left or right borders of the screen moves the window in the adjacent workspaces. In order to activate this functionality, 'AeroSpace = true' needs to be added to 'init.lua':
-
-```lua
-local LattinMellon = hs.loadSpoon("LattinMellon")
-
-LattinMellon:new({
-
-  ...
-
-  -- Should LattinMellon be used alongside AeroSpace?
-  AeroSpace = true
-
-
-})
-```
-
-To use LattinMellon alongside AeroSpace only makes sense if the latter is set to 'floating', so make sure aerospace.toml contains the following section:
-
-```lua
-[[on-window-detected]]
-check-further-callbacks = true
-run = 'layout floating'
-```
+  - If LattinMellon is used alongside AeroSpace (https://github.com/nikitabobko/AeroSpace), moving 80 or more percent of a window beyond the left or right borders of the screen moves the window in the adjacent workspaces.
 
 # v0.8.2
 
