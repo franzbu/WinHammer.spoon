@@ -64,28 +64,6 @@ function LattinMellon:new(options)
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
 
-  --[[ -- modifier1_2
-  modifier1_2 = {} -- merge modifier1 and modifier2:
-  k = 1
-  for i = 1, #modifier1 do
-    modifier1_2[k] = modifier1[i]
-    k = k + 1
-  end
-  for i = 1, #modifier2 do
-    ap = false -- already present
-    for j = 1, #modifier1_2 do -- prevent double entries
-      if modifier1_2[j] == modifier2[i] then
-        ap = true
-        break
-      end
-    end
-    if not ap then
-      modifier1_2[k] = modifier2[i]
-      k = k + 1
-    end
-  end
-  --]]
-
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
     dragging = false,
@@ -645,7 +623,6 @@ function LattinMellon:handleClick()
       ---[[
       -- experimental: prevent error when clicking on screen (and not window) with pressed modifier(s)
       if type(getWindowUnderMouse()) == "nil" then
-        print("______________ nil window ______________")
         self.cancelHandler:start()
         self.dragHandler:stop()
         self.clickHandler:stop()
