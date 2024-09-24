@@ -566,14 +566,14 @@ function LattinMellon:doMagic() -- automatic positioning and adjustments, for ex
   elseif useSpaces and movedNotResized then
     if moveLeftAS then
       aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
-      if not modifiersEqual(modifierDM, flags) then
+      if modifiersEqual(modifierDM, flags) then
         hs.timer.doAfter(0.02, function()
           aerospace({'workspace', '--wrap-around', 'prev'})
         end)
       end
     elseif moveRightAS then
       aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
-      if not modifiersEqual(modifierDM, flags) then
+      if modifiersEqual(modifierDM, flags) then
         hs.timer.doAfter(0.02, function()
           aerospace({'workspace', '--wrap-around', 'next'})
         end)
