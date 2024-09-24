@@ -105,7 +105,7 @@ LattinMellon:new({
 })
 ```
 
-To use LattinMellon alongside AeroSpace only makes sense if the layout in AeroSpace is set to 'floating' layout. AeroSpace is thus used primarily for its excellent implemantation of spaces, or, as they are called in AeroSpace, workspaces.
+To use LattinMellon alongside AeroSpace only makes sense if the layout in AeroSpace is set to 'floating'. AeroSpace, alongside its keyboard shortcuts for switching between spaces, is thus used primarily for its excellent implemantation of spaces, or, as they are called in AeroSpace, workspaces.
 
 To set AeroSpace to 'floating' layout, make sure aerospace.toml contains the following section:
 
