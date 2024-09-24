@@ -36,7 +36,7 @@ end
 
 -- Usage:
 --   resizer = LattinMellon:new({
---     margin = 30,
+--     margin = 0.3,
 --     modifier1 = { 'alt' },
 --     modifier2 = { 'ctrl' },
 --     modifier3 = { 'alt', 'ctrl', 'win' },
@@ -55,14 +55,36 @@ end
 
 function LattinMellon:new(options)
   options = options or {}
-  margin = options.margin or 30
-  m = margin / 2
+  margin = options.margin or 0.3
+  m = margin * 100 / 2
   modifier1 = options.modifier1 or { 'alt' }
   modifier2 = options.modifier2 or { 'ctrl' }
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
   modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
+
+  --[[ -- modifier1_2
+  modifier1_2 = {} -- merge modifier1 and modifier2:
+  k = 1
+  for i = 1, #modifier1 do
+    modifier1_2[k] = modifier1[i]
+    k = k + 1
+  end
+  for i = 1, #modifier2 do
+    ap = false -- already present
+    for j = 1, #modifier1_2 do -- prevent double entries
+      if modifier1_2[j] == modifier2[i] then
+        ap = true
+        break
+      end
+    end
+    if not ap then
+      modifier1_2[k] = modifier2[i]
+      k = k + 1
+    end
+  end
+  --]]
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -152,12 +174,12 @@ function LattinMellon:handleDrag()
       moveLeftAS = false -- two variables also needed if AeroSpace is deactivated
       moveRightAS = false
       if useSpaces then
-       if current.x + currentSize.w * ratioSpaces < 0 then 
+        if current.x + currentSize.w * ratioSpaces < 0 then -- left
           for i = 1, #cv do
             cv[ i ]:hide() 
           end
           moveLeftAS = true
-        elseif current.x + currentSize.w > max.w + currentSize.w * ratioSpaces then
+        elseif current.x + currentSize.w > max.w + currentSize.w * ratioSpaces then -- right
           for i = 1, #cv do
             cv[ i ]:hide()
           end
