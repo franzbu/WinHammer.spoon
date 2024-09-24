@@ -106,8 +106,6 @@ The file 'aerospace.toml' can stay like this; however, you might be interested i
 After installing AeroSpace, LattinMellon can be authorized to move windows to spaces by adding the following option to your 'init.lua':
 
 ```lua
-local LattinMellon = hs.loadSpoon("LattinMellon")
-
 LattinMellon:new({
 
   ...
