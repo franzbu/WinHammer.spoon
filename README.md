@@ -2,7 +2,7 @@
 
 LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma). With LattinMellon, windows can be snapped into dynamically changing grid positions with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
 
-An optional feature is to enable LattinMellon to use AeroSpace. With that feature enabled, LattinMellon can move windows to other spaces (also called workspaces); more below in the section 'Advanced features'.
+An optional feature is to enable handling spaces with LattinMellon using AeroSpace. With that feature enabled, LattinMellon can move windows to other spaces (also called workspaces); more below in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. Be also aware that the animations show an earlier stage of development; with the most recent version, indicators at the borders of the screen guide the positioning and resizing of windows.
 
@@ -87,9 +87,9 @@ As long as windows are resized - or moved within the borders of the screen -, it
 * The moment dragging of a window starts, the screen borders are highlighted in order to indicate where to drag the window for using two grid positions rather than one. 
 
 
-## Advanced features
+## Advanced Features
 
-### AeroSpace
+### Spaces
 
 As has been mentioned, AeroSpace can be installed (https://nikitabobko.github.io/AeroSpace/guide) in order to enable LattinMellon to handle spaces. 
 
@@ -181,7 +181,7 @@ LattinMellon:new({
 
 
 
-### Disabling moving/resizing for certain applications
+### Disabling Moving and Resizing for Certain Applications
 
 You can disable move/resize for any application by adding it to the `disabledApps` option:
 
