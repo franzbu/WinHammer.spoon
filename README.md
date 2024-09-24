@@ -11,7 +11,7 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo2.gif" />
 
-## Manual window resizing and positioning
+* Manual window resizing and positioning
 
 <img src="https://github.com/franzbu/LattinMellon.spoon/blob/main/doc/demo1.gif" />
          
