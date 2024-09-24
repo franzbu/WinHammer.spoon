@@ -100,7 +100,8 @@ To use AeroSpace in LattinMellon, the layout in AeroSpace needs to be set to 'fl
 check-further-callbacks = true
 run = 'layout floating'
 ```
-The file 'aerospace.toml' can be used for additional finetuning at a later stage (more here: https://nikitabobko.github.io/AeroSpace/guide).
+
+The file 'aerospace.toml' can be left like this for now; however, you can additionally finetune where - for instance, where the cursor is positionod after moving to another space - at a later stage (more here: https://nikitabobko.github.io/AeroSpace/guide).
 
 After installing AeroSpace, LattinMellon can be authorized to move windows to spaces by adding the following option to your 'init.lua':
 
