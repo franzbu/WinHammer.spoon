@@ -172,7 +172,7 @@ WinHammer:new({
 
 
 
-### Disabling Moving and Resizing for Certain Applications
+### Disable Moving and Resizing for Certain Applications
 
 You can disable move/resize for any application by adding it to the 'disabledApps' option:
 
