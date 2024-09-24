@@ -85,24 +85,9 @@ As long as windows are resized - or moved within the borders of the screen -, it
 * The moment dragging of a window starts, the screen borders are highlighted in order to indicate where to drag the window for using two vertical grid positions rather than one. 
 
 
-### Disabling moving/resizing for certain applications
+## Advanced options
 
-You can disable move/resize for any application by adding it to the `disabledApps` option:
-
-```lua
-LattinMellon:new({
-
-  -- ...
-
-  -- Applications that cannot be resized:
-  disabledApps = {"Alacritty"},
-})
-```
-
-
-### Advanced options
-
-## AeroSpace
+### AeroSpace
 
 As has been mentioned, LattinMellon can be used alongside AeroSpace (https://github.com/nikitabobko/AeroSpace). This feature can be enabled by adding the following option to 'init.lua':
 
@@ -130,7 +115,7 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-## Change Margin
+### Change Margin
 
 You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 30 percent. Changing it to 0 results in deactivating this options, changing it to 100 results in deactivating resizing. Any value in between 0 and 100 has both options enabled in the respective areas.
 
@@ -144,4 +129,19 @@ LattinMellon:new({
 })
 ```
 
+
+
+### Disabling moving/resizing for certain applications
+
+You can disable move/resize for any application by adding it to the `disabledApps` option:
+
+```lua
+LattinMellon:new({
+
+  -- ...
+
+  -- Applications that cannot be resized:
+  disabledApps = {"Alacritty"},
+})
+```
 
