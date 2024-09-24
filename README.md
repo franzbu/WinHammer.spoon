@@ -1,6 +1,6 @@
 # LattinMellon
 
-LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma). With LattinMellon, windows can be snapped into both user-controlled and dynamically changing grid positions with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
+LattinMellon is a window manager for macOS (tested in macOS Sequoia and Sonoma). With LattinMellon, windows can be snapped into dynamically changing grid positions with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
 
 As an optional feature, handling spaces with LattinMellon using AeroSpace can be enabled. With it, LattinMellon can also move windows to other spaces (also known as workspaces); more below in the section 'Advanced Features'.
 
