@@ -121,7 +121,7 @@ To move a window to a different space, you can use the keyboard shortcuts define
 
 There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier button before releasing the left mouse button, LattinMellon switches to the (work-) space the window has moved to; otherwise LattinMellon stays on the current (work-) space.
 
-You can additionally use Hammerspoon to handle your (work-) spaces; simply add the following lines to your 'init.lua'; adjust the keys to your liking:
+In case you'd like to additionally use Hammerspoon to handle your (work-) spaces, simply add the following lines to your 'init.lua'; adjust the keys to your liking:
 
 ```lua
 local hyper = { 'shift', 'ctrl', 'alt', 'cmd' } -- CapsLock, Karabiner Elements
