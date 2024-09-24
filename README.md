@@ -129,7 +129,6 @@ hs.hotkey.bind(hyper, "q", function() -- move active window to prev space and sw
   hs.timer.doAfter(0.1, function()
     aerospace({'workspace', '--wrap-around', 'prev'})
   end)
-
 end)
 
 hs.hotkey.bind(hyper, "w", function() -- move active window to next space and switch there
