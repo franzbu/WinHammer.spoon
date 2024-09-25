@@ -93,7 +93,7 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-The file 'aerospace.toml' can stay like this; however, you might be interested in some additional finetuning, so can you enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
+The file 'aerospace.toml' can stay like this; however, you might be interested in some additional finetuning, for example, you can enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
 
 After installing AeroSpace, WinHammer can be authorized to move windows to spaces by adding the following option to your 'init.lua':
 
