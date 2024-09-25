@@ -1,8 +1,8 @@
 # WinHammer
 
-WinHammer is a window manager for macOS that combines keyboard and mouse operations to manage windows and spaces in a highly efficient way. 
+WinHammer is a window manager for macOS that combines keyboard and mouse operations to manage windows and spaces in an efficient way. 
 
-There is no need to pre-define any kind of grid size, as windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
+There is no need to pre-define any kind of grid size, as windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be resized and moved without having to position your cursor; any area within the window will do. 
 
 As an optional feature, WinHammer handles spaces using AeroSpace (AeroSpace irons out some of macOS' space manager's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for increased functionality). With this feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
 
