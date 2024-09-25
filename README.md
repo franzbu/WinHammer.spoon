@@ -1,6 +1,6 @@
 # WinHammer
 
-WinHammer is a window manager for macOS (tested in macOS Sequoia and Sonoma) that combines keyboard and mouse operations to manage your windows and spaces in a highly efficient way. 
+WinHammer is a window manager for macOS (tested in macOS Sequoia and Sonoma) that combines keyboard and mouse operations to manage windows and spaces in a highly efficient way. 
 
 There is no need to pre-define any kind of grid size, as windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be resized and moved without having to position your mouse pointer; any area within the window will do. 
 
