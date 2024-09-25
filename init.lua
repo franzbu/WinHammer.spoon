@@ -646,7 +646,7 @@ function WinHammer:handleClick()
 
       -- show canvases for visually supporting automatic window positioning and resizing
       local thickness = 20 -- thickness of bar
-      cv = {} -- canvases need to be deleted
+      cv = {} -- canvases need to be reset
       if eventType == self.moveStartMouseEvent and modifiersEqual(flags, modifier1) then
         createCanvas(1, 0, max.h / 3, thickness, max.h / 3)
         createCanvas(2, max.w / 3, heightMB + max.h - thickness, max.w / 3, thickness)
@@ -681,7 +681,6 @@ function aerospace(args)
 end
 
 -- function for creating canvases at screen border
-cv = {}
 function createCanvas(n, x, y, w, h)
   cv[n] = hs.canvas.new(hs.geometry.rect(x, y, w, h))
   cv[n]:insertElement(
