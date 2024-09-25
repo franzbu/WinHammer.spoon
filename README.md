@@ -83,7 +83,7 @@ As long as windows are resized - or moved within the borders of the screen -, it
 
 ### Spaces
 
-As has been mentioned, if you want to also handle spaces with WinHammer, AeroSpace can optionally be installed (https://nikitabobko.github.io/AeroSpace/guide) . 
+As has been mentioned, if you want to also handle spaces with WinHammer, AeroSpace can optionally be installed (https://nikitabobko.github.io/AeroSpace/guide). 
 
 To use AeroSpace in WinHammer, the layout in AeroSpace needs to be set to 'floating', so the following section needs to be added at the top of AeroSpace's config file 'aerospace.toml':
 
