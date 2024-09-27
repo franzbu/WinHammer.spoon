@@ -109,7 +109,7 @@ run = 'layout floating'
 
 The file 'aerospace.toml' can stay like this; however, some additional finetuning might be beneficial, for example, you can enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
 
-After installing AeroSpace, WinHammer can be told to move windows to spaces by adding the following option to your 'init.lua':
+After installing AeroSpace, the space feature can be enabled in WinHammer by adding the following option to your 'init.lua':
 
 ```lua
 WinHammer:new({
@@ -121,12 +121,12 @@ WinHammer:new({
 })
 ```
 
-In order to move a window to another (work-) space, besides using the keyboard shortcuts defined in your 'aerospace.toml', you can also use WinHammer by simply dragging 80 percent (= 0.8) or more of the window beyond the left or right border of the screen. The area of '80 percent or more' can be altered with the option 'ratioSpaces = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling moving windows to spaces using WinHammer, while a value of '0' moves windows to the other (work-) space if they are even moved only slightly beyond the screen border; this at the same time practically leads to eliminating the area for automatic positioning and resizing of windows and thus disables this feature within WinHammer. The option 'ratioSpaces = 0.8' corresponds to the pre-set value of 80 percent (to keep it at that value, you do not need to do anything, only if you want a different value you can add the corresponding line).
+In order to move a window to another (work-) space, besides using the keyboard shortcuts defined in your 'aerospace.toml', you can do so with WinHammer by simply dragging 80 percent (= 0.8) or more of the window beyond the left or right border of the screen. The sizw of the area of, the standard option is 80 percent or more, can be altered with the option 'ratioSpaces = 0.x' in 'init.lua'. A value of '1' is equivalent with disabling moving windows to spaces using WinHammer, while a value of '0' moves windows to the other (work-) space if they are even moved only slightly beyond the screen border; this at the same time practically leads to eliminating the area for automatic positioning and resizing of windows and thus disables this feature within WinHammer.
 
 There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier key before releasing the left mouse button, WinHammer 
-stays on the current space; otherwise it switches to the (work-) space the window has moved to.
+stays on the current space; otherwise it switches to the (work-) space along with the moved window.
 
-In case you would like to additionally use Hammerspoon to handle your (work-) spaces, you can add the following lines to your 'init.lua'; adjust the keys to your liking:
+In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua'; adjust the keys to your liking:
 
 ```lua
 local hyper = { 'shift', 'ctrl', 'alt', 'cmd' } -- CapsLock, Karabiner Elements
