@@ -4,7 +4,7 @@ WinHammer is a window manager for macOS that combines keyboard and mouse operati
 
 A special feature of WinHammer is its dynamic approach, i.e., windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can be also be resized. 
 
-As a further optional feature, WinHammer can handle spaces using AeroSpace (AeroSpace irons out some of macOS' space manager's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for increased functionality). With this feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
+As a further optional feature, WinHammer can handle spaces using AeroSpace. AeroSpace has been chosen over macOS' implementet space manager because it irons out some of the latter's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for even basic functions. With the space feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
@@ -54,9 +54,9 @@ To move a window, hold your 'modifier1' or 'modifier2' key(s) down, then click t
 
 ### Manual Resizing
 
-Manual resizing is an optional feature, as windows of certain applications, such as LosslessCut or Kdenlive can behave in a stuttering and sluggish way when being resized. It is for each user to decide whether the resizing feature should be enabled. That being said, the feature works well here on standard applications such as Safari, Google Chrome, Finder, Terminal, iTerm2 and many more.
+Manual resizing is an optional feature, as windows of certain applications, such as LosslessCut or Kdenlive can behave in a stuttering and sluggish way when being resized. That being said, resizing works well with the usual suspects such as Safari, Google Chrome, Finder, and so on.
 
-In order to enable manual resizing, add the following option to your 'init.lua' (whether this option is set to 'false' or not added makes no difference):
+In order to enable manual resizing, add the following option to your 'init.lua':
 
 ```lua
 WinHammer:new({
