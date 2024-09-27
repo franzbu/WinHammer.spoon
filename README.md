@@ -2,9 +2,9 @@
 
 WinHammer is a window manager for macOS that combines keyboard and mouse operations to manage windows and spaces in an efficient way. 
 
-There is no need to pre-define any kind of grid size, as windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be resized and moved without having to position your cursor; any area within the window will do. 
+There is no need to pre-define any kind of grid size, as windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can be resized using the right mouse button. 
 
-As an optional feature, WinHammer handles spaces using AeroSpace (AeroSpace irons out some of macOS' space manager's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for increased functionality). With this feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
+Also as an optional feature, WinHammer can handle spaces using AeroSpace (AeroSpace irons out some of macOS' space manager's shortages, such as slow animations or the need to at least partly disable System Integrity Protection for increased functionality). With this feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more below in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
@@ -54,9 +54,23 @@ To move a window, hold your 'modifier1' or 'modifier2' key(s) down, then click t
 
 ### Manual Resizing
 
+Manual resizing is an optional feature, as windows of certain applications, such as LosslessCut or Kdenlive can behave in a stuttering and sluggish way when being resized. It is for each user to decide whether the resizing feature should be enabled. That being said, the feature works well here on standard applications such as Safari, Google Chrome, Finder, Terminal, iTerm2 and many more.
+
+In order to enable manual resizing, add the following option to your 'init.lua' (whether this option is set to 'false' or not added makes no difference):
+
+```lua
+WinHammer:new({
+
+  ...
+
+  -- Windows can be resized:
+  resize = true,
+})
+```
+
 To manually resize a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the right mouse button in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
 
-To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing.
+To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing. The size of this area can be adjusted; for more information see section 'Manual Resizing of Windows - Margin' in 'Advanced Features'.
 
 <img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/resizing.png" width="200">
 
@@ -155,7 +169,7 @@ end
 
 ```
 
-### Change Margin
+### Manual Resizing of Windows - Margin
 
 You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 0.3, which corresponds to 30 percent. Changing it to 0 results in deactivating this options, changing it to 1 results in deactivating resizing.
 
