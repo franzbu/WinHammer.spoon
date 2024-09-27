@@ -9,7 +9,7 @@ WinHammer.author = "Franz B. <csaa6335@gmail.com>"
 WinHammer.homepage = "https://github.com/franzbu/WinHammer.spoon"
 WinHammer.license = "MIT"
 WinHammer.name = "WinHammer"
-WinHammer.version = "0.9"
+WinHammer.version = "0.9.1"
 WinHammer.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -60,6 +60,7 @@ function WinHammer:new(options)
   m = margin * 100 / 2
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
+  useResize = options.resize or false
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -170,7 +171,7 @@ function WinHammer:handleDrag()
       end
 
       return true
-    elseif self:isResizing() then
+    elseif self:isResizing() and useResize then
       movedNotResized = false
       if mH <= -m and mV <= m and mV > -m then -- 9 o'clock
         win:move(hs.geometry.new(current.x + dx, current.y, currentSize.w - dx, currentSize.h), nil, false, 0)
