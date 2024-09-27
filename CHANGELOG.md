@@ -1,3 +1,8 @@
+# v0.9.1
+
+* Beta release:
+  - Manual resizing is an optional feature now.
+
 # v0.9
 
 * Beta release:
