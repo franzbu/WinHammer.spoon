@@ -19,7 +19,7 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 
 ## Installation
 
-WinHammerrequires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
+WinHammer requires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
 
 To install WinHammer, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'WinHammer.spoon'. 
 
