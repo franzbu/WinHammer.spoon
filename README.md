@@ -63,7 +63,7 @@ WinHammer:new({
 
   ...
 
-  -- Windows can be resized:
+  -- enable resizing:
   resize = true,
 })
 ```
@@ -116,7 +116,7 @@ WinHammer:new({
 
   ...
 
-  -- Handle spaces from within WinHammer:
+  -- enable spaces:
   useSpaces = true,
 })
 ```
@@ -178,7 +178,7 @@ WinHammer:new({
 
   -- ...
 
-  -- Adjust the size of the area with vertical-only and horizontal-only resizing:
+  -- adjust the size of the area with vertical-only and horizontal-only resizing:
   margin = 0.2,
 })
 ```
@@ -194,7 +194,7 @@ WinHammer:new({
 
   -- ...
 
-  -- Applications that cannot be resized:
+  -- applications that cannot be resized:
   disabledApps = {"Alacritty"},
 })
 ```
