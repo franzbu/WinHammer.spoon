@@ -179,7 +179,9 @@ end)
 
 ### Advanced Switching between Windows using AeroSpace
 
-This is still work in progress. In case you want to try out this experimental feature, add the following lines to your 'init.lua'. Alt-Escape switches between all windows of the current (work-) space, and Alt-Tab switches between the windows on all (work-) spaces; adjust the according values in case you prefer different keyboard shortcuts. The order of switching is both times in reverse order of focus ('hs.window.sortByFocused').
+When using AeroSpace with floating layout, there is no proper way of switching between windows on the current (work-) space. The following lines of code provide that feature. Additionally, a fast way of switching between the windows on all (work-) spaces has been added.
+
+This is still work in progress. In case you want to try out this experimental feature, add the following lines to your 'init.lua'. Alt-Escape switches between all windows of the current (work-) space, and Alt-Tab switches between the windows on all (work-) spaces; adjust the according values in case you prefer different keyboard shortcuts. The order of switching is both times the reverse order of focus given ('hs.window.sortByFocused').
 
 ```lua
 function aerospace(args)
