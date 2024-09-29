@@ -200,7 +200,7 @@ local nextToFocus = 2
 
 
 -- subscribe to filters
-local filter = hs.window.filter --subscribe: when a new window (dis)appears, run refreshWindowsWS
+local filter = hs.window.filter
 filter.default:subscribe(filter.windowNotOnScreen, function() refreshWindowsWS() end)
 filter.default:subscribe(filter.windowOnScreen, function() refreshWindowsWS() end)
 filter.default:subscribe(filter.windowFocused, function() refreshFocus() end)
