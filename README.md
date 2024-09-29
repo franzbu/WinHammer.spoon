@@ -177,7 +177,7 @@ hs.hotkey.bind(hyper, "f", function() -- move active window to next space
 end)
 ```
 
-### Advanced Switching between Windows using AeroSpace
+### Switching between Windows using AeroSpace
 
 When using AeroSpace with floating layout, there is no proper way of switching between windows on the current (work-) space. The following lines of code provide that feature. Additionally, a fast way of switching between the windows on all (work-) spaces has been added.
 
