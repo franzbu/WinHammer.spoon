@@ -186,8 +186,7 @@ This is still work in progress. In case you want to try out this experimental fe
 ```lua
 function aerospace(args)
   hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
-    as_out = (hs.inspect(table.pack(...)))  
-    return true
+    as_out = (hs.inspect(table.pack(...)))
   end, args):start()
   return as_out
 end
