@@ -159,14 +159,6 @@ end)
 hs.hotkey.bind(hyper, "f", function() -- move active window to next space
   aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
 end)
-
-function aerospace(args)
-  hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
-    hs.inspect(table.pack(...))
-    return true
-  end, args):start()
-end
-
 ```
 
 ### Manual Resizing of Windows - Margin
