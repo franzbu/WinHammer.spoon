@@ -140,6 +140,8 @@ In order to move a window to another (work-) space, besides using the keyboard s
 There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier key before releasing the left mouse button, WinHammer 
 stays on the current space; otherwise it switches to the (work-) space along with the moved window.
 
+### Use Keyboard Shortcut to Handle (Work-) Spaces
+
 In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua'; adjust the keys to your liking:
 
 ```lua
