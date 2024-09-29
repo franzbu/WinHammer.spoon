@@ -175,20 +175,6 @@ hs.hotkey.bind(hyper, "f", function() -- move active window to next space
 end)
 ```
 
-### Disable Moving and Resizing for Certain Applications
-
-You can disable move/resize for any application by adding it to the 'disabledApps' option:
-
-```lua
-WinHammer:new({
-
-  -- ...
-
-  -- applications that cannot be resized:
-  disabledApps = {"Alacritty"},
-})
-```
-
 ### Advanced Switching between Windows using AeroSpace
 
 This is still work in progress. In case you want to try out this experimental feature, add the following lines to your 'init.lua'. Alt-Escape switches between all windows of the current (work-) space and Alt-Tab switches between the windows on all (work-) spaces; adjust the according values in case you prefer different keyboard shortcuts. The order of switching is both times in order of 'hs.window.sortByFocused'.
@@ -354,4 +340,19 @@ function copyTable(a)
   end
   return b
 end
+```
+
+
+### Disable Moving and Resizing for Certain Applications
+
+You can disable move/resize for any application by adding it to the 'disabledApps' option:
+
+```lua
+WinHammer:new({
+
+  -- ...
+
+  -- applications that cannot be resized:
+  disabledApps = {"Alacritty"},
+})
 ```
