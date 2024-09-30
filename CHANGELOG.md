@@ -1,3 +1,8 @@
+# v0.9.2
+
+* Beta release:
+  - Integration of AeroSpace augmented.
+
 # v0.9.1
 
 * Beta release:
