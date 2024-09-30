@@ -9,7 +9,7 @@ WinHammer.author = "Franz B. <csaa6335@gmail.com>"
 WinHammer.homepage = "https://github.com/franzbu/WinHammer.spoon"
 WinHammer.license = "MIT"
 WinHammer.name = "WinHammer"
-WinHammer.version = "0.9.1"
+WinHammer.version = "0.9.2"
 WinHammer.spoonPath = scriptPath()
 
 local dragTypes = {
@@ -54,13 +54,18 @@ function WinHammer:new(options)
   options = options or {}
   modifier1 = options.modifier1 or { 'alt' }
   modifier2 = options.modifier2 or { 'ctrl' }
-  modifier3 = options.modifier3 or { 'alt', 'ctrl', 'win' }
-  modifier4 = options.modifier4 or { 'alt', 'ctrl', 'cmd', 'shift' } -- hyper key
+  modifier3 = options.modifier3 or { 'alt', 'ctrl', 'cmd', 'shift' }
   margin = options.margin or 0.3
   m = margin * 100 / 2
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
   useResize = options.resize or false
+  prevSpace = options.prevSpace or 'a'
+  nextSpace = options.nextSpace or 's'
+  moveWindowPrevSpace = options.moveWindowPrevSpace or 'd'
+  moveWindowNextSpace = options.moveWindowNextSpace or 'f'
+  moveWindowPrevSpaceSwitch = options.moveWindowPrevSpaceSwitch or 'q'
+  moveWindowNextSpaceSwitch = options.moveWindowNextSpaceSwitch or 'w'
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -97,6 +102,153 @@ function WinHammer:new(options)
     },
     resizer:handleDrag()
   )
+
+  --___________ aerospace ___________
+  ids = {} -- array with window IDs on current WS -> aerospace()
+  windows_all = {} -- table with all windows on all WS in order of focused last
+  copy_windows_all = {} -- fb: local?
+  cycleModifier = { "alt" } -- modifier used for cycling through all apps/apps on current WS
+  nextToFocus = 2 
+
+  -- watchdogs
+  filter = hs.window.filter --subscribe: when a new window (dis)appears, run refreshWindowsWS
+  filter.default:subscribe(filter.windowNotOnScreen, function() refreshWindowsWS() end)
+  filter.default:subscribe(filter.windowOnScreen, function() refreshWindowsWS() end)
+  filter.default:subscribe(filter.windowFocused, function() refreshFocus() end)
+
+  -- 'subscribe', watchdog for one of modifier keys pressed
+  local cycleModCounter = 0 
+  local events = hs.eventtap.event.types
+  local prevModifier = { "xyz" }
+  keyboardTracker = hs.eventtap.new({ events.flagsChanged }, function(e)
+    flags = eventToArray(e:getFlags())
+    --if flags[1] == "cmd" or prevModifier == "cmd" then
+    -- since on modifier release the flag is 'nil', prevModifier is used
+    if modifiersEqual(flags, cycleModifier) or modifiersEqual(prevModifier, cycleModifier) then
+      cycleModCounter = cycleModCounter + 1
+      if cycleModCounter % 2 == 0 then -- only when released (and not when pressed)
+        cycleModCounter = 0
+        nextToFocus = 2
+        refreshFocus()
+        refreshWindowsWS()
+      end
+    end
+    prevModifier = flags
+  end)
+  keyboardTracker:start()
+
+  --cycle through all windows, regardless of which WS they are on
+  ---[[
+  hs.hotkey.bind(cycleModifier, "tab", function()
+    copy_windows_all = copyTable( windows_all)
+    windows_all[nextToFocus]:focus()
+    if nextToFocus == #windows_all then
+      nextToFocus = 1
+    else
+      nextToFocus = nextToFocus + 1
+    end
+  end)
+  --]]
+  --[[ -- alternative using hs.window.switcher.new
+    -- https://applehelpwriter.com/2018/01/14/how-to-add-a-window-switcher/
+    -- set up your windowfilter
+    switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
+    switcher.ui.highlightColor = {0.4,0.4,0.5,0.8}
+    switcher.ui.thumbnailSize = 112
+    switcher.ui.selectedThumbnailSize = 284
+    switcher.ui.backgroundColor = {0.3, 0.3, 0.3, 0.5}
+    --switcher.ui.fontName = 'System'
+    switcher.ui.textSize = 14
+    switcher.ui.showSelectedTitle = false
+    -- bind to hotkeys; WARNING: at least one modifier key is required!
+    hs.hotkey.bind("alt","tab",function()
+      copy_windows_all = copyTable( windows_all)
+      switcher:next()
+      -- fb: todo -> fix switching windows on current WS
+    end)
+    hs.hotkey.bind("alt-shift","tab",function()
+      copy_windows_all = copyTable( windows_all)
+      switcher:previous()
+      -- fb: todo -> fix switching windows on current WS
+    end)
+    --]]
+
+  -- cycle through windows of current WS, last focus first
+  hs.hotkey.bind(cycleModifier, "escape", function()
+    while not isIncluded(windows_all[nextToFocus]:id()) do
+      if nextToFocus == #windows_all then
+        nextToFocus = 1
+      else
+        nextToFocus = nextToFocus + 1
+      end
+    end  
+    copy_windows_all = copyTable( windows_all) -- remedy for problem that hs.window.sortByFocused' (in this case wrongly) takes into account focus given to windwos by cycling
+    windows_all[nextToFocus]:focus()
+    if nextToFocus == #windows_all then
+      nextToFocus = 1
+    else
+      nextToFocus = nextToFocus + 1
+    end
+  end)
+
+  --_________ handling spaces: aerospace _________
+  hs.hotkey.bind(modifier3, prevSpace, function() -- previous space (incl. cycle)
+    aerospace({'workspace', '--wrap-around', 'prev'}) -- aerospace
+    hs.timer.doAfter(0.2, function() 
+      refreshWindowsWS()
+      refreshFocus()
+    end)
+  end)
+
+  hs.hotkey.bind(modifier3, nextSpace, function() -- next space (incl. cycle)
+    aerospace({'workspace', '--wrap-around', 'next'}) -- aerospace
+    hs.timer.doAfter(0.2, function()
+      refreshWindowsWS()
+      refreshFocus()
+    end)
+  end)
+
+  hs.hotkey.bind(modifier3, moveWindowPrevSpaceSwitch, function() -- move active window to previous space and switch there (incl. cycle)
+    aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
+    hs.timer.doAfter(0.02, function()
+      aerospace({'workspace', '--wrap-around', 'prev'})
+    end)
+    hs.timer.doAfter(0.2, function()
+      refreshWindowsWS()
+      refreshFocus()
+    end)
+  end)
+
+  hs.hotkey.bind(modifier3, moveWindowNextSpaceSwitch, function() -- move active window to next space and switch there (incl. cycle)
+    aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
+    hs.timer.doAfter(0.02, function()
+      aerospace({'workspace', '--wrap-around', 'next'})
+    end)
+    hs.timer.doAfter(0.2, function()
+      refreshWindowsWS()
+      refreshFocus()
+    end)
+  end)
+
+  hs.hotkey.bind(modifier3, moveWindowPrevSpace, function() -- move active window to previous space (incl. cycle)
+    aerospace({'move-node-to-workspace', '--wrap-around', 'prev'}) -- aerospace
+    hs.timer.doAfter(0.2, function()
+      refreshWindowsWS()
+      refreshFocus()
+    end)
+  end)
+
+  hs.hotkey.bind(modifier3, moveWindowNextSpace, function() -- move active window to next space (incl. cycle)
+    aerospace({'move-node-to-workspace', '--wrap-around', 'next'}) -- aerospace
+    hs.timer.doAfter(0.2, function()
+      refreshWindowsWS()
+      refreshFocus()
+    end)
+  end)
+
+  -- get arrays populated at start
+  refreshWindowsWS()
+  refreshFocus()
 
   resizer.clickHandler:start()
 
@@ -676,11 +828,11 @@ end
 -- function needed in case 'useSpaces' is activated
 function aerospace(args)
   hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
-    hs.inspect(table.pack(...))
-    return true
+    as_out = (hs.inspect(table.pack(...)))  
+    --return true
   end, args):start()
+  return as_out
 end
-
 -- function for creating canvases at screen border
 function createCanvas(n, x, y, w, h)
   cv[n] = hs.canvas.new(hs.geometry.rect(x, y, w, h))
@@ -722,6 +874,72 @@ function modifiersEqual(a, b)
     end
   end
   return true
+end
+
+--___________ functions aerospace - cycle through windows ___________
+-- get array with all window ids of active workspace -> aerospace()
+function refreshWindowsWS()
+  n = 1 -- index for app switcher
+  s = aerospace({"list-windows", "--workspace", "focused", "--format", "%{window-id}"})
+  -- example output: { "27805\n23632\n19152\n23628\n21665\n27746\n27424\n", ""  n = 2 }
+  hs.timer.doAfter(0.3, function() -- fb 0.12: time to wait - experimental
+    s = aerospace({"list-windows", "--workspace", "focused", "--format", "%{window-id}"})
+    ids = {}
+    table.insert(ids, string.match(s, "{ \"(%d+)")) -- get digits between '{ "' and '\'
+    for substring in s:gmatch("%bn\\") do -- get string between 'n' and '\'
+      table.insert(ids, string.sub(substring, 2, #substring - 1)) -- get rid of leading 'n' and final '\'
+    end
+    --print("________ windows current WS ________")
+    for i,v in pairs(ids) do
+      --print(i,v)
+    end
+  end)
+end
+
+function refreshFocus() -- called automatically when window-focus changes
+  hs.timer.doAfter(0.2, -- fb: 0.01
+    function() -- apparently necessary for keyboardTracker to have the time to release the modifier key
+      local modNow = eventToArray(hs.eventtap.checkKeyboardModifiers())
+      if not modifiersEqual(modNow, cycleModifier) then -- necessary for "cycle through windows of current WS, last focus first", otherwise 'focused' and 'windows_all' are always reset
+        nextToFocus = 2
+        filter_all = hs.window.filter.new()
+        local x = filter_all:getWindows(hs.window.sortByFocused)
+        windows_all = {}
+        -- 'hs.window.sortByFocused' (in this case wrongly) takes into account focus given to windows by cycling -> remedy:
+        if #copy_windows_all < #x then
+          windows_all = copyTable(x)
+          -- print("_______copy table____________")
+        else
+          -- print("_______insert into table____________")
+          windows_all[1] = x[1]
+          -- fill up in order from windows_all, leave out copy_windows_all[1]
+          for i = 1, #copy_windows_all do
+            if windows_all[1]:id() ~= copy_windows_all[i]:id() then
+              table.insert(windows_all, copy_windows_all[i])
+            end
+          end
+        end
+        copy_windows_all = copyTable(windows_all)   -- fixes discrepency if windows are given focus by clicking
+      end
+    end)
+end
+
+function isIncluded(id) -- check whether window id is included in table
+  local a = false
+  for i,v in pairs(ids) do
+    if tostring(id) == tostring(ids[i]) then
+      a = true
+    end
+  end
+  return a
+end
+
+function copyTable(a)
+  b = {}
+  for i,v in pairs(a) do
+    b[i] = v
+  end
+  return b
 end
 
 
