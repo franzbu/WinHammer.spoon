@@ -3,7 +3,7 @@
 
 WinHammer is a window manager for macOS that combines the power and flexibility of Hammerspoon with the most outstanding features of AeroSpace.
 
-A special feature of WinHammer is its dynamic approach, i.e., windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
+A special feature of WinHammer is its dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
 
 As a further optional feature, WinHammer can handle spaces using AeroSpace. AeroSpace has been chosen over macOS' implemented space manager because it irons out some of the latter's shortages, such as the need to at least partly disable System Integrity Protection for even basic functions. With the space feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more in the section 'Advanced Features'.
 
