@@ -66,6 +66,8 @@ function WinHammer:new(options)
   moveWindowNextSpace = options.moveWindowNextSpace or 'f'
   moveWindowPrevSpaceSwitch = options.moveWindowPrevSpaceSwitch or 'q'
   moveWindowNextSpaceSwitch = options.moveWindowNextSpaceSwitch or 'w'
+  cycleModifier = options.cycleModifier or { "alt" } 
+
 
   local resizer = {
     disabledApps = tableToMap(options.disabledApps or {}),
@@ -107,7 +109,6 @@ function WinHammer:new(options)
   ids = {} -- array with window IDs on current WS -> aerospace()
   windows_all = {} -- table with all windows on all WS in order of focused last
   copy_windows_all = {} -- fb: local?
-  cycleModifier = { "alt" } -- modifier used for cycling through all apps/apps on current WS
   nextToFocus = 2 
 
   -- watchdogs
