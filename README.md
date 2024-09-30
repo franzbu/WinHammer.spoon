@@ -142,7 +142,7 @@ stays on the current space; otherwise it switches to the (work-) space along wit
 
 ### Use Keyboard Shortcuts to Handle (Work-) Spaces
 
-In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua' (besides 'useSpaces = true'):
+In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua':
 
 ```lua
 WinHammer:new({
