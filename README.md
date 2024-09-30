@@ -1,6 +1,7 @@
 # WinHammer
 
-WinHammer is a window manager for macOS that combines keyboard and mouse operations to help managing windows and spaces in an efficient way. 
+
+WinHammer is a window manager for macOS that combines the power and flexibility of Hammerspoon with the most outstanding features of AeroSpace.
 
 A special feature of WinHammer is its dynamic approach, i.e., windows can be snapped into positions of a dynamically changing grid size with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
 
