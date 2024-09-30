@@ -161,11 +161,11 @@ WinHammer:new({
   moveWindowNextSpaceSwitch = 'w',
 })
 ```
-'modifier3' and 'prevSpace', for instance, are used to switch to the previous (work-) space.
+In this example, 'modifier3' and 'prevSpace' are used to switch to the previous (work-) space; 'modifier3' and 'moveWindowNextSpaceSwitch' to move the active window to the next (work-) space and switch there.
 
-### Switching between Windows using AeroSpace
+### Cycling through Windows
 
-WinHammer also allows cycling through windows of the current (work-) space. For the time being, the keyboard shortcuts are partly pre-set: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. The order of switching between the windows is both times set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The option (=alt) modifier is pre-set, i.e., if this is to your liking, you do not need to add the line below.
+WinHammer also allows cycling through windows of the current (work-) space. For the time being, the keyboard shortcuts are partly pre-set: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. The order of switching between the windows is set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The option (=alt) modifier is pre-set, i.e., if this is to your liking, you do not need to add the line below.
 
 ```lua
 WinHammer:new({
