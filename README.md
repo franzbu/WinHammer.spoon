@@ -130,7 +130,7 @@ WinHammer:new({
 
   ...
 
-  -- enable spaces:
+  -- spaces:
   useSpaces = true,
 })
 ```
@@ -142,207 +142,39 @@ stays on the current space; otherwise it switches to the (work-) space along wit
 
 ### Use Keyboard Shortcuts to Handle (Work-) Spaces
 
-In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua'; adjust the keys to your liking:
+In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua' (besides 'useSpaces = true'):
 
 ```lua
-local hyper = { 'shift', 'ctrl', 'alt', 'cmd' } -- CapsLock, Karabiner Elements
+WinHammer:new({
 
-hs.hotkey.bind(hyper, "a", function() -- switch to prev space
-  aerospace({'workspace', '--wrap-around', 'prev'})
+  ...
 
-hs.hotkey.bind(hyper, "s", function() -- switch to next space
-  aerospace({'workspace', '--wrap-around', 'next'})
-end)
-
-hs.hotkey.bind(hyper, "q", function() -- move active window to prev space and switch there
-  aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
-  hs.timer.doAfter(0.1, function()
-    aerospace({'workspace', '--wrap-around', 'prev'})
-  end)
-end)
-
-hs.hotkey.bind(hyper, "w", function() -- move active window to next space and switch there
-  aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
-  hs.timer.doAfter(0.1, function()
-    aerospace({'workspace', '--wrap-around', 'next'})
-  end)
-end)
-
-hs.hotkey.bind(hyper, "d", function() -- move active window to prev space
-  aerospace({'move-node-to-workspace', '--wrap-around', 'prev'})
-end)
-
-hs.hotkey.bind(hyper, "f", function() -- move active window to next space
-  aerospace({'move-node-to-workspace', '--wrap-around', 'next'})
-end)
+  -- spaces:
+  useSpaces = true,
+  ratioSpaces = 0.8, -- optional
+  modifier3 = { 'alt', 'ctrl', 'cmd', 'shift' }, -- hyper key (Karabiner Elements)
+  prevSpace = 'a',
+  nextSpace = 's',
+  moveWindowPrevSpace = 'd',
+  moveWindowNextSpace = 'f',
+  moveWindowPrevSpaceSwitch = 'q',
+  moveWindowNextSpaceSwitch = 'w',
+})
 ```
+'modifier3' and 'prevSpace', for instance, are used to switch to the previous (work-) space.
 
 ### Switching between Windows using AeroSpace
 
-When using AeroSpace with floating layout, there is no proper way of switching between windows on the current (work-) space. The following lines of code provide that feature. Additionally, a fast way of switching between the windows on all (work-) spaces has been added.
-
-This is still work in progress. In case you want to try out this experimental feature, add the following lines to your 'init.lua'. Alt-Escape switches between all windows of the current (work-) space, and Alt-Tab switches between the windows on all (work-) spaces; adjust the according values in case you prefer different keyboard shortcuts. The order of switching between the windows is both times set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first.
+WinHammer also allows cycling through windows of the current (work-) space. For the time being, the keyboard shortcuts are partly pre-set: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. The order of switching between the windows is both times set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The option (=alt) modifier is pre-set, i.e., if this is to your liking, you do not need to add the line below.
 
 ```lua
-function aerospace(args)
-  hs.task.new("/opt/homebrew/bin/aerospace", function(ud, ...)
-    as_out = (hs.inspect(table.pack(...)))
-  end, args):start()
-  return as_out
-end
+WinHammer:new({
 
+  ...
 
-cycleModifier = { "alt" } -- modifier used for cycling through all apps/apps on current WS
-local ids = {} -- array with window IDs on current WS -> aerospace()
-local windows_all = {} -- table with all windows on all WS in order of focused last
-local copy_windows_all = {} -- fb: local?
-local nextToFocus = 2 
-
-
--- subscribe to filters
-local filter = hs.window.filter
-filter.default:subscribe(filter.windowNotOnScreen, function() refreshWindowsWS() end)
-filter.default:subscribe(filter.windowOnScreen, function() refreshWindowsWS() end)
-filter.default:subscribe(filter.windowFocused, function() refreshFocus() end)
-
-
--- watchdog for one of modifier keys pressed
-local cycleModCounter = 0 
-local events = hs.eventtap.event.types
-local prevModifier = { "xyz" }
-keyboardTracker = hs.eventtap.new({ events.flagsChanged }, function(e)
-  flags = eventToArray(e:getFlags())
-  --if flags[1] == "cmd" or prevModifier == "cmd" then
-  -- since on modifier release the flag is 'nil', prevModifier is used
-  if modifiersEqual(flags, cycleModifier) or modifiersEqual(prevModifier, cycleModifier) then
-    cycleModCounter = cycleModCounter + 1
-    if cycleModCounter % 2 == 0 then -- only when released (and not when pressed)
-      cycleModCounter = 0
-      nextToFocus = 2
-      refreshFocus()
-      refreshWindowsWS()
-    end
-  end
-  prevModifier = flags
-end)
-keyboardTracker:start()
-
-
---cycle through all windows, regardless of which WS they are on
-hs.hotkey.bind(cycleModifier, "tab", function()
-  copy_windows_all = copyTable( windows_all)
-  windows_all[nextToFocus]:focus()
-  if nextToFocus == #windows_all then
-    nextToFocus = 1
-  else
-    nextToFocus = nextToFocus + 1
-  end
-end)
-
-
--- cycle through windows of current WS, last focus first
-hs.hotkey.bind(cycleModifier, "escape", function()
-  while not isIncluded(windows_all[nextToFocus]:id()) do
-    if nextToFocus == #windows_all then
-      nextToFocus = 1
-    else
-      nextToFocus = nextToFocus + 1
-    end
-  end  
-  copy_windows_all = copyTable( windows_all) -- remedy for problem that hs.window.sortByFocused' (in this case wrongly) takes into account focus given to windwos by cycling
-  windows_all[nextToFocus]:focus()
-  if nextToFocus == #windows_all then
-    nextToFocus = 1
-  else
-    nextToFocus = nextToFocus + 1
-  end
-end)
-
-
--- get array with all window ids of active workspace -> aerospace()
-function refreshWindowsWS()
-  n = 1 -- index for app switcher
-  s = aerospace({"list-windows", "--workspace", "focused", "--format", "%{window-id}"})
-  -- example output: { "27805\n23632\n19152\n23628\n21665\n27746\n27424\n", ""  n = 2 }
-  hs.timer.doAfter(0.3, function() -- fb 0.12: time to wait - experimental
-    s = aerospace({"list-windows", "--workspace", "focused", "--format", "%{window-id}"})
-    --print(s)               
-    ids = {}
-    table.insert(ids, string.match(s, "{ \"(%d+)")) -- get digits between '{ "' and '\'
-    for substring in s:gmatch("%bn\\") do -- get string between 'n' and '\'
-      table.insert(ids, string.sub(substring, 2, #substring - 1)) -- get rid of leading 'n' and final '\'
-    end
-    --print("________ windows current WS ________")
-    for i,v in pairs(ids) do
-      --print(i,v)
-    end
-
-  end)
-end
-
-
-function refreshFocus() -- called automatically when window-focus changes
-  hs.timer.doAfter(0.2, -- fb: 0.01
-    function() -- apparently necessary for keyboardTracker to have the time to release the modifier key
-      local modNow = eventToArray(hs.eventtap.checkKeyboardModifiers())
-      --if modNow[1] ~= "cmd" then -- necessary for "cycle through windows of current WS, last focus first", otherwise 'focused' and 'windows_all' are always reset
-      if not modifiersEqual(modNow, cycleModifier) then -- necessary for "cycle through windows of current WS, last focus first", otherwise 'focused' and 'windows_all' are always reset
-        nextToFocus = 2
-        filter_all = hs.window.filter.new()
-        local x = filter_all:getWindows(hs.window.sortByFocused)
-        windows_all = {}
-
-        -- 'hs.window.sortByFocused' (in this case wrongly) takes into account focus given to windows by cycling -> remedy:
-        if #copy_windows_all < #x then
-          windows_all = copyTable(x)
-        else
-          windows_all[1] = x[1]
-          -- fill up in order from windows_all, leave out copy_windows_all[1]
-          for i = 1, #copy_windows_all do
-            if windows_all[1]:id() ~= copy_windows_all[i]:id() then
-              table.insert(windows_all, copy_windows_all[i])
-            end
-          end
-        end
-        copy_windows_all = copyTable(windows_all) -- fixes discrepency if windows are given focus by clicking
-
-        --[[
-        print("===x===")
-        for i, v in pairs(x) do
-          print(i, v)
-        end
-        print("===windows_all - focus====")
-        for i, v in pairs(windows_all) do
-          print(i, v)
-        end
-        --]]
-      end
-    end)
-end
-
-
-function isIncluded(id) -- check whether window id is included in table
-  local a = false
-  --print("id: " .. id .. ", ids: " .. ids[1])
-  for i,v in pairs(ids) do
-    if tostring(id) == tostring(ids[i]) then
-      --print("included...")
-      a = true
-    else
-      --print("not included...")
-    end
-  end
-  return a
-end
-
-
-function copyTable(a)
-  b = {}
-  for i,v in pairs(a) do
-    b[i] = v
-  end
-  return b
-end
+  -- cycle through windows of current workspace and all windows
+  cycleModifier = { "alt" }
+})
 ```
 
 
