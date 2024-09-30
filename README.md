@@ -162,7 +162,7 @@ WinHammer:new({
   moveWindowNextSpaceSwitch = 'w',
 })
 ```
-In this example, 'modifier3' and 'prevSpace' are used to switch to the previous (work-) space; 'modifier3' and 'moveWindowNextSpaceSwitch' to move the active window to the next (work-) space and switch there.
+In this example, 'modifier3' and 'prevSpace', for instance, are used to switch to the previous (work-) space; 'modifier3' and 'moveWindowNextSpaceSwitch' to move the active window to the next (work-) space and switch there.
 
 ### Cycling through Windows
 
