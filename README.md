@@ -1,13 +1,14 @@
 # WinHammer
 
+The goal of managing windows efficiently is to adjust the size and position of any window according to the wishes of the user in the easiest and fastest way possible. 
 
-WinHammer is a window manager for macOS that makes use of the power and flexibility of Hammerspoon do manage windows and spaces.
-
-The goal of managing windows efficiently is to adjust the size and position of any window according to the wishes of the user in the easiest and fastest possible way. This includes placing windows on the screen as well as spreading your windows over a variety of spaces. You can think of spaces as virtual displays. In fact, by getting to know the concept of spaces many a user has decided to get rid of a multi-display arrangement and use spaces instead. The only difference between actual displays and spaces is that you cannot look at two spaces at the same time. However, in real life this turns out to be unnecessary in most cases, and switching to another space takes just about as much time as moving your eyes to another monitor.
+WinHammer does exactly that in macOS, and it uses the power and flexibility of Hammerspoon to achieve this goal.
 
 WinHammer has a dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
 
-As a further optional feature, WinHammer can handle spaces using AeroSpace. AeroSpace has been chosen over macOS' implemented space manager because it irons out some of the latter's shortages, such as the need to at least partly disable System Integrity Protection for even basic functions. With the space feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more in the section 'Advanced Features'.
+For handling spaces, WinHammer uses the tool AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, having its own philospophy of window management, disables this feature and uses AeroSpace solely for its excellent implementation of spaces.
+
+AeroSpace has been chosen over macOS' own spaces because it irons out some of the latter's shortages, such as the need to at least partly disable System Integrity Protection for even basic functions. More in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
@@ -98,23 +99,9 @@ As long as windows are resized - or moved within the borders of the screen -, it
 
 ## Advanced Features
 
-### Manual Resizing of Windows - Margin
-
-You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 0.3, which corresponds to 30 percent. Changing it to 0 results in deactivating this options, changing it to 1 results in deactivating resizing.
-
-```lua
-WinHammer:new({
-
-  -- ...
-
-  -- adjust the size of the area with vertical-only and horizontal-only resizing:
-  margin = 0.2,
-})
-```
-
 ### Spaces
 
-As has been mentioned, if you want to also handle spaces with WinHammer, AeroSpace can optionally be installed (https://nikitabobko.github.io/AeroSpace/guide). 
+As has been mentioned, if you also want to handle spaces with WinHammer, AeroSpace has to be installed (https://nikitabobko.github.io/AeroSpace/guide). 
 
 To use AeroSpace in WinHammer, the layout in AeroSpace has to be set to 'floating', so the following section needs to be added at the top of AeroSpace's config file 'aerospace.toml':
 
@@ -124,7 +111,7 @@ check-further-callbacks = true
 run = 'layout floating'
 ```
 
-The file 'aerospace.toml' can stay like this; however, some additional finetuning might be beneficial, for example, you can enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
+No further adjustments to the file 'aerospace.toml' are necessary; still, some additional finetuning might come in handy, for example, you can enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
 
 After installing AeroSpace, the space feature can be enabled in WinHammer by adding the following option to your 'init.lua':
 
@@ -143,7 +130,7 @@ In order to move a window to another (work-) space, besides using the keyboard s
 There is an additional feature regarding moving windows to different (work-) spaces: if you release the modifier key before releasing the left mouse button, WinHammer 
 stays on the current space; otherwise it switches to the (work-) space along with the moved window.
 
-### Use Keyboard Shortcuts to Handle (Work-) Spaces
+### Use Keyboard Shortcuts to handle Spaces
 
 In case you would like to additionally use keyboard shortcuts to handle your (work-) spaces, you can add the following lines to Hammerspoon's 'init.lua':
 
@@ -164,11 +151,13 @@ WinHammer:new({
   moveWindowNextSpaceSwitch = 'w',
 })
 ```
-In this example, 'modifier3' and 'prevSpace', for instance, are used to switch to the previous (work-) space; 'modifier3' and 'moveWindowNextSpaceSwitch' to move the active window to the next (work-) space and switch there.
+Here, 'modifier3' and 'prevSpace', for instance, are used to switch to the previous (work-) space; 'modifier3' and 'moveWindowNextSpaceSwitch' to move the active window to the next (work-) space and switch there.
 
 ### Cycling through Windows
 
-WinHammer also allows cycling through windows of the current (work-) space. For the time being, the keyboard shortcuts are partly pre-set: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. The order of switching between the windows is set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The option (=alt) modifier is pre-set, i.e., if this is to your liking, you do not need to add the line below. In case you do not define 'cycleModifier' in your 'init.lua', it will be the same as 'modifier1'.
+WinHammer also allows cycling through all windows of the current (work-) space on the one hand and all windows on all (work-) spaces on the other: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. 
+
+The order of switching between the windows is set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The standard modifier key for cycling through windows is 'modifier1'; in case you would like to change that, you can add the option 'cycleModifier' to your 'init.lua'.
 
 ```lua
 WinHammer:new({
@@ -177,6 +166,20 @@ WinHammer:new({
 
   -- cycle through windows of current workspace and all windows
   cycleModifier = { "alt" }
+})
+```
+
+### Manual Resizing of Windows - Margin
+
+You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 0.3, which corresponds to 30 percent. Changing it to 0 results in deactivating this options, changing it to 1 results in deactivating resizing.
+
+```lua
+WinHammer:new({
+
+  -- ...
+
+  -- adjust the size of the area with vertical-only and horizontal-only resizing:
+  margin = 0.2,
 })
 ```
 
