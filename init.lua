@@ -57,6 +57,7 @@ function WinHammer:new(options)
   modifier3 = options.modifier3 or { 'alt', 'ctrl', 'cmd', 'shift' }
   margin = options.margin or 0.3
   m = margin * 100 / 2
+
   useSpaces = options.useSpaces or false
   ratioSpaces = options.ratioSpaces or 0.8
   useResize = options.resize or false
@@ -123,7 +124,6 @@ function WinHammer:new(options)
   local prevModifier = { "xyz" }
   keyboardTracker = hs.eventtap.new({ events.flagsChanged }, function(e)
     flags = eventToArray(e:getFlags())
-    --if flags[1] == "cmd" or prevModifier == "cmd" then
     -- since on modifier release the flag is 'nil', prevModifier is used
     if modifiersEqual(flags, cycleModifier) or modifiersEqual(prevModifier, cycleModifier) then
       cycleModCounter = cycleModCounter + 1
@@ -131,7 +131,7 @@ function WinHammer:new(options)
         cycleModCounter = 0
         nextToFocus = 2
         refreshFocus()
-        refreshWindowsWS()
+        -- refreshWindowsWS() -- function is already called in refreshFocus()
       end
     end
     prevModifier = flags
@@ -139,7 +139,7 @@ function WinHammer:new(options)
   keyboardTracker:start()
 
   --cycle through all windows, regardless of which WS they are on
-  ---[[
+  --[[
   hs.hotkey.bind(cycleModifier, "tab", function()
     copy_windows_all = copyTable( windows_all)
     windows_all[nextToFocus]:focus()
@@ -150,7 +150,7 @@ function WinHammer:new(options)
     end
   end)
   --]]
-  --[[ -- alternative using hs.window.switcher.new
+  ---[[ -- alternative using hs.window.switcher.new
     -- https://applehelpwriter.com/2018/01/14/how-to-add-a-window-switcher/
     -- set up your windowfilter
     switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
@@ -168,7 +168,6 @@ function WinHammer:new(options)
       -- fb: todo -> fix switching windows on current WS
     end)
     hs.hotkey.bind("alt-shift","tab",function()
-      copy_windows_all = copyTable( windows_all)
       switcher:previous()
       -- fb: todo -> fix switching windows on current WS
     end)
@@ -196,7 +195,7 @@ function WinHammer:new(options)
   hs.hotkey.bind(modifier3, prevSpace, function() -- previous space (incl. cycle)
     aerospace({'workspace', '--wrap-around', 'prev'}) -- aerospace
     hs.timer.doAfter(0.2, function() 
-      refreshWindowsWS()
+      --refreshWindowsWS() -- function is already called in refreshFocus()
       refreshFocus()
     end)
   end)
@@ -204,7 +203,7 @@ function WinHammer:new(options)
   hs.hotkey.bind(modifier3, nextSpace, function() -- next space (incl. cycle)
     aerospace({'workspace', '--wrap-around', 'next'}) -- aerospace
     hs.timer.doAfter(0.2, function()
-      refreshWindowsWS()
+      --refreshWindowsWS() -- function is already called in refreshFocus()
       refreshFocus()
     end)
   end)
@@ -215,7 +214,7 @@ function WinHammer:new(options)
       aerospace({'workspace', '--wrap-around', 'prev'})
     end)
     hs.timer.doAfter(0.2, function()
-      refreshWindowsWS()
+      --refreshWindowsWS() -- function is already called in refreshFocus()
       refreshFocus()
     end)
   end)
@@ -226,7 +225,7 @@ function WinHammer:new(options)
       aerospace({'workspace', '--wrap-around', 'next'})
     end)
     hs.timer.doAfter(0.2, function()
-      refreshWindowsWS()
+      --refreshWindowsWS() -- function is already called in refreshFocus()
       refreshFocus()
     end)
   end)
@@ -234,7 +233,7 @@ function WinHammer:new(options)
   hs.hotkey.bind(modifier3, moveWindowPrevSpace, function() -- move active window to previous space (incl. cycle)
     aerospace({'move-node-to-workspace', '--wrap-around', 'prev'}) -- aerospace
     hs.timer.doAfter(0.2, function()
-      refreshWindowsWS()
+      --refreshWindowsWS() -- function is already called in refreshFocus()
       refreshFocus()
     end)
   end)
@@ -242,13 +241,13 @@ function WinHammer:new(options)
   hs.hotkey.bind(modifier3, moveWindowNextSpace, function() -- move active window to next space (incl. cycle)
     aerospace({'move-node-to-workspace', '--wrap-around', 'next'}) -- aerospace
     hs.timer.doAfter(0.2, function()
-      refreshWindowsWS()
+      --refreshWindowsWS() -- function is already called in refreshFocus()
       refreshFocus()
     end)
   end)
 
   -- get arrays populated at start
-  refreshWindowsWS()
+  --refreshWindowsWS() -- function is already called in refreshFocus()
   refreshFocus()
 
   resizer.clickHandler:start()
@@ -768,7 +767,7 @@ function WinHammer:handleClick()
       end
     
       ---[[
-      -- experimental: prevent error when clicking on screen (and not window) with pressed modifier(s)
+      -- prevent error when clicking on screen (and not window) with pressed modifier(s)
       if type(getWindowUnderMouse()) == "nil" then
         self.cancelHandler:start()
         self.dragHandler:stop()
@@ -851,7 +850,7 @@ end
 
  -- event looks like this: {'alt' 'true'}; function turns table into an 'array' so
  -- it can be compared to the other arrays (modifier1, modifier2,...)
-function eventToArray(a)
+function eventToArray(a) -- fb: maybe extend to work with more than one modifier at at time
   k = 1
   b = {}
   for i,_ in pairs(a) do
@@ -890,7 +889,6 @@ function refreshWindowsWS()
     for substring in s:gmatch("%bn\\") do -- get string between 'n' and '\'
       table.insert(ids, string.sub(substring, 2, #substring - 1)) -- get rid of leading 'n' and final '\'
     end
-    --print("________ windows current WS ________")
     for i,v in pairs(ids) do
       --print(i,v)
     end
@@ -899,7 +897,7 @@ end
 
 function refreshFocus() -- called automatically when window-focus changes
   hs.timer.doAfter(0.2, -- fb: 0.01
-    function() -- apparently necessary for keyboardTracker to have the time to release the modifier key
+    function()          -- apparently necessary for keyboardTracker to have the time to release the modifier key
       local modNow = eventToArray(hs.eventtap.checkKeyboardModifiers())
       if not modifiersEqual(modNow, cycleModifier) then -- necessary for "cycle through windows of current WS, last focus first", otherwise 'focused' and 'windows_all' are always reset
         nextToFocus = 2
@@ -909,9 +907,7 @@ function refreshFocus() -- called automatically when window-focus changes
         -- 'hs.window.sortByFocused' (in this case wrongly) takes into account focus given to windows by cycling -> remedy:
         if #copy_windows_all < #x then
           windows_all = copyTable(x)
-          -- print("_______copy table____________")
         else
-          -- print("_______insert into table____________")
           windows_all[1] = x[1]
           -- fill up in order from windows_all, leave out copy_windows_all[1]
           for i = 1, #copy_windows_all do
@@ -920,8 +916,9 @@ function refreshFocus() -- called automatically when window-focus changes
             end
           end
         end
-        copy_windows_all = copyTable(windows_all)   -- fixes discrepency if windows are given focus by clicking
+        copy_windows_all = copyTable(windows_all) -- fixes discrepency if windows are given focus by clicking
       end
+      refreshWindowsWS()
     end)
 end
 
