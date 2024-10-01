@@ -150,7 +150,7 @@ function WinHammer:new(options)
     end
   end)
   --]]
-  ---[[ -- alternative using hs.window.switcher.new
+  ---[[ -- alternative using hs.window.switcher
     -- https://applehelpwriter.com/2018/01/14/how-to-add-a-window-switcher/
     -- set up your windowfilter
     switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
