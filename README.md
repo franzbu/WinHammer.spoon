@@ -1,9 +1,11 @@
 # WinHammer
 
 
-WinHammer is a window manager for macOS that combines the power and flexibility of Hammerspoon with the most outstanding features of AeroSpace.
+WinHammer is a window manager for macOS that makes use of the power and flexibility of Hammerspoon do manage windows and spaces.
 
-A special feature of WinHammer is its dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
+The goal of managing windows efficiently is to adjust the size and position of any window according to the wishes of the user in the easiest and fastest possible way. This includes placing windows on the screen as well as spreading your windows over a variety of spaces. You can think of spaces as virtual displays. In fact, by getting to know the concept of spaces many a user has decided to get rid of a multi-display arrangement and use spaces instead. The only difference between actual displays and spaces is that you cannot look at two spaces at the same time. However, in real life this turns out to be unnecessary in most cases, and switching to another space takes just about as much time as moving your eyes to another monitor.
+
+WinHammer has a dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
 
 As a further optional feature, WinHammer can handle spaces using AeroSpace. AeroSpace has been chosen over macOS' implemented space manager because it irons out some of the latter's shortages, such as the need to at least partly disable System Integrity Protection for even basic functions. With the space feature activated, WinHammer can move windows to other spaces (also called workspaces) choosing on-the-fly whether to move there along with the window or whether to stay on the current space - more in the section 'Advanced Features'.
 
