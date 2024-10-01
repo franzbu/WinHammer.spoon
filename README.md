@@ -168,7 +168,7 @@ In this example, 'modifier3' and 'prevSpace', for instance, are used to switch t
 
 ### Cycling through Windows
 
-WinHammer also allows cycling through windows of the current (work-) space. For the time being, the keyboard shortcuts are partly pre-set: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. The order of switching between the windows is set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The option (=alt) modifier is pre-set, i.e., if this is to your liking, you do not need to add the line below.
+WinHammer also allows cycling through windows of the current (work-) space. For the time being, the keyboard shortcuts are partly pre-set: 'modifier3' and 'escape' switches between all windows of the current (work-) space, and 'modifier3' and 'tab' switches between the windows on all (work-) spaces. The order of switching between the windows is set according to 'hs.window.sortByFocused', i.e., windows are sorted in order of focus received, most recent first. The option (=alt) modifier is pre-set, i.e., if this is to your liking, you do not need to add the line below. In case you do not define 'cycleModifier' in your 'init.lua', it will be the same as 'modifier1'.
 
 ```lua
 WinHammer:new({
