@@ -1,12 +1,12 @@
 # WinHammer
 
-The goal of managing windows efficiently is to adjust the size and position of any window according to the wishes of the user in the easiest and fastest way possible. 
+The goal of managing windows efficiently is to adjust the size and position of any window according to the individual workflow of every user in the easiest and fastest way possible; in other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want it. 
 
-WinHammer is aiming to achieve that in macOS, and it uses the power and flexibility of Hammerspoon for it.
+WinHammer is aiming to achieve that in macOS, and it uses the power and flexibility of Hammerspoon to get there.
 
-WinHammer has a dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
+WinHammer has a dynamic approach for managing windows on screen, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse or keyboard shortcuts. On their way there, windows can be moved without having to position your cursor; any area within the window will do.
 
-For handling spaces, WinHammer - due to limitations of macOS' space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, having its own philospophy of window management, uses AeroSpace solely for its implementation of spaces. More in the section 'Advanced Features'.
+For handling spaces, WinHammer - due to limitations of macOS' space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, following its own philospophy regarding window management, uses AeroSpace solely for its implementation of spaces. More in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
@@ -14,10 +14,6 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 
 <img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/demo2.gif" />
 
-* Manual window resizing and positioning
-
-<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/demo1.gif" />
-         
 
 ## Installation
 
@@ -49,34 +45,9 @@ WinHammer:new({
 })
 ```
 
-### Manual Moving
+### Manual Moving and Positioning
 
 To move a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things start to get interesting because then window management with automatic resizing and positioning comes into play - more about that in a minute.
-
-
-### Manual Resizing
-
-Manual resizing is an optional feature, as windows of certain applications, such as LosslessCut or Kdenlive can behave in a stuttering and sluggish way when being resized. That being said, resizing works well with the usual suspects such as Safari, Google Chrome, Finder, and so on.
-
-In order to enable manual resizing, add the following option to your 'init.lua':
-
-```lua
-WinHammer:new({
-
-  ...
-
-  -- enable resizing:
-  resize = true,
-})
-```
-
-To manually resize a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the right mouse button in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
-
-To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing. The size of this area can be adjusted; for more information see section 'Manual Resizing of Windows - Margin' in 'Advanced Features'.
-
-<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/resizing.png" width="200">
-
-At the center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
 
 
 ### Automatic Positioning and Resizing
@@ -167,6 +138,53 @@ WinHammer:new({
 })
 ```
 
+### Disable Moving and Resizing for Certain Applications
+
+You can disable move/resize for any application by adding it to the 'disabledApps' option:
+
+```lua
+WinHammer:new({
+
+  -- ...
+
+  -- applications that cannot be resized:
+  disabledApps = {"Alacritty"},
+})
+```
+
+## Additional Features
+
+### Manual Resizing
+
+Similar to manual moving, manual resizing of windows can be achieved by positioning the cursor in virtually any area of the window. Be aware, though, that windows of certain applications, such as LosslessCut or Kdenlive, can behave in a stuttering and sluggish way when being resized. That being said, resizing works well with the usual suspects such as Safari, Google Chrome, Finder, and so on.
+
+In order to enable manual resizing, add the following option to your 'init.lua':
+
+```lua
+WinHammer:new({
+
+  ...
+
+  -- enable resizing:
+  resize = true,
+})
+```
+
+To manually resize a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the right mouse button in any part of the window and drag the window. If a window is resized beyond the borders of the screen, it will automatically snap back within the limits of the screen.
+
+To have the additional possibility of precisely resizing windows horizontally-only and vertically-only, 30 percent of the window (15 precent left and right of the middle of each border) is reserved for horizontal-only and vertical-only resizing. The size of this area can be adjusted; for more information see below.
+
+<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/resizing.png" width="200">
+
+At the center of the window there is an erea (M) where you can also move the window by pressing the right mouse button. 
+
+
+* Manual window resizing and positioning
+
+<img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/demo1.gif" />
+
+
+
 ### Manual Resizing of Windows - Margin
 
 You can change the size of the area of the window where the vertical-only and horizontal-only resizing applies by adjusting the option 'margin'. The standard value is 0.3, which corresponds to 30 percent. Changing it to 0 results in deactivating this options, changing it to 1 results in deactivating resizing.
@@ -182,16 +200,4 @@ WinHammer:new({
 ```
 
 
-### Disable Moving and Resizing for Certain Applications
-
-You can disable move/resize for any application by adding it to the 'disabledApps' option:
-
-```lua
-WinHammer:new({
-
-  -- ...
-
-  -- applications that cannot be resized:
-  disabledApps = {"Alacritty"},
-})
-```
+         
