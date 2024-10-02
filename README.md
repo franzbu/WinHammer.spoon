@@ -10,7 +10,7 @@ For handling spaces, WinHammer - due to limitations of macOS's built-in space ma
 
 In case you are not familiar with spaces, you can think of them as being similar to having a multi-display arrangement in the sense of that every space has its own environment with its own set of windows. Where an arrangement of displays and spaces differ, though, is that you cannot look at more than one space at a time. However, an advantage of spaces is that you don't have to move your head around, as, metaphorically speaking, you make your displays swap with a keyboard shortcut or a flick of your mouse.
 
-As spaces are an additional but not essential feature of sophisticated desktop operating systems such as macOS, so are spaces an additional but not essential feature of WinHammer. WinHammer can perfectly be used for managing your windows on a single space. Should you be a seasoned user of spaces or want to give this feature a try, have a look at 'Advanced Features' below on how to enable it.
+As spaces are an additional but not essential feature of sophisticated desktop operating systems such as macOS, so are spaces an additional but not essential feature of WinHammer. WinHammer can be used for managing your windows on a single space. Should you be a seasoned user of spaces or want to give this feature a try, have a look at 'Advanced Features' below on how to enable it.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. The animation only shows the automatic resizing and positioning on one screen; this applies to all your spaces in case you have more than one. Also the moving windows to different spaces or switching spaces is not part of the animation.
 
