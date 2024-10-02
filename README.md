@@ -6,9 +6,7 @@ WinHammer is aiming to achieve that in macOS, and it uses the power and flexibil
 
 WinHammer has a dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
 
-For handling spaces, WinHammer uses the tool AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, having its own philospophy of window management, disables this feature and uses AeroSpace solely for its excellent implementation of spaces.
-
-AeroSpace has been chosen over macOS' own spaces because it irons out some of the latter's shortages, such as the need to at least partly disable System Integrity Protection for even basic functions. More in the section 'Advanced Features'.
+For handling spaces, WinHammer - due to limitations of macOS' space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, having its own philospophy of window management, uses AeroSpace solely for its implementation of spaces. More in the section 'Advanced Features'.
 
 The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
 
