@@ -4,7 +4,7 @@ The goal of managing windows on your desktop is to adjust the size and position 
 
 WinHammer is aiming to achieve that in your macOS environment, and it uses the power and flexibility of Hammerspoon to get there.
 
-WinHammer uses a dynamic approach for managing windows on screen, i.e., windows can be snapped into positions of dynamically changing grid sizes with a keyboard shortcut or a flick of your mouse. Doing so, windows can be moved without having to position your cursor; any area within the window will do.
+WinHammer uses a dynamic approach for managing windows on your screen, i.e., windows can be snapped into positions of dynamically changing grid sizes with a keyboard shortcut or a flick of your mouse. Doing so, windows can be moved without having to position your cursor; any area within the window will do.
 
 For handling spaces, WinHammer - due to limitations of macOS' built-in space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, following its own philospophy regarding window management, uses AeroSpace solely for its implementation of spaces. 
 
