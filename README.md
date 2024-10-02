@@ -1,14 +1,16 @@
 # WinHammer
 
-The goal of managing windows efficiently is to adjust the size and position of any window according to the individual workflow of every user in the easiest and fastest way possible; in other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want it. 
+The goal of managing windows efficiently is to adjust the size and position of any window according to the individual workflow of every user in the easiest and fastest way possible, be it on the current screen or on 'virtual desktops', so called spaces. In other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want it. 
 
 WinHammer is aiming to achieve that in macOS, and it uses the power and flexibility of Hammerspoon to get there.
 
 WinHammer has a dynamic approach for managing windows on screen, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse or keyboard shortcuts. On their way there, windows can be moved without having to position your cursor; any area within the window will do.
 
-For handling spaces, WinHammer - due to limitations of macOS' space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, following its own philospophy regarding window management, uses AeroSpace solely for its implementation of spaces. More in the section 'Advanced Features'.
+For handling spaces, WinHammer - due to limitations of macOS' space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, following its own philospophy regarding window management, uses AeroSpace solely for its implementation of spaces. 
 
-The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected.
+In case you are not familiar with spaces, you can think of them as similar to having a multi-display arrangement in the sense of that every space has its own work environment with its own set of windows. Where an arrangement of displays and spaces differ, though, is that you cannot look at more than one space at a time. However, an advantage of spaces is that you don't have to move your head around, as switching spaces with a keyboard shortcut or a flick of your mousemakes your displays swap, metaphorically speaking. More in the section 'Advanced Features'.
+
+The animated GIFs below don't capture the mouse cursor correctly; in real life the cursor moves along with moving and resizing the window as expected. The animation only shows the automatic resizing and positioning on one screen; this applies to all your spaces in case you have more than one. Also the moving windows to different spaces or switching spaces is not part of the animation.
 
 * Automatic window resizing and positioning
 
