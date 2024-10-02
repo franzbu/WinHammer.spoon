@@ -1,6 +1,6 @@
 # WinHammer
 
-The goal of managing windows is to adjust the size and position of any window according to your workflow in the easiest and fastest way possible, be it on a single screen or on 'virtual desktops', so called spaces. In other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want it. 
+The goal of managing windows is to adjust the size and position of any window according to your workflow in the easiest and fastest way possible, be it on a single screen or on 'virtual desktops', so called spaces. In other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want it, and it goes without saying that there has to be a better way than the traditional resizing and moving.
 
 WinHammer is aiming to achieve that in your macOS environment, and it uses the power and flexibility of Hammerspoon to get there.
 
