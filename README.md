@@ -87,7 +87,7 @@ run = 'layout floating'
 
 No further adjustments to the file 'aerospace.toml' are necessary; still, some additional finetuning might come in handy, for example, you can enable the automatic start of AeroSpace at login (start-at-login = true) or determine where the cursor is positioned after moving to another space.
 
-After installing AeroSpace, the space feature can be enabled in WinHammer by adding the following option to your 'init.lua':
+After installing AeroSpace, the space feature can be enabled in WinHammer by adding the following option to Hammerspoon's 'init.lua':
 
 ```lua
 WinHammer:new({
