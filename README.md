@@ -1,10 +1,10 @@
 # WinHammer
 
-The goal of managing windows efficiently is to adjust the size and position of any window according to the individual workflow of every user in the easiest and fastest way possible, be it on the current screen or on 'virtual desktops', so called spaces. In other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want it. 
+The goal of managing windows on your desktop is to adjust the size and position of any window according to your workflow in the easiest and fastest way possible, be it on the current screen or on 'virtual desktops', so called spaces. In other words: the user should have to invest the least possible energy to get their work environment set up exactly the way they want. 
 
-WinHammer is aiming to achieve that in macOS, and it uses the power and flexibility of Hammerspoon to get there.
+WinHammer is aiming to achieve that in your macOS environment, and it uses the power and flexibility of Hammerspoon to get there.
 
-WinHammer has a dynamic approach for managing windows on screen, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse or keyboard shortcuts. On their way there, windows can be moved without having to position your cursor; any area within the window will do.
+WinHammer uses a dynamic approach for managing windows on screen, i.e., windows can be snapped into positions of dynamically changing grid sizes with a keyboard shortcut or a flick of your mouse. Doing so, windows can be moved without having to position your cursor; any area within the window will do.
 
 For handling spaces, WinHammer - due to limitations of macOS' space manager - uses AeroSpace, the original purpose of which is automatic window management as a tiling manager. WinHammer, however, following its own philospophy regarding window management, uses AeroSpace solely for its implementation of spaces. 
 
@@ -16,14 +16,15 @@ The animated GIFs below don't capture the mouse cursor correctly; in real life t
 
 <img src="https://github.com/franzbu/WinHammer.spoon/blob/main/doc/demo2.gif" />
 
+As spaces are an additional but not essential feature of elaborate operating systems such as macOS, so are spaces an additional but not essential feature of WinHammer. WinHammer can perfectly be used for managing your windows on your one space, i.e., your screen. Should you be a seasoned spaces user or want to give this feature a try, have a look at 'Advanced Features' below.
 
-## Installation
+## Installation of WinHammer
 
 WinHammer requires [Hammerspoon](https://www.hammerspoon.org/) to be installed and running.
 
 To install WinHammer, after downloading and unzipping, move the folder to ~/.hammerspoon/Spoons and make sure the name of the folder is 'WinHammer.spoon'. 
 
-Alternatively, you can simply paste the following line into a terminal window and execute it:
+Alternatively, you can simply execute the following line from a terminal window:
 
 ```lua
 
@@ -40,8 +41,8 @@ local WinHammer = hs.loadSpoon("WinHammer")
 
 WinHammer:new({
 
-  -- modifier(s) to hold to move (left mouse button) or resize (right mouse button) a window:
-  modifier1 = { 'alt' }, -- also a group of modifiers such as { 'alt', 'cmd' } is possible
+  -- modifier(s) for managing your windows, also a group of modifiers such as { 'alt', 'cmd' } is possible:
+  modifier1 = { 'alt' },
   modifier2 = { 'ctrl' },
 
 })
@@ -49,10 +50,10 @@ WinHammer:new({
 
 ### Manual Moving and Positioning
 
-To move a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things start to get interesting because then window management with automatic resizing and positioning comes into play - more about that in a minute.
+To move a window, hold your 'modifier1' or 'modifier2' key(s) down, then click the left mouse button and drag the window. If a window is dragged up to 10 percent of its width (left and right borders of screen) or its height (bottom border) outside the screen borders, it will automatically snap back within the borders of the screen. If the window is dragged beyond this 10-percent-limit, things are getting interesting because then window management with automatic resizing and positioning comes into play.
 
 
-### Automatic Positioning and Resizing
+### Automatic Resizing and Positioning 
 
 For automatic resizing and positioning of a window, you simply have to move between 10 and 80 percent of the window beyond the left, right, or bottom (no upper limit here) borders of your screen using your left mouse button. 
 
@@ -63,16 +64,18 @@ As long as windows are resized - or moved within the borders of the screen -, it
   * If windows are moved beyond the bottom border of the screen: imagine your bottom screen border divided into three equally long sections: if the cursor crosses the screen border in the middle third of the bottom border, the window snaps into full screen. Crossing the screen border in the left or right thirds, the window snaps into the respective halfs of the screen.
 
 * modifier2: 
-  * The difference to 'modifier1' is that your screen has an underlying 3x3 grid. This means that windows snap into the left column of the 3x3 grid when dragged beyond the left screen border and into the right column when dragged beyond the right screen border. If 'modifier2' is released before the left mouse button, the window will snap into the middle column.
+  * The difference to 'modifier1' is that your screen has a 3x3 grid. This means that windows snap into the left third of the 3x3 grid when dragged beyond the left screen border and into the right third when dragged beyond the right screen border. If 'modifier2' is released before the left mouse button, the window will snap into the middle.
  
-* The moment dragging of a window starts, indicators appear to guide the user as to where to drag the window for different window managing scenarios. 
+* The moment dragging of a window starts, indicators appear to guide the user as to where to drag the window for different window managing scenarios.
+
+All this is been implemented with the goal of being as intuitive as possible; therefore, you shoud be able to build up your muscle memory quickly.
 
 
 ## Advanced Features
 
 ### Spaces
 
-As has been mentioned, if you also want to handle spaces with WinHammer, AeroSpace has to be installed (https://nikitabobko.github.io/AeroSpace/guide). 
+If you also want to handle spaces with WinHammer, AeroSpace has to be installed (https://nikitabobko.github.io/AeroSpace/guide). 
 
 To use AeroSpace in WinHammer, the layout in AeroSpace has to be set to 'floating', so the following section needs to be added at the top of AeroSpace's config file 'aerospace.toml':
 
