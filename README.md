@@ -2,7 +2,7 @@
 
 The goal of managing windows efficiently is to adjust the size and position of any window according to the wishes of the user in the easiest and fastest way possible. 
 
-WinHammer is aiming to achieve that in macOS, and it uses the power and flexibility of Hammerspoon to achieve this goal.
+WinHammer is aiming to achieve that in macOS, and it uses the power and flexibility of Hammerspoon for it.
 
 WinHammer has a dynamic approach, i.e., windows can be snapped into positions of dynamically changing grid sizes with a flick of your mouse. Windows can also be moved without having to position your cursor; any area within the window will do. Optionally, windows can also be resized. 
 
